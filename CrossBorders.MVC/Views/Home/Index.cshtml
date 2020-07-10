@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model CreatePost
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <form asp-action="Create" enctype="multipart/form-data">
+        <input asp-for="LocationHistory"/>
+        <input type="submit"/>
+    </form>
+
+</div>
