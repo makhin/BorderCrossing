@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model LocationHistoryFilePostRequest
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <form asp-action="LoadFile" enctype="multipart/form-data">
+        <input asp-for="LocationHistoryFile"/>
+        <input type="submit"/>
+    </form>
+
+</div>
