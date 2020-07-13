@@ -17,7 +17,7 @@ namespace CrossBorders.MVC.Services
     { HistoryStat 
         HistoryProcess(IFormFile modelLocationHistory);
 
-        Dictionary<DateTime, string> FindCrosses(CalcPost model);
+        Models.Results FindCrosses(CalcPost model);
     }
 
     public class CrossService : ICrossService
@@ -67,7 +67,7 @@ namespace CrossBorders.MVC.Services
             return null;
         }
 
-        public Dictionary<DateTime, string> FindCrosses(CalcPost model)
+        public Models.Results FindCrosses(CalcPost model)
         {
             var locations = _repository.GetLocations(model.Guid);
             var countries = _repository.GetAllCountries();
@@ -76,21 +76,39 @@ namespace CrossBorders.MVC.Services
             (
                 from location in locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).AsParallel().AsOrdered().WithDegreeOfParallelism(10)
                 from country in countries.Where(c => c.Region == 150 && location.Value.Within(c.Geom)).DefaultIfEmpty().AsParallel().WithDegreeOfParallelism(10)
-                select new {Name = country == null ? "Unknown" : country.Name, Date = location.Key}
-            ).AsParallel().WithDegreeOfParallelism(10).ToList();
+                select new
+                {
+                    Name = country == null ? "Unknown" : country.Name,
+                    Date = location.Key
+                }
+            ).AsParallel().WithDegreeOfParallelism(10).OrderBy(p => p.Date).ToList();
             
+
+            var result = new Models.Results();
+            result.Periods.Add(new Period
+            {
+                ArrivalDate = places.First().Date,
+                Country = places.First().Name,
+            });
+            var last = result.Periods.Last();
             
-            string countryPlace = string.Empty;
-            Dictionary<DateTime, string> result = new Dictionary<DateTime, string>();
             foreach (var place in places)
             {
-                if (place.Name != countryPlace)
+                if (place.Name == last.Country)
                 {
-                    countryPlace = place.Name;
-                    result.Add(place.Date, countryPlace);
+                    continue;
                 }
+                
+                last.DepartureDate = place.Date;
+                result.Periods.Add(new Period
+                {
+                    ArrivalDate = place.Date,
+                    Country = place.Name,
+                });
+                last = result.Periods.Last();
             }
-
+            
+            last.DepartureDate = places.Last().Date;
             return result;
         }
 
@@ -125,7 +143,7 @@ namespace CrossBorders.MVC.Services
             {
                 foreach (var entry in zip.Entries)
                 {
-                    if (entry.Name == "Location History.json")
+                    if (entry.Name == "Location History.json" || entry.Name == "История местоположений.json")
                     {
                         using (Stream stream = entry.Open())
                         {

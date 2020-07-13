@@ -1,22 +1,44 @@
-﻿@model System.Collections.Generic.Dictionary<System.DateTime,string>
+﻿@model Results
 
 <div class="text-center">
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Country</th>
+                <th>Въезд</th>
+                <th>Страна</th>
+                <th>Выезд</th>
+                <th>Дни</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (KeyValuePair<DateTime, string> entry in Model)
+            @foreach (Period period in Model.Periods)
             {
                 <tr>
-                    <td>@entry.Key</td>
-                    <td>@entry.Value</td>
+                    <td>@period.ArrivalDate</td>
+                    <td>@period.Country</td>
+                    <td>@period.DepartureDate</td>
+                    <td>@period.Days</td>
                 </tr>
             }
         </tbody>
     </table>
-    
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Страна</th>
+                    <th>Дни</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (KeyValuePair<string, int> countryDay in Model.CountryDays)
+                {
+                    <tr>
+                        <td>@countryDay.Key</td>
+                        <td>@countryDay.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
 </div>

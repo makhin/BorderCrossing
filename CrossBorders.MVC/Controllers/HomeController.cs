@@ -23,6 +23,8 @@ namespace CrossBorders.MVC.Controllers
         }
         
         [HttpPost]
+        [DisableRequestSizeLimit] 
+        [Consumes("multipart/form-data")]         
         public IActionResult Create(CreatePost model)
         {
             if (model.LocationHistory != null)
