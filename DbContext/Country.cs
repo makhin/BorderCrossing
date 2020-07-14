@@ -4,7 +4,6 @@ using NetTopologySuite.Geometries;
 
 namespace BorderCrossing.DbContext
 {
-    [Table("Countries1")]
     public class Country
     {
         [Key]
