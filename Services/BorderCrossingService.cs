@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
+using BlazorInputFile;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
@@ -15,10 +17,9 @@ using Newtonsoft.Json;
 namespace BorderCrossing.Services
 {
     public interface IBorderCrossingService
-    { 
-        DateRangePostRequest PrepareLocationHistory(IFormFile modelLocationHistory);
-
-        BorderCrossingResponse ParseLocationHistory(DateRangePostRequest model);
+    {
+        Task<DateRangePostRequest> PrepareLocationHistoryAsync(IFileListEntry stream);
+        Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model);
     }
 
     public class BorderCrossingService : IBorderCrossingService
@@ -32,42 +33,31 @@ namespace BorderCrossing.Services
             _environment = environment;
         }
 
-        public DateRangePostRequest PrepareLocationHistory(IFormFile file)
+        public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(IFileListEntry file)
         {
-            
-            var usageHistory = new LocationHistoryFile
+            using (var memoryStream = new MemoryStream())
             {
-                DateUpload = DateTime.Now, 
-                FileName = file.FileName
-            };
-            
-            LocationHistory history;
-            
-            using(var memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-                usageHistory.File = memoryStream.ToArray();
-                //_repository.SaveUsageHistory(usageHistory);
-                history = ExtractJson(memoryStream);
-            }
+                await file.Data.CopyToAsync(memoryStream);
+                var history = await ExtractJsonAsync(memoryStream);
 
-            if (history != null)
-            {
-                var locations = PrepareLocations(history);
-                var guid = _repository.AddLocations(locations);
-                
-                return new DateRangePostRequest
+                if (history != null)
                 {
-                    Guid = guid,
-                    StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
-                    EndDate = history.Locations.Max(l => l.TimestampMs).ToDateTime()
-                };
+                    var locations = PrepareLocations(history);
+                    var guid = _repository.AddLocations(locations);
+
+                    return await Task.FromResult(new DateRangePostRequest()
+                    {
+                        Guid = guid,
+                        StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
+                        EndDate = history.Locations.Max(l => l.TimestampMs).ToDateTime()
+                    });
+                }
             }
 
             return null;
         }
 
-        public BorderCrossingResponse ParseLocationHistory(DateRangePostRequest model)
+        public Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model)
         {
             var locations = _repository.GetLocations(model.Guid);
             var countries = _repository.GetAllCountries();
@@ -110,7 +100,7 @@ namespace BorderCrossing.Services
             }
             
             last.DeparturePoint = checkPoints.Last();
-            return response;
+            return new Task<BorderCrossingResponse>(() => response);
         }
 
         private Dictionary<DateTime, Geometry> PrepareLocations(LocationHistory history)
@@ -138,7 +128,7 @@ namespace BorderCrossing.Services
             return locations;
         }
         
-        private LocationHistory ExtractJson(MemoryStream memoryStream)
+        private async Task<LocationHistory> ExtractJsonAsync(MemoryStream memoryStream)
         {
             using (var zip = new ZipArchive(memoryStream, ZipArchiveMode.Read))
             {
@@ -152,7 +142,7 @@ namespace BorderCrossing.Services
                             using (JsonReader reader = new JsonTextReader(sr))
                             {
                                 JsonSerializer serializer = new JsonSerializer();
-                                return serializer.Deserialize<LocationHistory>(reader);
+                                return await Task.Run( () => serializer.Deserialize<LocationHistory>(reader));
                             }
                         }
                     }

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderCrossing", "BorderCrossing.csproj", "{67C397C0-D9C8-4173-ADCD-3758DD7BBD52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderCrossing", "BorderCrossing.csproj", "{D6A3EEBA-70AE-4471-9553-C40CE03A6900}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +8,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{67C397C0-D9C8-4173-ADCD-3758DD7BBD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67C397C0-D9C8-4173-ADCD-3758DD7BBD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67C397C0-D9C8-4173-ADCD-3758DD7BBD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67C397C0-D9C8-4173-ADCD-3758DD7BBD52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
