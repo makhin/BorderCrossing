@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderCrossing", "BorderCrossing\BorderCrossing.csproj", "{D6A3EEBA-70AE-4471-9553-C40CE03A6900}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.FileReader", "Blazor.FileReader\Blazor.FileReader.csproj", "{3E8D2933-871A-470D-8D75-F6D5EE625E48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.FileReader", "Blazor.FileReader\Blazor.FileReader.csproj", "{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,12 +20,12 @@ Global
 		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Ghpages|Any CPU.Build.0 = Release|Any CPU
 		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6A3EEBA-70AE-4471-9553-C40CE03A6900}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E8D2933-871A-470D-8D75-F6D5EE625E48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E8D2933-871A-470D-8D75-F6D5EE625E48}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E8D2933-871A-470D-8D75-F6D5EE625E48}.Ghpages|Any CPU.ActiveCfg = Ghpages|Any CPU
-		{3E8D2933-871A-470D-8D75-F6D5EE625E48}.Ghpages|Any CPU.Build.0 = Ghpages|Any CPU
-		{3E8D2933-871A-470D-8D75-F6D5EE625E48}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E8D2933-871A-470D-8D75-F6D5EE625E48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}.Ghpages|Any CPU.ActiveCfg = Ghpages|Any CPU
+		{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}.Ghpages|Any CPU.Build.0 = Ghpages|Any CPU
+		{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DB09D5-D803-4BAB-85A9-F8510EF83A3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
