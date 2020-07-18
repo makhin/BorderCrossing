@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using Blazor.FileReader;
 
 namespace BorderCrossing.Components
 {
     public class FileUploaderBaseEventArgs : EventArgs
     {
-        public Stream Stream { get; set; }
+        public MemoryStream Stream { get; set; }
     }
 }

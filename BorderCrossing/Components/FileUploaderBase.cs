@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Blazor.FileReader;
@@ -15,13 +16,13 @@ namespace BorderCrossing.Components
         public long Value;
 
         [Inject]
-        IFileReaderService FileReaderService { get; set; }
+        public IFileReaderService FileReaderService { get; set; }
 
         [Inject]
-        IJSRuntime CurrentJsRuntime { get; set; }
+        public IJSRuntime CurrentJsRuntime { get; set; }
 
         [Parameter]
-        public int BufferSize { get; set; } = 20480;
+        public EventCallback<FileUploaderBaseEventArgs> OnUploadCompleteCallback { get; set; }
 
         public CancellationTokenSource CancellationTokenSource;
 
@@ -45,39 +46,39 @@ namespace BorderCrossing.Components
                 var fileInfo = await file.ReadFileInfoAsync();
                 Max = fileInfo.Size;
 
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-
                 this.StateHasChanged();
                 CancellationTokenSource?.Dispose();
                 CancellationTokenSource = new System.Threading.CancellationTokenSource();
                 CanCancel = true;
 
-                const int onlyReportProgressAfterThisPercentDelta = 10;
+                const int onlyReportProgressAfterThisPercentDelta = 5;
 
                 fileInfo.PositionInfo.PositionChanged += (s, e) =>
                 {
                     if (e.PercentageDeltaSinceAcknowledge > onlyReportProgressAfterThisPercentDelta)
                     {
-                        stopwatch.Stop();
                         this.InvokeAsync(this.StateHasChanged);
                         e.Acknowledge();
                         Value = e.Position;
-                        stopwatch.Start();
                     }
                 };
 
                 try
                 {
-                    var ps = new PositionStream();
-
-                    using (var fs = await file.OpenReadAsync())
+                    using (var memoryStream = new MemoryStream())
                     {
-                        await fs.CopyToAsync(ps, BufferSize, CancellationTokenSource.Token);
-                        stopwatch.Stop();
+                        using (var stream = await file.OpenReadAsync())
+                        {
+                            await stream.CopyToAsync(memoryStream, CancellationTokenSource.Token);
+                            Value = Max;
+
+                            await OnUploadCompleteCallback.InvokeAsync(new FileUploaderBaseEventArgs
+                            {
+                                Stream = memoryStream
+                            });
+                        }
                     }
 
-                    Value = Max;
                     this.StateHasChanged();
                 }
                 catch (OperationCanceledException)

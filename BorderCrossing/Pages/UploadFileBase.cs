@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Threading.Tasks;
-//using Blazor.FileReader;
 using BorderCrossing.Components;
 using BorderCrossing.Models;
 using BorderCrossing.Services;
@@ -22,6 +20,11 @@ namespace BorderCrossing.Pages
         protected async Task HandleValidSubmit()
         {
             BorderCrossingResponse = await BorderCrossingService.ParseLocationHistoryAsync(DateRangePostRequest);
+        }
+
+        protected async Task OnUploadComplete(FileUploaderBaseEventArgs e)
+        {
+            DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(e.Stream);
         }
     }
 }
