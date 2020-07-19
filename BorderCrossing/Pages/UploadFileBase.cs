@@ -12,7 +12,7 @@ namespace BorderCrossing.Pages
         public IBorderCrossingService BorderCrossingService { get; set; }
 
         public string Status { get; set; }
-        
+
         public DateRangePostRequest DateRangePostRequest { get; set; }
         
         public BorderCrossingResponse BorderCrossingResponse{ get; set; }
@@ -24,6 +24,7 @@ namespace BorderCrossing.Pages
 
         protected async Task OnUploadComplete(FileUploaderBaseEventArgs e)
         {
+            Status = "Preparing locations";
             DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(e.Stream);
         }
     }

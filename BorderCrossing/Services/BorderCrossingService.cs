@@ -31,7 +31,6 @@ namespace BorderCrossing.Services
             _repository = repository;
         }
 
-
         public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream)
         {
             var history = await ExtractJsonAsync(memoryStream);
@@ -52,7 +51,7 @@ namespace BorderCrossing.Services
             return null;
         }
 
-        public Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model)
+        public async Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model)
         {
             var locations = _repository.GetLocations(model.Guid);
             var countries = _repository.GetAllCountries();
@@ -95,7 +94,8 @@ namespace BorderCrossing.Services
             }
             
             last.DeparturePoint = checkPoints.Last();
-            return new Task<BorderCrossingResponse>(() => response);
+
+            return await Task.FromResult(response);
         }
 
         private Dictionary<DateTime, Geometry> PrepareLocations(LocationHistory history)

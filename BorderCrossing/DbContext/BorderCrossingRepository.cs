@@ -32,7 +32,7 @@ namespace BorderCrossing.DbContext
         {
             if (!_cache.TryGetValue(CountriesKey, out List<Country> allCountries))
             {
-                allCountries = _appDbContext.Countries.ToList();
+                allCountries = _appDbContext.Countries.Where(c=>c.Region == 150).ToList();
                 _cache.Set(CountriesKey, allCountries);
             }
             

@@ -9,13 +9,14 @@
     <EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <InputDate @bind-Value="DateRangePostRequest.StartDate" />
-        <InputDate @bind-Value="DateRangePostRequest.EndDate" />
-        <button type="submit">Submit</button>
+        <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate" />
+        <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate" />
+        <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
 else
 {
+
     <FileUploader OnUploadCompleteCallback ="@OnUploadComplete"/>
 }
 
@@ -34,9 +35,9 @@ else
             @foreach (Period period in BorderCrossingResponse.Periods)
             {
                 <tr>
-                    <td><a href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
+                    <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
                     <td>@period.Country</td>
-                    <td><a href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
+                    <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
                     <td>@period.Days</td>
                 </tr>
             }
