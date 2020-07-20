@@ -1,3 +1,4 @@
+using System;
 using Blazor.FileReader;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +29,7 @@ namespace BorderCrossing
             services.AddServerSideBlazor().AddHubOptions(o =>
             {
                 o.MaximumReceiveMessageSize = 50 * 1024 * 1024; // 50MB
+                o.ClientTimeoutInterval = TimeSpan.FromHours(1);
             });
 
             services.AddFileReaderService();
