@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -18,7 +20,7 @@ namespace BorderCrossing.Services
 {
     public interface IBorderCrossingService
     {
-        Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream);
+        Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback);
         Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model);
     }
 
@@ -31,9 +33,9 @@ namespace BorderCrossing.Services
             _repository = repository;
         }
 
-        public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream)
+        public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback)
         {
-            var history = await ExtractJsonAsync(memoryStream);
+            var history = await ExtractJsonAsync(memoryStream, callback);
 
             if (history != null)
             {
@@ -55,19 +57,28 @@ namespace BorderCrossing.Services
         {
             var locations = _repository.GetLocations(model.Guid);
             var countries = _repository.GetAllCountries();
-            
-            var checkPoints =
-            (
-                from location in locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).AsParallel().AsOrdered().WithDegreeOfParallelism(10)
-                from country in countries.Where(c => location.Value.Within(c.Geom)).DefaultIfEmpty().AsParallel().WithDegreeOfParallelism(10)
+
+            var context = new ProgressContext<CheckPoint>(
+                from location in locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).AsParallel()
+                    .AsOrdered().WithDegreeOfParallelism(10)
+                from country in countries.Where(c => location.Value.Within(c.Geom)).DefaultIfEmpty().AsParallel()
+                    .WithDegreeOfParallelism(10)
                 select new CheckPoint()
                 {
                     CountryName = country == null ? "Unknown" : country.Name,
                     Date = location.Key,
                     Point = location.Value
                 }
-            ).AsParallel().WithDegreeOfParallelism(10).OrderBy(p => p.Date).ToList();
-            
+            );
+
+            var count = locations.Count;
+
+            context.UpdateProgress += (sender, e) =>
+            {
+                Debug.WriteLine($"{e.Count} of {count}");
+            };
+
+            var checkPoints = context.AsParallel().WithDegreeOfParallelism(10).OrderBy(p => p.Date).ToList();
 
             var response = new BorderCrossingResponse();
             response.Periods.Add(new Period
@@ -111,19 +122,19 @@ namespace BorderCrossing.Services
                 }
                 
                 var date = location.Date;
-                if (hour == date.Hour)
+                if (hour == date.Day)
                 {
                     continue;
                 }
                 
-                hour = date.Hour;
+                hour = date.Day;
                 locations.Add(date, location.Point);
             }
 
             return locations;
         }
         
-        private async Task<LocationHistory> ExtractJsonAsync(MemoryStream memoryStream)
+        private async Task<LocationHistory> ExtractJsonAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback)
         {
             using (var zip = new ZipArchive(memoryStream, ZipArchiveMode.Read))
             {
@@ -133,9 +144,14 @@ namespace BorderCrossing.Services
                     {
                         using (var stream = entry.Open())
                         {
-                            using (var sr = new StreamReader(stream))
+                            using (ReadProgressStream rps = new ReadProgressStream(stream))
+                            using (var sr = new StreamReader(rps))
                             using (var reader = new JsonTextReader(sr))
                             {
+                                if (callback != null)
+                                {
+                                    rps.ProgressChanged += callback;
+                                }
                                 var serializer = new JsonSerializer();
                                 return await Task.Run( () => serializer.Deserialize<LocationHistory>(reader));
                             }

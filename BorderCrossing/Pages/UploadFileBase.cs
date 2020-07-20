@@ -25,7 +25,7 @@ namespace BorderCrossing.Pages
         protected async Task OnUploadComplete(FileUploaderBaseEventArgs e)
         {
             Status = "Preparing locations";
-            DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(e.Stream);
+            DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(e.Stream, null);
         }
     }
 }

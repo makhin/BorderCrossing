@@ -29,14 +29,14 @@ namespace BorderCrossing
             services.AddServerSideBlazor().AddHubOptions(o =>
             {
                 o.MaximumReceiveMessageSize = 50 * 1024 * 1024; // 50MB
-                o.ClientTimeoutInterval = TimeSpan.FromHours(1);
+//                o.ClientTimeoutInterval = TimeSpan.FromHours(1);
             });
 
-            services.AddSignalR(o =>
-            {
-                o.EnableDetailedErrors = true;
-                o.KeepAliveInterval = TimeSpan.FromHours(1);
-            });
+            //services.AddSignalR(o =>
+            //{
+            //    o.EnableDetailedErrors = true;
+            //    o.KeepAliveInterval = TimeSpan.FromHours(1);
+            //});
 
             services.AddFileReaderService();
 
