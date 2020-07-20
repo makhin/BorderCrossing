@@ -32,6 +32,12 @@ namespace BorderCrossing
                 o.ClientTimeoutInterval = TimeSpan.FromHours(1);
             });
 
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+                o.KeepAliveInterval = TimeSpan.FromHours(1);
+            });
+
             services.AddFileReaderService();
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
