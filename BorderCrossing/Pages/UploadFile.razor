@@ -2,21 +2,27 @@
 @using BorderCrossing.Models
 @using BorderCrossing.Components
 @inherits UploadFileBase
+
 <p>@Status</p>
 
 @if (DateRangePostRequest != null)
 {
-    <EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+<EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit" class="form-inline">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group mb-2">
         <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate" />
-        <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate" />
+    </div>
+    <div class="form-group mb-2">
+        <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate"/>
+    </div>
+    <div class="form-group mb-2">
         <button type="submit" class="btn btn-primary">Submit</button>
-    </EditForm>
+    </div>
+</EditForm>
 }
 else
 {
-
     <FileUploader OnUploadCompleteCallback ="@OnUploadComplete"/>
 }
 
@@ -43,7 +49,6 @@ else
             }
         </tbody>
     </table>
-
     <table class="table">
         <thead>
             <tr>
