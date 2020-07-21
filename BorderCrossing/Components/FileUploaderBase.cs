@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Blazor.FileReader;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Tewr.Blazor.FileReader;
 
 namespace BorderCrossing.Components
 {

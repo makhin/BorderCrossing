@@ -6,7 +6,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using Blazor.FileReader;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
@@ -144,14 +143,9 @@ namespace BorderCrossing.Services
                     {
                         using (var stream = entry.Open())
                         {
-                            using (ReadProgressStream rps = new ReadProgressStream(stream))
-                            using (var sr = new StreamReader(rps))
+                            using (var sr = new StreamReader(stream))
                             using (var reader = new JsonTextReader(sr))
                             {
-                                if (callback != null)
-                                {
-                                    rps.ProgressChanged += callback;
-                                }
                                 var serializer = new JsonSerializer();
                                 return await Task.Run( () => serializer.Deserialize<LocationHistory>(reader));
                             }

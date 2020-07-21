@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Blazor.FileReader;
 
 namespace BorderCrossing.Components
 {

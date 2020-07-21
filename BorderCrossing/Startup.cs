@@ -1,5 +1,4 @@
 using System;
-using Blazor.FileReader;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +8,7 @@ using BorderCrossing.Data;
 using BorderCrossing.DbContext;
 using BorderCrossing.Services;
 using Microsoft.EntityFrameworkCore;
+using Tewr.Blazor.FileReader;
 
 namespace BorderCrossing
 {

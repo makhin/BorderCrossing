@@ -7,23 +7,26 @@
 
 @if (DateRangePostRequest != null)
 {
-<EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit" class="form-inline">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="form-group mb-2">
-        <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate" />
-    </div>
-    <div class="form-group mb-2">
-        <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate"/>
-    </div>
-    <div class="form-group mb-2">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</EditForm>
+    <EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit" class="form-inline">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group mb-2">
+            <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate" />
+        </div>
+        <div class="form-group mb-2">
+            <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate" />
+        </div>
+        <div class="form-group mb-2">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </EditForm>
 }
 else
 {
-    <FileUploader OnUploadCompleteCallback ="@OnUploadComplete"/>
+    <input type="file" @ref=InputTypeFileElement />
+    <button @onclick=ReadFile>Read file</button>
+
+    @*<FileUploader OnUploadCompleteCallback="@OnUploadComplete" />*@
 }
 
 @if (BorderCrossingResponse != null)

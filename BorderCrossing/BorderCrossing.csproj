@@ -22,10 +22,7 @@
       <PackageReference Include="System.IO.Compression" Version="4.3.0" />
       <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
       <PackageReference Include="System.Linq" Version="4.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Blazor.FileReader\Blazor.FileReader.csproj" />
+      <PackageReference Include="Tewr.Blazor.FileReader" Version="2.0.0.20200" />
     </ItemGroup>
 
     <ItemGroup>
