@@ -1,72 +1,100 @@
 ﻿@page "/uploadfile"
 @using BorderCrossing.Models
-@using BorderCrossing.Components
 @inherits UploadFileBase
 
-<p>@Status</p>
+    @Status
 
-@if (DateRangePostRequest != null)
-{
-    <EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit" class="form-inline">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group mb-2">
-            <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate" />
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <input type="file" @ref=InputTypeFileElement />
+                <button @onclick=ReadFile>Read file</button>
+            </div>
         </div>
-        <div class="form-group mb-2">
-            <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate" />
+        <div class="row">
+            <div class="col">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @PercentageLoad%;" aria-valuenow="@PercentageLoad" aria-valuemin="0" aria-valuemax="100">@PercentageLoad%</div>
+                </div>
+            </div>
         </div>
-        <div class="form-group mb-2">
-            <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="row">
+            <div class="col">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @PercentagePrep%;" aria-valuenow="@PercentagePrep" aria-valuemin="0" aria-valuemax="100">@PercentagePrep%</div>
+                </div>
+            </div>
         </div>
-    </EditForm>
-}
-else
-{
-    <input type="file" @ref=InputTypeFileElement />
-    <button @onclick=ReadFile>Read file</button>
-
-    @*<FileUploader OnUploadCompleteCallback="@OnUploadComplete" />*@
-}
-
-@if (BorderCrossingResponse != null)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Въезд</th>
-                <th>Страна</th>
-                <th>Выезд</th>
-                <th>Дни</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Period period in BorderCrossingResponse.Periods)
-            {
-                <tr>
-                    <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
-                    <td>@period.Country</td>
-                    <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
-                    <td>@period.Days</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Страна</th>
-                <th>Дни</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (KeyValuePair<string, int> countryDay in BorderCrossingResponse.CountryDays)
-            {
-                <tr>
-                    <td>@countryDay.Key</td>
-                    <td>@countryDay.Value</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        @if (DateRangePostRequest != null)
+        {
+            <div class="row">
+                <div class="col">
+                    <EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit" class="form-inline">
+                        <DataAnnotationsValidator/>
+                        <ValidationSummary/>
+                        <div class="form-group mb-2">
+                            <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate"/>
+                        </div>
+                        <div class="form-group mb-2">
+                            <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate"/>
+                        </div>
+                        <div class="form-group mb-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: @PercentageProc%;" aria-valuenow="@PercentageProc" aria-valuemin="0" aria-valuemax="100">@PercentageProc%</div>
+                        </div>
+                    </div>
+                </div>
+        }
+        @if (BorderCrossingResponse != null)
+        {
+            <div class="row">
+                <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Въезд</th>
+                        <th>Страна</th>
+                        <th>Выезд</th>
+                        <th>Дни</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (Period period in BorderCrossingResponse.Periods)
+                    {
+                        <tr>
+                            <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
+                            <td>@period.Country</td>
+                            <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
+                            <td>@period.Days</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Страна</th>
+                            <th>Дни</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (KeyValuePair<string, int> countryDay in BorderCrossingResponse.CountryDays)
+                        {
+                            <tr>
+                                <td>@countryDay.Key</td>
+                                <td>@countryDay.Value</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>

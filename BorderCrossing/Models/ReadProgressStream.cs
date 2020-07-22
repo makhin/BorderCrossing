@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.IO.Compression;
 
 namespace BorderCrossing.Models
 {
@@ -8,9 +9,9 @@ namespace BorderCrossing.Models
     {
         private int _lastProgress = 0;
 
-        public ReadProgressStream(Stream stream) : base(stream)
+        public ReadProgressStream(DeflateStream stream) : base(stream)
         {
-            if (stream.Length <= 0 || !stream.CanRead) throw new ArgumentException("stream");
+            if (!stream.CanRead) throw new ArgumentException("stream");
         }
 
         public override int Read(byte[] buffer, int offset, int count)

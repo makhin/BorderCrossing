@@ -1,9 +1,0 @@
-﻿@inherits FileUploaderBase
-
-<h1>Hello, files!</h1>
-<input type="file" @ref=InputElement />
-<button @onclick=ReadFile class="btn btn-primary">Read file</button>
-<button @onclick=ClearFile class="btn btn-primary">Clear</button>
-<button @onclick=CancelFile disabled=@IsCancelDisabled class="btn btn-primary">Cancel</button>
-<br />
-<progress max="@Max" value="@Value"></progress>

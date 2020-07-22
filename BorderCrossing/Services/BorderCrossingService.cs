@@ -20,7 +20,7 @@ namespace BorderCrossing.Services
     public interface IBorderCrossingService
     {
         Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback);
-        Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model);
+        Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, EventHandler<ProgressArgs> callback);
     }
 
     public class BorderCrossingService : IBorderCrossingService
@@ -52,12 +52,12 @@ namespace BorderCrossing.Services
             return null;
         }
 
-        public async Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model)
+        public async Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, EventHandler<ProgressArgs> callback)
         {
             var locations = _repository.GetLocations(model.Guid);
             var countries = _repository.GetAllCountries();
 
-            var context = new ProgressContext<CheckPoint>(
+            var context = new ProgressContext<CheckPoint>((
                 from location in locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).AsParallel()
                     .AsOrdered().WithDegreeOfParallelism(10)
                 from country in countries.Where(c => location.Value.Within(c.Geom)).DefaultIfEmpty().AsParallel()
@@ -67,15 +67,10 @@ namespace BorderCrossing.Services
                     CountryName = country == null ? "Unknown" : country.Name,
                     Date = location.Key,
                     Point = location.Value
-                }
+                })
             );
 
-            var count = locations.Count;
-
-            context.UpdateProgress += (sender, e) =>
-            {
-                Debug.WriteLine($"{e.Count} of {count}");
-            };
+            context.UpdateProgress += callback;
 
             var checkPoints = context.AsParallel().WithDegreeOfParallelism(10).OrderBy(p => p.Date).ToList();
 
@@ -137,17 +132,25 @@ namespace BorderCrossing.Services
         {
             using (var zip = new ZipArchive(memoryStream, ZipArchiveMode.Read))
             {
+
                 foreach (var entry in zip.Entries)
                 {
-                    if (entry.Name == "Location History.json" || entry.Name == "История местоположений.json")
+                    if (entry.Name != "Location History.json" && entry.Name != "История местоположений.json")
                     {
-                        using (var stream = entry.Open())
+                        continue;
+                    }
+
+                    await using (Stream stream = entry.Open())
+                    {
+                        using (ContainerStream containerStream = new ContainerStream(stream as DeflateStream))
                         {
-                            using (var sr = new StreamReader(stream))
-                            using (var reader = new JsonTextReader(sr))
+                            containerStream.ProgressChanged += callback;
+
+                            using (StreamReader streamReader = new StreamReader(containerStream))
+                            using (JsonTextReader jsonTextReader = new JsonTextReader(streamReader))
                             {
                                 var serializer = new JsonSerializer();
-                                return await Task.Run( () => serializer.Deserialize<LocationHistory>(reader));
+                                return await Task.Run(() => serializer.Deserialize<LocationHistory>(jsonTextReader));
                             }
                         }
                     }

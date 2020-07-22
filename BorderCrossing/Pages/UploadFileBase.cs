@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using BorderCrossing.Components;
 using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
@@ -12,10 +13,6 @@ namespace BorderCrossing.Pages
 {
     public class UploadFileBase : ComponentBase
     {
-        public long Max;
-        public long Value;
-        public CancellationTokenSource CancellationTokenSource;
-
         [Inject] 
         public IBorderCrossingService BorderCrossingService { get; set; }
 
@@ -24,44 +21,40 @@ namespace BorderCrossing.Pages
 
         public ElementReference InputTypeFileElement { get; set; }
 
+        public int PercentageLoad { get; set; }
+
+        public int PercentagePrep { get; set; }
+
+        public int PercentageProc { get; set; }
+
         public string Status { get; set; }
-
-        public bool CanCancel { get; set; }
-
-        public EventCallback<FileUploaderBaseEventArgs> OnUploadCompleteCallback { get; set; }
 
         public DateRangePostRequest DateRangePostRequest { get; set; }
 
         public BorderCrossingResponse BorderCrossingResponse { get; set; }
 
-        protected async Task HandleValidSubmit()
+        public async Task HandleValidSubmit()
         {
-            BorderCrossingResponse = await BorderCrossingService.ParseLocationHistoryAsync(DateRangePostRequest);
-        }
-
-        protected async Task OnUploadComplete(FileUploaderBaseEventArgs e)
-        {
-            Status = "Preparing locations";
-            DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(e.Stream, null);
+            BorderCrossingResponse = await BorderCrossingService.ParseLocationHistoryAsync(DateRangePostRequest, (sender, e) =>
+            {
+                this.InvokeAsync(this.StateHasChanged);
+                Debug.WriteLine($"{e.Count} of");
+                Status = $"{e.Count}";
+                this.InvokeAsync(this.StateHasChanged);
+                PercentageProc = (int)(e.Count * 100.0 / 1700);
+                this.InvokeAsync(this.StateHasChanged);
+            });
         }
 
         public async Task ReadFile()
         {
-            Max = 0;
-            Value = 0;
             this.StateHasChanged();
             var files = await FileReaderService.CreateReference(InputTypeFileElement).EnumerateFilesAsync();
             foreach (var file in files)
             {
                 var fileInfo = await file.ReadFileInfoAsync();
-                Max = fileInfo.Size;
-
                 this.StateHasChanged();
-                CancellationTokenSource?.Dispose();
-                CancellationTokenSource = new System.Threading.CancellationTokenSource();
-                CanCancel = true;
-
-                const int onlyReportProgressAfterThisPercentDelta = 5;
+                const int onlyReportProgressAfterThisPercentDelta = 1;
 
                 fileInfo.PositionInfo.PositionChanged += (s, e) =>
                 {
@@ -69,7 +62,7 @@ namespace BorderCrossing.Pages
                     {
                         this.InvokeAsync(this.StateHasChanged);
                         e.Acknowledge();
-                        Value = e.Position;
+                        PercentageLoad =  (int)e.Percentage;
                     }
                 };
 
@@ -79,9 +72,14 @@ namespace BorderCrossing.Pages
                     {
                         using (var stream = await file.OpenReadAsync())
                         {
-                            await stream.CopyToAsync(memoryStream, CancellationTokenSource.Token);
-                            Value = Max;
-                            DateRangePostRequest =  await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, null);
+                            await stream.CopyToAsync(memoryStream);
+                            PercentageLoad = 100;
+                            this.StateHasChanged();
+                            DateRangePostRequest =  await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, (sender, e) =>
+                            {
+                                PercentagePrep = e.ProgressPercentage;
+                                this.InvokeAsync(this.StateHasChanged);
+                            });
                         }
                     }
 
@@ -91,10 +89,6 @@ namespace BorderCrossing.Pages
                 {
                     await InvokeAsync(StateHasChanged);
                     await Task.Delay(1);
-                }
-                finally
-                {
-                    CanCancel = false;
                 }
             }
         }

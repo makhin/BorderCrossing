@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO.Compression;
 
 namespace BorderCrossing.Models
 {
-    public abstract class ContainerStream : Stream
+    public class ContainerStream : Stream
     {
-        private Stream _stream;
+        private readonly DeflateStream _stream;
+        private int _lastProgress = 0;
 
-        protected ContainerStream(Stream stream)
+        public ContainerStream(DeflateStream stream)
         {
             if (stream == null) throw new ArgumentNullException("stream");
             _stream = stream;
         }
 
-        protected Stream ContainedStream { get { return _stream; } }
+        protected DeflateStream ContainedStream { get { return _stream; } }
 
         public override bool CanRead { get { return _stream.CanRead; } }
 
@@ -36,7 +36,17 @@ namespace BorderCrossing.Models
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return _stream.Read(buffer, offset, count);
+            int amountRead = _stream.Read(buffer, offset, count);
+            if (ProgressChanged != null)
+            {
+                int newProgress = (int)(_stream.BaseStream.Position * 100.0 / _stream.BaseStream.Length);
+                if (newProgress > _lastProgress)
+                {
+                    _lastProgress = newProgress;
+                    ProgressChanged(this, new ProgressChangedEventArgs(_lastProgress, null));
+                }
+            }
+            return amountRead;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -53,5 +63,7 @@ namespace BorderCrossing.Models
         {
             _stream.Write(buffer, offset, count);
         }
+
+        public event ProgressChangedEventHandler ProgressChanged;
     }
 }
