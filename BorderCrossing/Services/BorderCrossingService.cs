@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -10,8 +9,6 @@ using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
 using BorderCrossing.Models.Google;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 
@@ -20,16 +17,18 @@ namespace BorderCrossing.Services
     public interface IBorderCrossingService
     {
         Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback);
-        Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, EventHandler<ProgressArgs> callback);
+        BorderCrossingResponse ParseLocationHistory(DateRangePostRequest model, ProgressChangedEventHandler callback);
     }
 
     public class BorderCrossingService : IBorderCrossingService
     {
         private readonly IBorderCrossingRepository _repository;
+        private readonly List<Country> _countries;
 
         public BorderCrossingService(IBorderCrossingRepository repository)
         {
             _repository = repository;
+            _countries = _repository.GetAllCountries().ToList();
         }
 
         public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback)
@@ -41,7 +40,7 @@ namespace BorderCrossing.Services
                 var locations = PrepareLocations(history);
                 var guid = _repository.AddLocations(locations);
 
-                return await Task.FromResult(new DateRangePostRequest()
+                return await Task.FromResult(new DateRangePostRequest
                 {
                     Guid = guid,
                     StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
@@ -52,55 +51,73 @@ namespace BorderCrossing.Services
             return null;
         }
 
-        public async Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, EventHandler<ProgressArgs> callback)
+        public BorderCrossingResponse ParseLocationHistory(DateRangePostRequest model, ProgressChangedEventHandler callback)
         {
-            var locations = _repository.GetLocations(model.Guid);
-            var countries = _repository.GetAllCountries();
-
-            var context = new ProgressContext<CheckPoint>((
-                from location in locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).AsParallel()
-                    .AsOrdered().WithDegreeOfParallelism(10)
-                from country in countries.Where(c => location.Value.Within(c.Geom)).DefaultIfEmpty().AsParallel()
-                    .WithDegreeOfParallelism(10)
-                select new CheckPoint()
-                {
-                    CountryName = country == null ? "Unknown" : country.Name,
-                    Date = location.Key,
-                    Point = location.Value
-                })
-            );
-
-            context.UpdateProgress += callback;
-
-            var checkPoints = context.AsParallel().WithDegreeOfParallelism(10).OrderBy(p => p.Date).ToList();
-
+            Dictionary<DateTime, Geometry> locations = _repository.GetLocations(model.Guid);
             var response = new BorderCrossingResponse();
-            response.Periods.Add(new Period
+
+            var checkPoints = locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).Select(l => new CheckPoint()
             {
-                ArrivalPoint = checkPoints.First(),
-                Country = checkPoints.First().CountryName,
+                Date = l.Key,
+                Point = l.Value
+            }).ToList();
+
+            if (!checkPoints.Any())
+            {
+                return response;
+            }
+
+            Period last = null;
+            var arrivalPoint = checkPoints.First();
+            var countryName = GetCountryName(arrivalPoint);
+            response.Periods.Add(new Period()
+            {
+                ArrivalPoint = arrivalPoint,
+                Country = countryName
             });
-            var last = response.Periods.Last();
-            
-            foreach (var place in checkPoints)
+            last = response.Periods.Last();
+
+            int i = 0;
+            int count = checkPoints.Count;
+
+            foreach (var checkPoint in checkPoints)
             {
-                if (place.CountryName == last.Country)
+                i++;
+                callback(this, new ProgressChangedEventArgs( (int)(100.0 * i / count), null));
+                countryName = GetCountryName(checkPoint);
+                if (last.Country == countryName)
                 {
                     continue;
                 }
-                
-                last.DeparturePoint = place;
+
+                last.DeparturePoint = checkPoint;
+
                 response.Periods.Add(new Period
                 {
-                    ArrivalPoint = place,
-                    Country = place.CountryName,
+                    ArrivalPoint = checkPoint,
+                    Country = countryName,
                 });
                 last = response.Periods.Last();
             }
-            
             last.DeparturePoint = checkPoints.Last();
 
-            return await Task.FromResult(response);
+            return response;
+        }
+
+        private string GetCountryName(CheckPoint checkPoint)
+        {
+            var country = _countries.FirstOrDefault(c => checkPoint.Point.Within(c.Geom));
+            var countryName = country == null ? "Unknown" : country.Name;
+            return countryName;
+        }
+
+        private static CheckPoint GetCheckpoint(string countryName, KeyValuePair<DateTime, Geometry> location)
+        {
+            return new CheckPoint()
+            {
+                Date = location.Key,
+                Point = location.Value
+            };
         }
 
         private Dictionary<DateTime, Geometry> PrepareLocations(LocationHistory history)
