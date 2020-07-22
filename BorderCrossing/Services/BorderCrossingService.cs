@@ -17,7 +17,7 @@ namespace BorderCrossing.Services
     public interface IBorderCrossingService
     {
         Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback);
-        BorderCrossingResponse ParseLocationHistory(DateRangePostRequest model, ProgressChangedEventHandler callback);
+        Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, ProgressChangedEventHandler callback);
     }
 
     public class BorderCrossingService : IBorderCrossingService
@@ -51,7 +51,7 @@ namespace BorderCrossing.Services
             return null;
         }
 
-        public BorderCrossingResponse ParseLocationHistory(DateRangePostRequest model, ProgressChangedEventHandler callback)
+        public async Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, ProgressChangedEventHandler callback)
         {
             Dictionary<DateTime, Geometry> locations = _repository.GetLocations(model.Guid);
             var response = new BorderCrossingResponse();
@@ -64,10 +64,9 @@ namespace BorderCrossing.Services
 
             if (!checkPoints.Any())
             {
-                return response;
+                return await Task.FromResult(response);
             }
 
-            Period last = null;
             var arrivalPoint = checkPoints.First();
             var countryName = GetCountryName(arrivalPoint);
             response.Periods.Add(new Period()
@@ -75,33 +74,37 @@ namespace BorderCrossing.Services
                 ArrivalPoint = arrivalPoint,
                 Country = countryName
             });
-            last = response.Periods.Last();
+            var last = response.Periods.Last();
 
             int i = 0;
             int count = checkPoints.Count;
 
             foreach (var checkPoint in checkPoints)
             {
-                i++;
-                callback(this, new ProgressChangedEventArgs( (int)(100.0 * i / count), null));
-                countryName = GetCountryName(checkPoint);
-                if (last.Country == countryName)
+                await Task.Run(() =>
                 {
-                    continue;
-                }
+                    i++;
+                    callback(this, new ProgressChangedEventArgs((int) (100.0 * i / count), null));
+                    countryName = GetCountryName(checkPoint);
+                    if (last.Country == countryName)
+                    {
+                        return;
+                    }
 
-                last.DeparturePoint = checkPoint;
+                    last.DeparturePoint = checkPoint;
 
-                response.Periods.Add(new Period
-                {
-                    ArrivalPoint = checkPoint,
-                    Country = countryName,
+                    response.Periods.Add(new Period
+                    {
+                        ArrivalPoint = checkPoint,
+                        Country = countryName,
+                    });
+                    last = response.Periods.Last();
                 });
-                last = response.Periods.Last();
             }
+
             last.DeparturePoint = checkPoints.Last();
 
-            return response;
+            return await Task.FromResult(response);
         }
 
         private string GetCountryName(CheckPoint checkPoint)

@@ -37,11 +37,7 @@ namespace BorderCrossing.Pages
         {
             BorderCrossingResponse = await BorderCrossingService.ParseLocationHistoryAsync(DateRangePostRequest, (sender, e) =>
             {
-                this.InvokeAsync(this.StateHasChanged);
-                Debug.WriteLine($"{e.Count} of");
-                Status = $"{e.Count}";
-                this.InvokeAsync(this.StateHasChanged);
-                PercentageProc = (int)(e.Count * 100.0 / 1700);
+                PercentageProc = e.ProgressPercentage;
                 this.InvokeAsync(this.StateHasChanged);
             });
         }
