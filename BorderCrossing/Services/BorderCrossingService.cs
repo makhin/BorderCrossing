@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
+using BorderCrossing.Models.Core;
 using BorderCrossing.Models.Google;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
@@ -24,31 +25,32 @@ namespace BorderCrossing.Services
     {
         private readonly IBorderCrossingRepository _repository;
         private readonly List<Country> _countries;
+        private static readonly string[] Names = new []
+        {
+            "Location History",
+            "История местоположений",
+            "Historia lokalizacji",
+            "Історія місцезнаходжень"
+        };
 
         public BorderCrossingService(IBorderCrossingRepository repository)
         {
             _repository = repository;
-            _countries = _repository.GetAllCountries().ToList();
+            _countries = _repository.GetAllCountries();
         }
 
         public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback)
         {
             var history = await ExtractJsonAsync(memoryStream, callback);
+            var locations = PrepareLocations(history);
+            var guid = _repository.AddLocations(locations);
 
-            if (history != null)
+            return await Task.FromResult(new DateRangePostRequest
             {
-                var locations = PrepareLocations(history);
-                var guid = _repository.AddLocations(locations);
-
-                return await Task.FromResult(new DateRangePostRequest
-                {
-                    Guid = guid,
-                    StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
-                    EndDate = history.Locations.Max(l => l.TimestampMs).ToDateTime()
-                });
-            }
-
-            return null;
+                Guid = guid,
+                StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
+                EndDate = history.Locations.Max(l => l.TimestampMs).ToDateTime(),
+        });
         }
 
         public async Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, ProgressChangedEventHandler callback)
@@ -152,10 +154,9 @@ namespace BorderCrossing.Services
         {
             using (var zip = new ZipArchive(memoryStream, ZipArchiveMode.Read))
             {
-
                 foreach (var entry in zip.Entries)
                 {
-                    if (entry.Name != "Location History.json" && entry.Name != "История местоположений.json")
+                    if (Path.GetExtension(entry.Name) != ".json" || !Names.Contains(Path.GetFileNameWithoutExtension(entry.Name)))
                     {
                         continue;
                     }
@@ -177,7 +178,7 @@ namespace BorderCrossing.Services
                 }
             }
 
-            return null;
+            throw new Exception("Архив не содержит файла с историей местоположений");
         }
     }
 }

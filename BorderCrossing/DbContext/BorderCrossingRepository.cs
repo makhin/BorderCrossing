@@ -10,7 +10,7 @@ namespace BorderCrossing.DbContext
 {
     public interface IBorderCrossingRepository
     {
-        IEnumerable<Country> GetAllCountries();
+        List<Country> GetAllCountries();
         void SaveLocationHistoryFile(LocationHistoryFile usageHistory);
         string AddLocations(Dictionary<DateTime, Geometry> locations);
         Dictionary<DateTime, Geometry> GetLocations(string guid);
@@ -28,7 +28,7 @@ namespace BorderCrossing.DbContext
             _cache = cache;
         }
 
-        public IEnumerable<Country> GetAllCountries()
+        public List<Country> GetAllCountries()
         {
             if (!_cache.TryGetValue(CountriesKey, out List<Country> allCountries))
             {

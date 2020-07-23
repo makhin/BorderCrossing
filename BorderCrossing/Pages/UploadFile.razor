@@ -1,97 +1,144 @@
 ﻿@page "/uploadfile"
 @using BorderCrossing.Models
-@inherits UploadFileBase
+@using BorderCrossing.Components
+@inherits UploadFileBase    
 
-    @Status
-
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <input type="file" @ref=InputTypeFileElement />
-                <button @onclick=ReadFile>Read file</button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: @PercentageLoad%;" aria-valuenow="@PercentageLoad" aria-valuemin="0" aria-valuemax="100">@PercentageLoad%</div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: @PercentagePrep%;" aria-valuenow="@PercentagePrep" aria-valuemin="0" aria-valuemax="100">@PercentagePrep%</div>
-                </div>
-            </div>
-        </div>
-        @if (DateRangePostRequest != null)
+    <div class="container-fluid">
+        @if (Status == Status.ReadyToUpload || Status == Status.Uploading)
         {
-            <div class="row">
-                <div class="col">
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
+                    <form>
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" lang="ru" class="custom-file-input @(!string.IsNullOrEmpty(ErrorMessage) ? "is-invalid" : string.Empty)" id="validatedCustomFile" required @ref=InputTypeFileElement @onchange="ReadFile" disabled="@(Status != Status.ReadyToUpload)">
+                                <label class="custom-file-label" for="validatedCustomFile">Выберите файл...</label>
+                                @if (!string.IsNullOrEmpty(ErrorMessage))
+                                {
+                                    <div class="invalid-feedback">@ErrorMessage</div>
+                                }
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+        @if (Status == Status.Uploading)
+        {
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
+                    <h5>Загружаем файл</h5>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: @PercentageLoad%;" aria-valuenow="@PercentageLoad" aria-valuemin="0" aria-valuemax="100">@PercentageLoad%</div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Status == Status.Deserializing)
+        {
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
+                    <h5>Подготовка данных</h5>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar" role="progressbar" style="width: @PercentagePrep%;" aria-valuenow="@PercentagePrep" aria-valuemin="0" aria-valuemax="100">@PercentagePrep%</div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Status == Status.AskParameter && DateRangePostRequest != null)
+        {
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
                     <EditForm Model="@DateRangePostRequest" OnValidSubmit="HandleValidSubmit" class="form-inline">
-                        <DataAnnotationsValidator/>
-                        <ValidationSummary/>
-                        <div class="form-group mb-2">
-                            <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate"/>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group p-0 mt-3 mb-2">
+                            <label>
+                                От:
+                                <InputDate class="form-control" @bind-Value="DateRangePostRequest.StartDate" />
+                            </label>
                         </div>
-                        <div class="form-group mb-2">
-                            <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate"/>
+                        <div class="form-group p-0 mt-3 mb-2">
+                            <label>
+                                До:
+                                <InputDate class="form-control" @bind-Value="DateRangePostRequest.EndDate" />
+                            </label>
                         </div>
-                        <div class="form-group mb-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="form-group p-0 mt-3 mb-2">
+                            <label>
+                                <InputRadio checked name="interval" SelectedValue="1" @bind-Value="DateRangePostRequest.Interval" /> По дням
+                            </label>
+                            <label>
+                                <InputRadio name="interval" SelectedValue="2" @bind-Value="DateRangePostRequest.Interval" /> По часам
+                            </label>
                         </div>
+                        <div class="form-group p-0 mt-3 mb-2">
+                            @foreach (var region in DateRangePostRequest.Regions)
+                            {
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" >
+                                        @region.Name:
+                                        <InputCheckbox @bind-Value="region.Checked" />
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </EditForm>
                 </div>
             </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: @PercentageProc%;" aria-valuenow="@PercentageProc" aria-valuemin="0" aria-valuemax="100">@PercentageProc%</div>
-                        </div>
+        }
+        @if(Status == Status.Processing)
+        {
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-9 col-md-7 col-lg-6 col-xl-5 text-center p-0 mt-3 mb-2">
+                    <h5>Обработка</h5>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar" role="progressbar" style="width: @PercentageProc%;" aria-valuenow="@PercentageProc" aria-valuemin="0" aria-valuemax="100">@PercentageProc%</div>
                     </div>
                 </div>
+            </div>
         }
-        @if (BorderCrossingResponse != null)
+        @if(Status == Status.Results && BorderCrossingResponse != null)
         {
             <div class="row">
                 <div class="col">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Въезд</th>
-                        <th>Страна</th>
-                        <th>Выезд</th>
-                        <th>Дни</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (Period period in BorderCrossingResponse.Periods)
-                    {
-                        <tr>
-                            <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
-                            <td>@period.Country</td>
-                            <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.DeparturePoint.Date</a></td>
-                            <td>@period.Days</td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th>Страна</th>
-                            <th>Дни</th>
-                        </tr>
+                            <tr>
+                                <th>Въезд</th>
+                                <th>Страна</th>
+                                <th>Выезд</th>
+                                <th>Дни</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        @foreach (KeyValuePair<string, int> countryDay in BorderCrossingResponse.CountryDays)
-                        {
+                            @foreach (Period period in BorderCrossingResponse.Periods)
+                            {
+                                <tr>
+                                    <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date</a></td>
+                                    <td>@period.Country</td>
+                                    <td><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.DeparturePoint.Date</a></td>
+                                    <td>@period.Days</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>@countryDay.Key</td>
-                                <td>@countryDay.Value</td>
+                                <th>Страна</th>
+                                <th>Дни</th>
                             </tr>
-                        }
+                        </thead>
+                        <tbody>
+                            @foreach (KeyValuePair<string, int> countryDay in BorderCrossingResponse.CountryDays)
+                            {
+                                <tr>
+                                    <td>@countryDay.Key</td>
+                                    <td>@countryDay.Value</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
