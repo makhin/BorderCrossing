@@ -9,12 +9,12 @@ namespace BorderCrossing.Models.Core
     {
         private int _lastProgress = 0;
 
-        public ContainerStream(DeflateStream stream)
+        public ContainerStream(Stream stream)
         {
             ContainedStream = stream ?? throw new ArgumentNullException(nameof(stream));
         }
 
-        protected DeflateStream ContainedStream { get; }
+        protected Stream ContainedStream { get; }
 
         public override bool CanRead => ContainedStream.CanRead;
 
@@ -40,7 +40,18 @@ namespace BorderCrossing.Models.Core
                 return amountRead;
             }
 
-            int newProgress = (int)(ContainedStream.BaseStream.Position * 100.0 / ContainedStream.BaseStream.Length);
+            int newProgress;
+
+            if (ContainedStream is DeflateStream deflateStream)
+            {
+                var stream = deflateStream.BaseStream;
+                newProgress = (int)(stream.Position * 100.0 / stream.Length);
+            }
+            else
+            {
+                newProgress = (int)(ContainedStream.Position * 100.0 / ContainedStream.Length);
+            }
+           
             if (newProgress > _lastProgress)
             {
                 _lastProgress = newProgress;

@@ -50,6 +50,7 @@ namespace BorderCrossing.Services
                 Guid = guid,
                 StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
                 EndDate = history.Locations.Max(l => l.TimestampMs).ToDateTime(),
+                Interval = 1
         });
         }
 
@@ -116,15 +117,6 @@ namespace BorderCrossing.Services
             return countryName;
         }
 
-        private static CheckPoint GetCheckpoint(string countryName, KeyValuePair<DateTime, Geometry> location)
-        {
-            return new CheckPoint()
-            {
-                Date = location.Key,
-                Point = location.Value
-            };
-        }
-
         private Dictionary<DateTime, Geometry> PrepareLocations(LocationHistory history)
         {
             var hour = 0;
@@ -163,7 +155,7 @@ namespace BorderCrossing.Services
 
                     await using (Stream stream = entry.Open())
                     {
-                        using (ContainerStream containerStream = new ContainerStream(stream as DeflateStream))
+                        using (ContainerStream containerStream = new ContainerStream(stream))
                         {
                             containerStream.ProgressChanged += callback;
 

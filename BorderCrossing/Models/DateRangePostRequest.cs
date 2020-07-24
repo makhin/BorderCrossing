@@ -33,37 +33,37 @@ namespace BorderCrossing.Models
                 new Region
                 {
                     Id = 0,
-                    Name = "Antarctica",
+                    Name = "Антарктика",
                     Checked = false
                 },
                 new Region
                 {
                     Id = 2,
-                    Name = "Africa",
+                    Name = "Африка",
                     Checked = false
                 },
                 new Region
                 {
                     Id = 9,
-                    Name = "Australia",
+                    Name = "Австралия",
                     Checked = false
                 },
                 new Region
                 { 
                     Id = 19,
-                    Name = "America",
+                    Name = "Америка",
                     Checked = false
                 },
                 new Region
                 {
                     Id = 142,
-                    Name = "Asia",
+                    Name = "Азия",
                     Checked = false
                 },
                 new Region
                 {
                     Id = 150,
-                    Name = "Europe",
+                    Name = "Европа",
                     Checked = true
                 },
             };

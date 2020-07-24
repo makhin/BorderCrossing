@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Blazorise;
 using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
-using Tewr.Blazor.FileReader;
 
 namespace BorderCrossing.Pages
 {
@@ -23,9 +22,6 @@ namespace BorderCrossing.Pages
         [Inject] 
         public IBorderCrossingService BorderCrossingService { get; set; }
 
-        [Inject] 
-        public IFileReaderService FileReaderService { get; set; }
-
         public Status Status { get; set; }
 
         public string ErrorMessage { get; set; }
@@ -42,12 +38,14 @@ namespace BorderCrossing.Pages
 
         public BorderCrossingResponse BorderCrossingResponse { get; set; }
 
+        public ValidationStatus FileUploadStatus { get; set; }
+
         protected override void OnInitialized()
         {
             Status = Status.ReadyToUpload;
         }
 
-        public async Task HandleValidSubmit()
+        public async Task Start()
         {
             Status = Status.Processing;
             BorderCrossingResponse = await BorderCrossingService.ParseLocationHistoryAsync(DateRangePostRequest, (sender, e) =>
@@ -58,70 +56,50 @@ namespace BorderCrossing.Pages
             Status = Status.Results;
         }
 
-        public async Task ReadFile()
+        public async Task OnChanged(FileChangedEventArgs e)
         {
-            StateHasChanged();
-            var files = await FileReaderService.CreateReference(InputTypeFileElement).EnumerateFilesAsync();
             try
             {
-                foreach (var file in files)
+                foreach (var file in e.Files)
                 {
-                    var fileInfo = await file.ReadFileInfoAsync();
-                    if (Path.GetExtension(fileInfo.Name) != ".zip")
-                    {
-                        throw new Exception("Файл должен иметь расширение .zip");
-                    }
-
                     Status = Status.Uploading;
+                    FileUploadStatus = ValidationStatus.None;
                     StateHasChanged();
-                    const int onlyReportProgressAfterThisPercentDelta = 1;
 
-                    fileInfo.PositionInfo.PositionChanged += (s, e) =>
+                    await using (var memoryStream = new MemoryStream())
                     {
-                        if (e.PercentageDeltaSinceAcknowledge > onlyReportProgressAfterThisPercentDelta)
-                        {
-                            InvokeAsync(StateHasChanged);
-                            e.Acknowledge();
-                            PercentageLoad = (int)e.Percentage;
-                        }
-                    };
-
-                    try
-                    {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            using (var stream = await file.OpenReadAsync())
-                            {
-                                await stream.CopyToAsync(memoryStream);
-                                PercentageLoad = 100;
-                                StateHasChanged();
-                                Status = Status.Deserializing;
-                                DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, (sender, e) =>
-                                {
-                                    PercentagePrep = e.ProgressPercentage;
-                                    InvokeAsync(StateHasChanged);
-                                });
-                            }
-                        }
-
-                        Status = Status.AskParameter;
+                        await file.WriteToStreamAsync(memoryStream);
+                        PercentageLoad = 100;
                         StateHasChanged();
+                        Status = Status.Deserializing;
+                        DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, (sender, progressChangedEventArgs) =>
+                        {
+                            PercentagePrep = progressChangedEventArgs.ProgressPercentage;
+                            InvokeAsync(StateHasChanged);
+                        });
                     }
-                    catch (OperationCanceledException)
-                    {
-                        await InvokeAsync(StateHasChanged);
-                        await Task.Delay(1);
-                    }
+
+                    Status = Status.AskParameter;
                 }
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                ErrorMessage = e.Message;
+                ErrorMessage = exception.Message;
+                FileUploadStatus = ValidationStatus.Error;
                 Status = Status.ReadyToUpload;
                 PercentageLoad = 0;
                 PercentagePrep = 0;
-                StateHasChanged();
             }
+            finally
+            {
+                this.StateHasChanged();
+            }
+        }
+
+        public void OnProgressed(FileProgressedEventArgs e)
+        {
+            PercentageLoad = (int)e.Percentage;
+            this.StateHasChanged();
         }
     }
 }
