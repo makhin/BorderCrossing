@@ -15,6 +15,11 @@
             </Validation>
         </Validations>
 
+        @if(!string.IsNullOrEmpty(ErrorMessage))
+        {
+            <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Warning">@ErrorMessage</Heading>
+        }
+
         @if (Status == Status.Uploading)
         {
             <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">Загрузка</Heading>
@@ -62,7 +67,7 @@
                 </Validation>
                 <Validation>
                     <Field Horizontal="true">
-                        <FieldLabel ColumnSize="ColumnSize.Is2">Интервал</FieldLabel>
+                        <FieldLabel ColumnSize="ColumnSize.Is2"></FieldLabel>
                         <FieldBody ColumnSize="ColumnSize.Is10">
                             <RadioGroup TValue="int" Name="interval" Inline="true" CheckedValue="@DateRangePostRequest.Interval">
                                 <Radio Disabled="true" TValue="int" Value="@(1)">По дням</Radio>
@@ -73,7 +78,7 @@
                 </Validation>
                 <Validation>
                     <Field Horizontal="true" JustifyContent="JustifyContent.Between">
-                        <FieldLabel ColumnSize="ColumnSize.Is2">Регионы</FieldLabel>
+                        <FieldLabel ColumnSize="ColumnSize.Is2"></FieldLabel>
                         <FieldBody ColumnSize="ColumnSize.Is10">
                             @foreach (var region in DateRangePostRequest.Regions)
                             {

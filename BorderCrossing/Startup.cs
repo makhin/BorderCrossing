@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BorderCrossing.Data;
 using BorderCrossing.DbContext;
 using BorderCrossing.Services;
 using Microsoft.EntityFrameworkCore;
@@ -51,8 +50,7 @@ namespace BorderCrossing
                     });
             });
 
-            services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<IBorderCrossingRepository, BorderCrossingRepository>();
+            services.AddSingleton<BorderCrossingRepository>();
             services.AddScoped<IBorderCrossingService, BorderCrossingService>();
         }
 
