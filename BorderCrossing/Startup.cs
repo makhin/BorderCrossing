@@ -50,7 +50,7 @@ namespace BorderCrossing
                     });
             });
 
-            services.AddSingleton<BorderCrossingRepository>();
+            services.AddScoped<IBorderCrossingRepository, BorderCrossingRepository>();
             services.AddScoped<IBorderCrossingService, BorderCrossingService>();
         }
 

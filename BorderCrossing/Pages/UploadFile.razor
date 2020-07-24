@@ -2,11 +2,22 @@
 @using BorderCrossing.Models
 @inherits UploadFileBase
 
+@functions {
+    void FileNameValidator(ValidatorEventArgs e)
+    {
+        var fileName = Convert.ToString( e.Value );
+        var extension = Path.GetExtension(fileName);
+
+        e.Status = string.IsNullOrEmpty(fileName) ? ValidationStatus.None :
+            (extension == ".zip" ? ValidationStatus.Success : ValidationStatus.Error);
+    }
+}
+
 <Container>
     @if (Status == Status.ReadyToUpload || Status == Status.Uploading)
     {
         <Validations Mode="ValidationMode.Manual">
-            <Validation Status="@FileUploadStatus">
+            <Validation Status="@FileUploadStatus" Validator="@FileNameValidator">
                 <FileEdit Multiple="false" Filter=".zip" Changed="@OnChanged" Progressed="@OnProgressed" Disabled="@(Status != Status.ReadyToUpload)">
                     <Feedback>
                         <ValidationError>@ErrorMessage</ValidationError>
@@ -17,7 +28,7 @@
 
         @if(!string.IsNullOrEmpty(ErrorMessage))
         {
-            <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Warning">@ErrorMessage</Heading>
+            <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Danger">@ErrorMessage</Heading>
         }
 
         @if (Status == Status.Uploading)
