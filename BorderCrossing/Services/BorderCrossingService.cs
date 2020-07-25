@@ -17,7 +17,7 @@ namespace BorderCrossing.Services
 {
     public interface IBorderCrossingService
     {
-        Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback);
+        Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, ProgressChangedEventHandler callback);
         Task<BorderCrossingResponse> ParseLocationHistoryAsync(DateRangePostRequest model, ProgressChangedEventHandler callback);
     }
 
@@ -39,15 +39,18 @@ namespace BorderCrossing.Services
             _countries = _repository.GetAllCountries();
         }
 
-        public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, ProgressChangedEventHandler callback)
+        public async Task<DateRangePostRequest> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, ProgressChangedEventHandler callback)
         {
+            var guid = Guid.NewGuid();
+            _ = _repository.SaveLocationHistoryFileAsync(memoryStream, fileName, guid);
+
             var history = await ExtractJsonAsync(memoryStream, callback);
             var locations = PrepareLocations(history);
-            var guid = _repository.AddLocations(locations);
+            _repository.AddLocations(locations, guid.ToString());
 
             return await Task.FromResult(new DateRangePostRequest
             {
-                Guid = guid,
+                Guid = guid.ToString(),
                 StartDate = history.Locations.Min(l => l.TimestampMs).ToDateTime(),
                 EndDate = history.Locations.Max(l => l.TimestampMs).ToDateTime(),
                 Interval = 1

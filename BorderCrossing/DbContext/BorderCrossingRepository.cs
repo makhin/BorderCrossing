@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using BorderCrossing.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -11,8 +14,8 @@ namespace BorderCrossing.DbContext
     public interface IBorderCrossingRepository
     {
         List<Country> GetAllCountries();
-        void SaveLocationHistoryFile(LocationHistoryFile usageHistory);
-        string AddLocations(Dictionary<DateTime, Geometry> locations);
+        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid guid);
+        void AddLocations(Dictionary<DateTime, Geometry> locations, string guid);
         Dictionary<DateTime, Geometry> GetLocations(string guid);
     }
 
@@ -39,11 +42,9 @@ namespace BorderCrossing.DbContext
             return allCountries;
         }
 
-        public string AddLocations(Dictionary<DateTime, Geometry> locations)
+        public void AddLocations(Dictionary<DateTime, Geometry> locations, string guid)
         {
-            var guid = Guid.NewGuid().ToString();
             _cache.Set(guid, locations, TimeSpan.FromMinutes(15));
-            return guid;
         }
         
         public Dictionary<DateTime, Geometry> GetLocations(string guid)
@@ -51,11 +52,29 @@ namespace BorderCrossing.DbContext
             return _cache.Get<Dictionary<DateTime, Geometry>>(guid);
         }
 
-        public void SaveLocationHistoryFile(LocationHistoryFile usageHistory)
+        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid guid)
         {
             _appDbContext.Database.SetCommandTimeout(180);
-            _appDbContext.UsageHistory.AddAsync(usageHistory);
-            _appDbContext.SaveChangesAsync();
+            var locationHistoryFile = new LocationHistoryFile
+            {
+                File = memoryStream.ToArray(),
+                DateUpload = DateTime.Now,
+                RequestId = guid,
+                FileName = fileName
+            };
+
+            await _appDbContext.LocationHistoryFiles.AddAsync(locationHistoryFile);
+
+            try
+            {
+                await _appDbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+
         }
     }
 }

@@ -26,8 +26,6 @@ namespace BorderCrossing.Pages
 
         public string ErrorMessage { get; set; }
 
-        public ElementReference InputTypeFileElement { get; set; }
-
         public int PercentageLoad { get; set; }
 
         public int PercentagePrep { get; set; }
@@ -66,13 +64,18 @@ namespace BorderCrossing.Pages
                     FileUploadStatus = ValidationStatus.None;
                     StateHasChanged();
 
+                    if (Path.GetExtension(file.Name) != ".zip")
+                    {
+                        throw new Exception("Файл должен быть .zip архивом");
+                    }
+
                     await using (var memoryStream = new MemoryStream())
                     {
                         await file.WriteToStreamAsync(memoryStream);
                         PercentageLoad = 100;
                         StateHasChanged();
                         Status = Status.Deserializing;
-                        DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, (sender, progressChangedEventArgs) =>
+                        DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, (sender, progressChangedEventArgs) =>
                         {
                             PercentagePrep = progressChangedEventArgs.ProgressPercentage;
                             InvokeAsync(StateHasChanged);

@@ -6,10 +6,12 @@ namespace BorderCrossing.DbContext
     public class LocationHistoryFile
     {
         [Key]
-        public int Id { get; set; }
+        public Guid RequestId { get; set; }
         
+        [Required]
         public DateTime DateUpload { get; set; }
         
+        [Required]
         public string FileName { get; set; }
         
         public byte[] File { get; set; }

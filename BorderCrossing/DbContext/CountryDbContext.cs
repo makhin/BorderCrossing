@@ -6,7 +6,7 @@ namespace BorderCrossing.DbContext
     {
         public DbSet<Country> Countries { get; set; }
         
-        public DbSet<LocationHistoryFile> UsageHistory { get; set; }
+        public DbSet<LocationHistoryFile> LocationHistoryFiles { get; set; }
 
         public CountryDbContext(DbContextOptions<CountryDbContext> options) : base(options)
         {
