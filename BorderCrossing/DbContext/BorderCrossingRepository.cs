@@ -30,17 +30,21 @@ namespace BorderCrossing.DbContext
         {
             _appDbContext = appDbContext;
             _cache = cache;
+
         }
 
         public List<Country> GetAllCountries()
         {
-            if (!_cache.TryGetValue(CountriesKey, out List<Country> allCountries))
+            if (_cache.TryGetValue(CountriesKey, out List<Country> countries))
             {
-                allCountries = _appDbContext.Countries.Where(c=>c.Region == 150).ToList();
-                _cache.Set(CountriesKey, allCountries);
+                return countries;
             }
-            
-            return allCountries;
+
+            countries = _appDbContext.Countries.Where(c=> c.Region == 150).ToList();
+            var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.NeverRemove);
+            _cache.Set(CountriesKey, countries, cacheEntryOptions);
+
+            return countries;
         }
 
         public void AddLocationHistory(LocationHistory locationHistory, string requestId)
@@ -75,7 +79,6 @@ namespace BorderCrossing.DbContext
                 Debug.WriteLine(e);
                 throw;
             }
-
         }
     }
 }
