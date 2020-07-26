@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BorderCrossing.Models;
+using BorderCrossing.Models.Google;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NetTopologySuite.Geometries;
@@ -14,9 +15,9 @@ namespace BorderCrossing.DbContext
     public interface IBorderCrossingRepository
     {
         List<Country> GetAllCountries();
-        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid guid);
-        void AddLocations(Dictionary<DateTime, Geometry> locations, string guid);
-        Dictionary<DateTime, Geometry> GetLocations(string guid);
+        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid requestId);
+        void AddLocationHistory(LocationHistory locationHistory, string requestId);
+        LocationHistory GetLocationHistory(string requestId);
     }
 
     public class BorderCrossingRepository : IBorderCrossingRepository
@@ -42,24 +43,24 @@ namespace BorderCrossing.DbContext
             return allCountries;
         }
 
-        public void AddLocations(Dictionary<DateTime, Geometry> locations, string guid)
+        public void AddLocationHistory(LocationHistory locationHistory, string requestId)
         {
-            _cache.Set(guid, locations, TimeSpan.FromMinutes(15));
+            _cache.Set(requestId, locationHistory, TimeSpan.FromMinutes(15));
         }
         
-        public Dictionary<DateTime, Geometry> GetLocations(string guid)
+        public LocationHistory GetLocationHistory(string requestId)
         {
-            return _cache.Get<Dictionary<DateTime, Geometry>>(guid);
+            return _cache.Get<LocationHistory>(requestId);
         }
 
-        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid guid)
+        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid requestId)
         {
             _appDbContext.Database.SetCommandTimeout(180);
             var locationHistoryFile = new LocationHistoryFile
             {
                 File = memoryStream.ToArray(),
                 DateUpload = DateTime.Now,
-                RequestId = guid,
+                RequestId = requestId,
                 FileName = fileName
             };
 

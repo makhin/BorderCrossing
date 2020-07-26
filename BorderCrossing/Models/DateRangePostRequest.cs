@@ -9,7 +9,7 @@ namespace BorderCrossing.Models
     {
         [HiddenInput]
         [Required]
-        public string Guid { get; set; }
+        public string RequestId { get; set; }
         
         [DataType(DataType.Date)]
         [Required]
@@ -19,9 +19,8 @@ namespace BorderCrossing.Models
         [Required]
         public DateTime EndDate { get; set; }
 
-        [Range(1, 2)]
         [Required]
-        public int Interval { get; set; }
+        public IntervalType IntervalType { get; set; }
 
         [Required]
         public List<Region> Regions { get; set; }

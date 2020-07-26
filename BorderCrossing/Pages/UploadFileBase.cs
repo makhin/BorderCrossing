@@ -38,6 +38,8 @@ namespace BorderCrossing.Pages
 
         public ValidationStatus FileUploadStatus { get; set; }
 
+        public bool IsDemo = true;
+
         protected override void OnInitialized()
         {
             Status = Status.ReadyToUpload;

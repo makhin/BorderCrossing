@@ -1,5 +1,6 @@
 ﻿@page "/uploadfile"
 @using BorderCrossing.Models
+@using BorderCrossing.Extensions
 @inherits UploadFileBase
 
 @functions {
@@ -82,9 +83,9 @@
                     <Field Horizontal="true">
                         <FieldLabel ColumnSize="ColumnSize.Is2"></FieldLabel>
                         <FieldBody ColumnSize="ColumnSize.Is10">
-                            <RadioGroup TValue="int" Name="interval" Inline="true" CheckedValue="@DateRangePostRequest.Interval">
-                                <Radio Disabled="true" TValue="int" Value="@(1)">По дням</Radio>
-                                <Radio  Disabled="true"TValue="int" Value="@(2)">По часам</Radio>
+                            <RadioGroup TValue="BorderCrossing.Models.IntervalType" Name="interval" Inline="true" @bind-CheckedValue="@DateRangePostRequest.IntervalType">
+                                <Radio Disabled="@IsDemo" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Day)">@IntervalType.Day.GetDisplayName()</Radio>
+                                <Radio Disabled="@IsDemo" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Hour)">@IntervalType.Hour.GetDisplayName()</Radio>
                             </RadioGroup>
                         </FieldBody>
                     </Field>
@@ -95,7 +96,7 @@
                         <FieldBody ColumnSize="ColumnSize.Is10">
                             @foreach (var region in DateRangePostRequest.Regions)
                             {
-                                <Check Disabled="true" TValue="bool" @bind-Checked="@region.Checked">@region.Name</Check>
+                                <Check Disabled="@IsDemo" TValue="bool" @bind-Checked="@region.Checked">@region.Name</Check>
                             }
                         </FieldBody>
                     </Field>
@@ -114,7 +115,7 @@
         <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">Обработка</Heading>
 
         <Progress Margin="Margin.Is3.FromTop" Size="Size.Large">
-            <ProgressBar Value="@PercentageProc">@PercentagePrep%</ProgressBar>
+            <ProgressBar Value="@PercentageProc">@PercentageProc%</ProgressBar>
         </Progress>
     }
 
