@@ -2,27 +2,31 @@
 using System.IO;
 using System.Threading.Tasks;
 using Blazorise;
-using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 
 namespace BorderCrossing.Pages
 {
-    public enum Status{
-        ReadyToUpload,
-        Uploading,
-        Deserializing,
-        AskParameter,
-        Processing,
-        Results
-    }
-
     public class UploadFileBase : ComponentBase
     {
+        protected enum PageStatus
+        {
+            ReadyToUpload,
+            Uploading,
+            Deserializing,
+        }
+
         [Inject] 
         public IBorderCrossingService BorderCrossingService { get; set; }
 
-        public Status Status { get; set; }
+        [Inject]
+        IHttpContextAccessor HttpContextAccessor { get; set; }
+
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
+        protected PageStatus Status { get; set; }
 
         public string ErrorMessage { get; set; }
 
@@ -30,30 +34,11 @@ namespace BorderCrossing.Pages
 
         public int PercentagePrep { get; set; }
 
-        public int PercentageProc { get; set; }
-
-        public DateRangePostRequest DateRangePostRequest { get; set; }
-
-        public BorderCrossingResponse BorderCrossingResponse { get; set; }
-
         public ValidationStatus FileUploadStatus { get; set; }
-
-        public bool IsDemo = true;
 
         protected override void OnInitialized()
         {
-            Status = Status.ReadyToUpload;
-        }
-
-        public async Task Start()
-        {
-            Status = Status.Processing;
-            BorderCrossingResponse = await BorderCrossingService.ParseLocationHistoryAsync(DateRangePostRequest, (sender, e) =>
-            {
-                PercentageProc = e.ProgressPercentage;
-                InvokeAsync(StateHasChanged);
-            });
-            Status = Status.Results;
+            Status = PageStatus.ReadyToUpload;
         }
 
         public async Task OnChanged(FileChangedEventArgs e)
@@ -62,9 +47,13 @@ namespace BorderCrossing.Pages
             {
                 foreach (var file in e.Files)
                 {
-                    Status = Status.Uploading;
+                    Status = PageStatus.Uploading;
                     FileUploadStatus = ValidationStatus.None;
                     StateHasChanged();
+
+                    var ipAddress = HttpContextAccessor.HttpContext.Connection?.RemoteIpAddress.ToString();
+                    var userAgent = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"];
+
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {
@@ -76,22 +65,22 @@ namespace BorderCrossing.Pages
                         await file.WriteToStreamAsync(memoryStream);
                         PercentageLoad = 100;
                         StateHasChanged();
-                        Status = Status.Deserializing;
-                        DateRangePostRequest = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, (sender, progressChangedEventArgs) =>
+                        Status = PageStatus.Deserializing;
+                        string requestId = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, (sender, progressChangedEventArgs) =>
                         {
                             PercentagePrep = progressChangedEventArgs.ProgressPercentage;
                             InvokeAsync(StateHasChanged);
                         });
-                    }
 
-                    Status = Status.AskParameter;
+                        NavigationManager.NavigateTo($"query/{requestId}");
+                    }
                 }
             }
             catch (Exception exception)
             {
                 ErrorMessage = exception.Message;
                 FileUploadStatus = ValidationStatus.Error;
-                Status = Status.ReadyToUpload;
+                Status = PageStatus.ReadyToUpload;
                 PercentageLoad = 0;
                 PercentagePrep = 0;
             }

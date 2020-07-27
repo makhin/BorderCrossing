@@ -1,0 +1,48 @@
+﻿@page "/result"
+@using BorderCrossing.Models
+@inherits ResultBase
+
+<Container>
+@if (Result != null)
+{
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Въезд</TableHeaderCell>
+                <TableHeaderCell>Страна</TableHeaderCell>
+                <TableHeaderCell>Выезд</TableHeaderCell>
+                <TableHeaderCell>Дни</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            @foreach (var period in Result.Periods)
+            {
+                <TableRow>
+                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
+                    <TableRowCell>@period.Country</TableRowCell>
+                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.DeparturePoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
+                    <TableRowCell>@period.Days</TableRowCell>
+                </TableRow>
+            }
+        </TableBody>
+    </Table>
+
+    <Table>
+        <TableHeader>
+            <TableRow>
+                <TableHeaderCell>Страна</TableHeaderCell>
+                <TableHeaderCell>Дни</TableHeaderCell>
+            </TableRow>
+        </TableHeader>
+        <TableBody>
+            @foreach (KeyValuePair<string, int> countryDay in Result.CountryDays)
+            {
+                <TableRow>
+                    <TableRowHeader>@countryDay.Key</TableRowHeader>
+                    <TableRowCell>@countryDay.Value</TableRowCell>
+                </TableRow>
+            }
+        </TableBody>
+    </Table>
+}
+</Container>

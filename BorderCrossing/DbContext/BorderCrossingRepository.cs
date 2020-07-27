@@ -18,6 +18,8 @@ namespace BorderCrossing.DbContext
         Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid requestId);
         void AddLocationHistory(LocationHistory locationHistory, string requestId);
         LocationHistory GetLocationHistory(string requestId);
+        Task<List<CheckPoint>> GetResultAsync(string requestId);
+        Task SaveResultAsync(string requestId, List<CheckPoint> response);
     }
 
     public class BorderCrossingRepository : IBorderCrossingRepository
@@ -55,6 +57,16 @@ namespace BorderCrossing.DbContext
         public LocationHistory GetLocationHistory(string requestId)
         {
             return _cache.Get<LocationHistory>(requestId);
+        }
+
+        public Task<List<CheckPoint>> GetResultAsync(string requestId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveResultAsync(string requestId, List<CheckPoint> response)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid requestId)

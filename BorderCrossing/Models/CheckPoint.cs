@@ -8,5 +8,7 @@ namespace BorderCrossing.Models
         public DateTime Date { get; set; }
         
         public Geometry Point { get; set; }
+
+        public string CountryName { get; set; }
     }
 }

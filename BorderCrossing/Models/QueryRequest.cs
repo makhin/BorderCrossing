@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BorderCrossing.Models
 {
-    public class DateRangePostRequest
+    public class QueryRequest
     {
-        [HiddenInput]
-        [Required]
-        public string RequestId { get; set; }
+        //[HiddenInput]
+        //[Required]
+        //public string RequestId { get; set; }
         
         [DataType(DataType.Date)]
         [Required]
@@ -25,7 +25,7 @@ namespace BorderCrossing.Models
         [Required]
         public List<Region> Regions { get; set; }
 
-        public DateRangePostRequest()
+        public QueryRequest()
         {
             Regions = new List<Region>()
             {
