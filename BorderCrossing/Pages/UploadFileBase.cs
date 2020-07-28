@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Blazorise;
@@ -51,8 +52,17 @@ namespace BorderCrossing.Pages
                     FileUploadStatus = ValidationStatus.None;
                     StateHasChanged();
 
-                    var ipAddress = HttpContextAccessor.HttpContext.Connection?.RemoteIpAddress.ToString();
-                    var userAgent = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+                    string ipAddress = null, userAgent = null;
+
+                    try
+                    {
+                        ipAddress = HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                        userAgent = HttpContextAccessor.HttpContext?.Request?.Headers["User-Agent"].ToString();
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.WriteLine(exception);
+                    }
 
                     var request = await BorderCrossingService.AddNewRequestAsync(ipAddress, userAgent);
 
