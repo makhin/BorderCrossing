@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,9 @@ namespace BorderCrossing.DbContext
         public string IpAddress { get; set; }
 
         public string UserAgent { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
 
         public LocationHistoryFile File { get; set; }
 

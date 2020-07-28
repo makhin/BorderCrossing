@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using NetTopologySuite.Geometries;
 
@@ -10,6 +11,7 @@ namespace BorderCrossing.DbContext
 
         public Request Request { get; set; }
 
+        [Required]
         public DateTime Date { get; set; }
 
         [Column(TypeName = "geometry")]

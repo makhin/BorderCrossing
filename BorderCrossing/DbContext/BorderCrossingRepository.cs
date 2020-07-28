@@ -91,7 +91,8 @@ namespace BorderCrossing.DbContext
             {
                 RequestId = guid,
                 IpAddress = ipAddress,
-                UserAgent = userAgent
+                UserAgent = userAgent,
+                Date = DateTime.Now,
             };
 
             await _appDbContext.Requests.AddAsync(request);
@@ -114,7 +115,6 @@ namespace BorderCrossing.DbContext
             var locationHistoryFile = new LocationHistoryFile
             {
                 File = memoryStream.ToArray(),
-                DateUpload = DateTime.Now,
                 FileName = fileName,
                 Request = request
             };

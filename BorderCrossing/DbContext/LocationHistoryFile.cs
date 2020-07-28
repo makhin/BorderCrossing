@@ -11,9 +11,6 @@ namespace BorderCrossing.DbContext
         public Request Request { get; set; }
 
         [Required]
-        public DateTime DateUpload { get; set; }
-        
-        [Required]
         public string FileName { get; set; }
         
         public byte[] File { get; set; }
