@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using BorderCrossing.DbContext;
 using BorderCrossing.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BorderCrossing
 {
@@ -42,17 +43,22 @@ namespace BorderCrossing
                 .AddFontAwesomeIcons();
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
+
+
             services.AddDbContext<CountryDbContext>(options =>
             {
+                options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
                 options.UseSqlServer(connectionString,
                     builder =>
                     {
                         builder.UseNetTopologySuite();
                     });
-            });
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }, ServiceLifetime.Transient);
 
-            services.AddScoped<IBorderCrossingRepository, BorderCrossingRepository>();
-            services.AddScoped<IBorderCrossingService, BorderCrossingService>();
+            services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
+            services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

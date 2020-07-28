@@ -1,9 +1,9 @@
-﻿@page "/result"
+﻿@page "/result/{RequestId}"
 @using BorderCrossing.Models
 @inherits ResultBase
 
 <Container>
-@if (Result != null)
+@if (Response != null)
 {
     <Table>
         <TableHeader>
@@ -15,12 +15,12 @@
             </TableRow>
         </TableHeader>
         <TableBody>
-            @foreach (var period in Result.Periods)
+            @foreach (var period in Response.Periods)
             {
                 <TableRow>
-                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.X,@period.ArrivalPoint.Point.Coordinate.Y">@period.ArrivalPoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
+                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.Y,@period.ArrivalPoint.Point.Coordinate.X">@period.ArrivalPoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
                     <TableRowCell>@period.Country</TableRowCell>
-                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.X,@period.DeparturePoint.Point.Coordinate.Y">@period.DeparturePoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
+                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.Y,@period.DeparturePoint.Point.Coordinate.X">@period.DeparturePoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
                     <TableRowCell>@period.Days</TableRowCell>
                 </TableRow>
             }
@@ -35,7 +35,7 @@
             </TableRow>
         </TableHeader>
         <TableBody>
-            @foreach (KeyValuePair<string, int> countryDay in Result.CountryDays)
+            @foreach (KeyValuePair<string, int> countryDay in Response.CountryDays)
             {
                 <TableRow>
                     <TableRowHeader>@countryDay.Key</TableRowHeader>
@@ -44,5 +44,9 @@
             }
         </TableBody>
     </Table>
+}
+else
+{
+    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Danger">Результаты не найдены</Heading>
 }
 </Container>

@@ -4,22 +4,21 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BorderCrossing.Models;
 using BorderCrossing.Models.Google;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using NetTopologySuite.Geometries;
 
 namespace BorderCrossing.DbContext
 {
     public interface IBorderCrossingRepository
     {
         List<Country> GetAllCountries();
-        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid requestId);
+        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Request request);
         void AddLocationHistory(LocationHistory locationHistory, string requestId);
         LocationHistory GetLocationHistory(string requestId);
         Task<List<CheckPoint>> GetResultAsync(string requestId);
-        Task SaveResultAsync(string requestId, List<CheckPoint> response);
+        Task SaveResultAsync(string requestId, List<CheckPoint> checkPoints);
+        Task<Request> AddNewRequest(Guid newGuid, string ipAddress, string userAgent);
     }
 
     public class BorderCrossingRepository : IBorderCrossingRepository
@@ -59,25 +58,65 @@ namespace BorderCrossing.DbContext
             return _cache.Get<LocationHistory>(requestId);
         }
 
-        public Task<List<CheckPoint>> GetResultAsync(string requestId)
+        public async Task<List<CheckPoint>> GetResultAsync(string requestId)
         {
-            throw new NotImplementedException();
+            return await _appDbContext.CheckPoints.Where(cp => cp.Request.RequestId == Guid.Parse(requestId)).OrderBy(cp => cp.Date).ToListAsync();
         }
 
-        public Task SaveResultAsync(string requestId, List<CheckPoint> response)
+        public async Task SaveResultAsync(string requestId, List<CheckPoint> checkPoints)
         {
-            throw new NotImplementedException();
+            var request = await _appDbContext.Requests.FindAsync(Guid.Parse(requestId));
+            
+            foreach (var checkPoint in checkPoints)
+            {
+                checkPoint.Request = request;
+            }
+
+            await _appDbContext.CheckPoints.AddRangeAsync(checkPoints);
+
+            try
+            {
+                await _appDbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
         }
 
-        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Guid requestId)
+        public async Task<Request> AddNewRequest(Guid guid, string ipAddress, string userAgent)
+        {
+            var request = new Request()
+            {
+                RequestId = guid,
+                IpAddress = ipAddress,
+                UserAgent = userAgent
+            };
+
+            await _appDbContext.Requests.AddAsync(request);
+
+            try
+            {
+                await _appDbContext.SaveChangesAsync();
+                return request;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+        }
+
+        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Request request)
         {
             _appDbContext.Database.SetCommandTimeout(180);
             var locationHistoryFile = new LocationHistoryFile
             {
                 File = memoryStream.ToArray(),
                 DateUpload = DateTime.Now,
-                RequestId = requestId,
-                FileName = fileName
+                FileName = fileName,
+                Request = request
             };
 
             await _appDbContext.LocationHistoryFiles.AddAsync(locationHistoryFile);

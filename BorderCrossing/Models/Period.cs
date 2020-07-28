@@ -1,4 +1,5 @@
 ﻿using System;
+using BorderCrossing.DbContext;
 
 namespace BorderCrossing.Models
 {

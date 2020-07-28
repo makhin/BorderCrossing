@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
@@ -16,36 +17,43 @@ namespace BorderCrossing.Pages
         [Parameter]
         public string RequestId { get; set; }
 
-        public BorderCrossingResponse Result { get; set; }
+        public BorderCrossingResponse Response { get; set; }
+
+        public string Message { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            Message = "Загрузка...";
+            this.StateHasChanged();
+
             var checkPoints = await BorderCrossingService.GetResultAsync(RequestId);
 
             if (!checkPoints.Any())
             {
+                Message = "Результатов не найдено";
+                this.StateHasChanged();
                 return;
             }
 
-            var response = new BorderCrossingResponse();
+            Response = new BorderCrossingResponse();
 
             var arrivalPoint = checkPoints.First();
-            response.Periods.Add(new Period()
+            Response.Periods.Add(new Period
             {
                 ArrivalPoint = arrivalPoint,
                 Country = arrivalPoint.CountryName
             });
-            var last = response.Periods.Last();
+            var last = Response.Periods.Last();
 
-            foreach (var checkPoint in checkPoints.Skip(1))
+            foreach (var checkPoint in checkPoints.Skip(1).Take(checkPoints.Count - 2))
             {
                 last.DeparturePoint = checkPoint;
-                response.Periods.Add(new Period
+                Response.Periods.Add(new Period
                 {
                     ArrivalPoint = checkPoint,
                     Country = checkPoint.CountryName,
                 });
-                last = response.Periods.Last();
+                last = Response.Periods.Last();
             }
 
             last.DeparturePoint = checkPoints.Last();

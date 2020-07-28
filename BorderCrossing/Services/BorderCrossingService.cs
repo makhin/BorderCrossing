@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
+using Microsoft.Extensions.Primitives;
 using NetTopologySuite.Geometries;
 
 namespace BorderCrossing.Services
 {
     public interface IBorderCrossingService
     {
-        Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, ProgressChangedEventHandler callback);
+        Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, Request request, ProgressChangedEventHandler callback);
         Task<QueryRequest> GetQueryRequestAsync(string requestId);
         Task ParseLocationHistoryAsync(string requestId, QueryRequest model, ProgressChangedEventHandler callback);
         Task<List<CheckPoint>> GetResultAsync(string requestId);
+        Task<Request> AddNewRequestAsync(string ipAddress, string userAgent);
     }
 
     public class BorderCrossingService : IBorderCrossingService
@@ -30,13 +32,12 @@ namespace BorderCrossing.Services
             _countries = _repository.GetAllCountries();
         }
 
-        public async Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, ProgressChangedEventHandler callback)
+        public async Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, Request request, ProgressChangedEventHandler callback)
         {
-            var requestId = Guid.NewGuid();
-            _ = _repository.SaveLocationHistoryFileAsync(memoryStream, fileName, requestId);
+            _ = _repository.SaveLocationHistoryFileAsync(memoryStream, fileName, request);
             var locationHistory = await BorderCrossingHelper.ExtractJsonAsync(memoryStream, callback);
-            _repository.AddLocationHistory(locationHistory, requestId.ToString());
-            return requestId.ToString();
+            _repository.AddLocationHistory(locationHistory, request.RequestId.ToString());
+            return request.RequestId.ToString();
         }
 
         public async Task<QueryRequest> GetQueryRequestAsync(string requestId)
@@ -63,7 +64,7 @@ namespace BorderCrossing.Services
             int i = 0;
             int count = filteredLocations.Count();
 
-            foreach (var (date, point) in filteredLocations)
+            foreach (var (date, point) in filteredLocations.OrderBy(l => l.Key))
             {
                 await Task.Run(() =>
                 {
@@ -71,15 +72,18 @@ namespace BorderCrossing.Services
                     callback(this, new ProgressChangedEventArgs((int)(100.0 * i / count), null));
 
                     var countryName = GetCountryName(point);
-                    if (currentCountry != countryName)
+                    if (currentCountry == countryName)
                     {
-                        checkPoints.Add(new CheckPoint()
-                        {
-                            CountryName = countryName,
-                            Date = date,
-                            Point = point
-                        });
+                        return;
                     }
+
+                    checkPoints.Add(new CheckPoint()
+                    {
+                        CountryName = countryName,
+                        Date = date,
+                        Point = point
+                    });
+                    currentCountry = countryName;
                 });
             }
 
@@ -99,11 +103,18 @@ namespace BorderCrossing.Services
             return await _repository.GetResultAsync(requestId);
         }
 
-        private string GetCountryName(Geometry location)
+        public Task<Request> AddNewRequestAsync(string ipAddress, string userAgent)
         {
-            var country = _countries.FirstOrDefault(c => location.Within(c.Geom));
-            var countryName = country == null ? "Unknown" : country.Name;
-            return countryName;
+            return _repository.AddNewRequest(Guid.NewGuid(), ipAddress, userAgent);
+        }
+
+        private string GetCountryName(Geometry point)
+        {
+            var country = _countries.FirstOrDefault(c => point.Within(c.Geom)) ?? _countries
+                .Select(c => new {Country = c, Distance = c.Geom.Distance(point),})
+                .OrderBy(d => d.Distance).FirstOrDefault()?.Country;
+
+            return country == null ? "Unknown" : country.Name;
         }
     }
 }

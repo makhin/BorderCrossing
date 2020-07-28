@@ -10,7 +10,8 @@ namespace BorderCrossing.DbContext
         public string Name { get; set; }
 
         public short Region { get; set; }
-        
+
+        [Column(TypeName = "geometry")]
         public Geometry Geom { get; set; }
     }
 }

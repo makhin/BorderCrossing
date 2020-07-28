@@ -52,8 +52,9 @@ namespace BorderCrossing.Pages
                     StateHasChanged();
 
                     var ipAddress = HttpContextAccessor.HttpContext.Connection?.RemoteIpAddress.ToString();
-                    var userAgent = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"];
+                    var userAgent = HttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
 
+                    var request = await BorderCrossingService.AddNewRequestAsync(ipAddress, userAgent);
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {
@@ -66,7 +67,7 @@ namespace BorderCrossing.Pages
                         PercentageLoad = 100;
                         StateHasChanged();
                         Status = PageStatus.Deserializing;
-                        string requestId = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, (sender, progressChangedEventArgs) =>
+                        string requestId = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, request, (sender, progressChangedEventArgs) =>
                         {
                             PercentagePrep = progressChangedEventArgs.ProgressPercentage;
                             InvokeAsync(StateHasChanged);

@@ -24,7 +24,7 @@ namespace BorderCrossing.Models.Google
             {
                 var latitude = LatitudeE7/1e7;
                 var longitude = LongitudeE7/1e7;
-                return new Point(latitude, longitude);
+                return new Point(longitude, latitude);
             }
         }
         

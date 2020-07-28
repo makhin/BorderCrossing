@@ -7,7 +7,9 @@ namespace BorderCrossing.DbContext
     {
         [Key]
         public Guid RequestId { get; set; }
-        
+
+        public Request Request { get; set; }
+
         [Required]
         public DateTime DateUpload { get; set; }
         
@@ -15,5 +17,6 @@ namespace BorderCrossing.DbContext
         public string FileName { get; set; }
         
         public byte[] File { get; set; }
+
     }
 }
