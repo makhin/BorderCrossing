@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Blazorise;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http;
+using BorderCrossing.Models.Core;
 
 namespace BorderCrossing.Pages
 {
@@ -22,9 +22,6 @@ namespace BorderCrossing.Pages
         public IBorderCrossingService BorderCrossingService { get; set; }
 
         [Inject]
-        IHttpContextAccessor HttpContextAccessor { get; set; }
-
-        [Inject]
         public NavigationManager NavigationManager { get; set; }
 
         protected PageStatus Status { get; set; }
@@ -37,6 +34,9 @@ namespace BorderCrossing.Pages
 
         public ValidationStatus FileUploadStatus { get; set; }
 
+        [CascadingParameter]
+        private ConnectionInfo ConnectionInfo { get; set; }
+
         protected override void OnInitialized()
         {
             Status = PageStatus.ReadyToUpload;
@@ -46,25 +46,14 @@ namespace BorderCrossing.Pages
         {
             try
             {
+                ErrorMessage = string.Empty;
+                Status = PageStatus.Uploading;
+                FileUploadStatus = ValidationStatus.None;
+                StateHasChanged();
+
                 foreach (var file in e.Files)
                 {
-                    Status = PageStatus.Uploading;
-                    FileUploadStatus = ValidationStatus.None;
-                    StateHasChanged();
-
-                    string ipAddress = null, userAgent = null;
-
-                    try
-                    {
-                        ipAddress = HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-                        userAgent = HttpContextAccessor.HttpContext?.Request?.Headers["User-Agent"].ToString();
-                    }
-                    catch (Exception exception)
-                    {
-                        Debug.WriteLine(exception);
-                    }
-
-                    var request = await BorderCrossingService.AddNewRequestAsync(ipAddress, userAgent);
+                    var request = await BorderCrossingService.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {

@@ -27,11 +27,10 @@ namespace BorderCrossing
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpContextAccessor();
             services.AddRazorPages();
             services.AddServerSideBlazor().AddHubOptions(o =>
             {
-                o.MaximumReceiveMessageSize = 50 * 1024 * 1024; // 50MB
+                o.MaximumReceiveMessageSize = 100 * 1024 * 1024; // 50MB
             });
 
             services
