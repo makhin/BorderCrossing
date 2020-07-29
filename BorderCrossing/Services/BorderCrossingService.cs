@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
+using BorderCrossing.Models.Google;
 using Microsoft.Extensions.Primitives;
 using NetTopologySuite.Geometries;
+using Location = BorderCrossing.Models.Google.Location;
 
 namespace BorderCrossing.Services
 {
@@ -46,9 +49,9 @@ namespace BorderCrossing.Services
 
             return await Task.FromResult(new QueryRequest
             {
-                StartDate = locationHistory.Locations.Min(l => l.TimestampMs).ToDateTime(),
-                EndDate = locationHistory.Locations.Max(l => l.TimestampMs).ToDateTime(),
-                IntervalType = IntervalType.Day
+                StartDate = locationHistory.Locations.Min(l => l.TimestampMsUnix).ToDateTime(),
+                EndDate = locationHistory.Locations.Max(l => l.TimestampMsUnix).ToDateTime(),
+                IntervalType = IntervalType.Every12Hours
             });
         }
 
@@ -56,47 +59,47 @@ namespace BorderCrossing.Services
         {
             var locationHistory = _repository.GetLocationHistory(requestId);
             var locations = BorderCrossingHelper.PrepareLocations(locationHistory, model.IntervalType);
-            var filteredLocations = locations.Where(l => l.Key >= model.StartDate && l.Key <= model.EndDate).ToList();
+            var filteredLocations = locations.Where(l => l.Date >= model.StartDate && l.Date <= model.EndDate).OrderBy(l => l.TimestampMsUnix).ToList();
+            
+            var currentLocation = filteredLocations.First();
+            var currentCountry = GetCountryName(currentLocation.Point);
+            
+            var i = 0;
+            var count = filteredLocations.Count();
 
-            var checkPoints = new List<CheckPoint>();
+            var checkPoints = new List<CheckPoint>
+            {
+                BorderCrossingHelper.LocationToCheckPoint(currentLocation, currentCountry)
+            };
 
-            var currentCountry = string.Empty;
-            int i = 0;
-            int count = filteredLocations.Count();
-
-            foreach (var (date, point) in filteredLocations.OrderBy(l => l.Key))
+            foreach (var location in filteredLocations)
             {
                 await Task.Run(() =>
                 {
                     i++;
                     callback(this, new ProgressChangedEventArgs((int)(100.0 * i / count), null));
 
-                    var countryName = GetCountryName(point);
+                    var countryName = GetCountryName(location.Point);
                     if (currentCountry == countryName)
                     {
+                        currentLocation = location;
                         return;
                     }
 
-                    checkPoints.Add(new CheckPoint()
-                    {
-                        CountryName = countryName,
-                        Date = date,
-                        Point = point
-                    });
+                    var range = locationHistory.Locations.Where(lh => lh.TimestampMsUnix >= currentLocation.TimestampMsUnix && lh.TimestampMsUnix <= location.TimestampMsUnix).ToList();
+                    var checkPoint = BorderCrossingHelper.FindCheckPoint(range, currentLocation, currentCountry, location, countryName, GetCountryName);
+
+                    checkPoints.Add(checkPoint);
                     currentCountry = countryName;
+                    currentLocation = location;
                 });
             }
 
             var last = filteredLocations.Last();
-            checkPoints.Add(new CheckPoint()
-            {
-                CountryName = GetCountryName(last.Value),
-                Point = last.Value,
-                Date = last.Key
-            });
-
+            checkPoints.Add(BorderCrossingHelper.LocationToCheckPoint(last, GetCountryName(last.Point)));
             await _repository.SaveResultAsync(requestId, checkPoints);
         }
+
 
         public async Task<List<CheckPoint>> GetResultAsync(string requestId)
         {

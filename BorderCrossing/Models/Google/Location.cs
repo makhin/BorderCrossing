@@ -28,6 +28,8 @@ namespace BorderCrossing.Models.Google
             }
         }
         
-        public DateTime Date => TimestampMs.ToDateTime();
+        public DateTime Date => TimestampMsUnix.ToDateTime();
+
+        public long TimestampMsUnix => long.Parse(this.TimestampMs);
     }
 }

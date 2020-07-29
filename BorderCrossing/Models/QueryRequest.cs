@@ -7,10 +7,6 @@ namespace BorderCrossing.Models
 {
     public class QueryRequest
     {
-        //[HiddenInput]
-        //[Required]
-        //public string RequestId { get; set; }
-        
         [DataType(DataType.Date)]
         [Required]
         public DateTime StartDate { get; set; }

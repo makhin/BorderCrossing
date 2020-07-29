@@ -37,8 +37,9 @@
                     <FieldLabel ColumnSize="ColumnSize.Is2"></FieldLabel>
                     <FieldBody ColumnSize="ColumnSize.Is10">
                         <RadioGroup TValue="BorderCrossing.Models.IntervalType" Name="interval" Inline="true" @bind-CheckedValue="@QueryRequest.IntervalType">
-                            <Radio Disabled="@(IsDemo && (QueryRequest.EndDate - QueryRequest.StartDate).Days > 100)" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Day)">@IntervalType.Day.GetDisplayName()</Radio>
-                            <Radio Disabled="@(IsDemo && (QueryRequest.EndDate - QueryRequest.StartDate).Days > 100)" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Hour)">@IntervalType.Hour.GetDisplayName()</Radio>
+                            <Radio Disabled="@(IsDemo)" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Day)">@IntervalType.Day.GetDisplayName()</Radio>
+                            <Radio Disabled="@(IsDemo)" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Every12Hours)">@IntervalType.Every12Hours.GetDisplayName()</Radio>
+                            <Radio Disabled="@(IsDemo)" TValue="BorderCrossing.Models.IntervalType" Value="@(IntervalType.Hour)">@IntervalType.Hour.GetDisplayName()</Radio>
                         </RadioGroup>
                     </FieldBody>
                 </Field>

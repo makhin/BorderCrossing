@@ -5,16 +5,20 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Models.Core;
 using BorderCrossing.Models.Google;
 using Jil;
 using NetTopologySuite.Geometries;
+using Location = BorderCrossing.Models.Google.Location;
 
 namespace BorderCrossing.Extensions
 {
     public static class BorderCrossingHelper
     {
+        private static readonly long MinInterval = (long)new TimeSpan(0, 10, 0).TotalMilliseconds;
+
         private static readonly string[] Names = new[]
         {
             "Location History",
@@ -23,10 +27,11 @@ namespace BorderCrossing.Extensions
             "Історія місцезнаходжень"
         };
 
-        public static Dictionary<DateTime, Geometry> PrepareLocations(LocationHistory history, IntervalType intervalType)
+        public static List<Location> PrepareLocations(LocationHistory history, IntervalType intervalType)
         {
-            var interval = 0;
-            var locations = new Dictionary<DateTime, Geometry>();
+            var day = 0;
+            var hour = 0;
+            var locations = new List<Location>();
 
             foreach (var location in history.Locations)
             {
@@ -38,22 +43,38 @@ namespace BorderCrossing.Extensions
                 var date = location.Date;
                 if (intervalType == IntervalType.Day)
                 {
-                    if (interval == date.Day)
+                    if (day == date.Day)
                     {
                         continue;
                     }
-                    interval = date.Day;
+                    day = date.Day;
+                }
+
+                if (intervalType == IntervalType.Every12Hours)
+                {
+                    if (hour < 12 && day == date.Day && (date.Hour < 12))
+                    {
+                        continue;
+                    }
+
+                    if (hour >= 12 && hour < 24 && day == date.Day && (date.Hour >= 12 &&  date.Hour < 24))
+                    {
+                        continue;
+                    }
+
+                    hour = date.Hour;
+                    day = date.Day;
                 }
                 else
                 {
-                    if (interval == date.Hour)
+                    if (hour == date.Hour)
                     {
                         continue;
                     }
-                    interval = date.Hour;
+                    hour = date.Hour;
                 }
 
-                locations.Add(date, location.Point);
+                locations.Add(location);
             }
             return locations;
         }
@@ -88,5 +109,44 @@ namespace BorderCrossing.Extensions
             throw new Exception("Архив не содержит файла с историей местоположений");
         }
 
+        public static CheckPoint FindCheckPoint(List<Location> locations, Location location1, string country1, Location location2, string country2, Func<Geometry, string> getCountry, int callCount = 0)
+        {
+            callCount++;
+            if (locations.Count < 4 || (location2.TimestampMsUnix - location1.TimestampMsUnix) < MinInterval || callCount > 10)
+            {
+                return LocationToCheckPoint(location2, country2);
+            }
+
+            var mid = (long)((location2.TimestampMsUnix + location1.TimestampMsUnix) / 2.0);
+            var midLocation = locations.OrderBy(l => Math.Abs(l.TimestampMsUnix - mid)).First();
+
+            if (midLocation == null)
+            {
+                return LocationToCheckPoint(location2, country2);
+            }
+
+            var midCountry = getCountry(midLocation.Point);
+
+            if (midCountry == country2)
+            {
+                var range = locations.Where(lh => lh.TimestampMsUnix >= location1.TimestampMsUnix && lh.TimestampMsUnix <= midLocation.TimestampMsUnix).ToList();
+                return FindCheckPoint(range, location1, country1, midLocation, midCountry, getCountry, callCount);
+            }
+            else
+            {
+                var range = locations.Where(lh => lh.TimestampMsUnix >= midLocation.TimestampMsUnix && lh.TimestampMsUnix <= location2.TimestampMsUnix).ToList();
+                return FindCheckPoint(range, midLocation, midCountry, location2, country2, getCountry, callCount);
+            }
+        }
+
+        public static CheckPoint LocationToCheckPoint(Location location, string country)
+        {
+            return new CheckPoint
+            {
+                CountryName = country,
+                Date = location.Date,
+                Point = location.Point
+            };
+        }
     }
 }

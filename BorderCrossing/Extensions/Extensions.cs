@@ -7,10 +7,9 @@ namespace BorderCrossing.Extensions
 {
     public static class Extensions
     {
-        public static DateTime ToDateTime(this string ticks)
+        public static DateTime ToDateTime(this long ticks)
         {
-            TimeSpan time = TimeSpan.FromMilliseconds(long.Parse(ticks));
-            return new DateTime(1970, 1, 1) + time;
+            return new DateTime(1970, 1, 1) + TimeSpan.FromMilliseconds(ticks);
         }
 
         public static string GetDisplayName(this Enum enumValue)
