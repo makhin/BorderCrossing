@@ -17,7 +17,7 @@ namespace BorderCrossing.DbContext
         void AddLocationHistory(LocationHistory locationHistory, string requestId);
         LocationHistory GetLocationHistory(string requestId);
         Task<List<CheckPoint>> GetResultAsync(string requestId);
-        Task SaveResultAsync(string requestId, List<CheckPoint> checkPoints);
+        Task UpdateResultAsync(string requestId, List<CheckPoint> checkPoints);
         Task<Request> AddNewRequest(Guid newGuid, string ipAddress, string userAgent);
     }
 
@@ -63,9 +63,10 @@ namespace BorderCrossing.DbContext
             return await _appDbContext.CheckPoints.Where(cp => cp.Request.RequestId == Guid.Parse(requestId)).OrderBy(cp => cp.Date).ToListAsync();
         }
 
-        public async Task SaveResultAsync(string requestId, List<CheckPoint> checkPoints)
+        public async Task UpdateResultAsync(string requestId, List<CheckPoint> checkPoints)
         {
             var request = await _appDbContext.Requests.FindAsync(Guid.Parse(requestId));
+            _appDbContext.CheckPoints.FromSqlRaw("DELETE FROM dbo.CheckPoints WHERE RequestId = {0}", request.RequestId); //Does not find other way to delete bunch of rows with one statement
             
             foreach (var checkPoint in checkPoints)
             {

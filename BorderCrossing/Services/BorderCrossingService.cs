@@ -97,7 +97,8 @@ namespace BorderCrossing.Services
 
             var last = filteredLocations.Last();
             checkPoints.Add(BorderCrossingHelper.LocationToCheckPoint(last, GetCountryName(last.Point)));
-            await _repository.SaveResultAsync(requestId, checkPoints);
+
+            await _repository.UpdateResultAsync(requestId, checkPoints);
         }
 
 
