@@ -17,7 +17,7 @@ namespace BorderCrossing.Extensions
 {
     public static class BorderCrossingHelper
     {
-        private static readonly long MinInterval = (long)new TimeSpan(0, 10, 0).TotalMilliseconds;
+        private static readonly long MinInterval = (long)new TimeSpan(0, 15, 0).TotalMilliseconds;
 
         private static readonly string[] Names = new[]
         {
@@ -41,29 +41,25 @@ namespace BorderCrossing.Extensions
                 }
 
                 var date = location.Date;
+
                 if (intervalType == IntervalType.Day)
                 {
                     if (day == date.Day)
                     {
                         continue;
                     }
-                    day = date.Day;
-                }
-
-                if (intervalType == IntervalType.Every12Hours)
+                } 
+                else if (intervalType == IntervalType.Every12Hours)
                 {
-                    if (hour < 12 && day == date.Day && (date.Hour < 12))
+                    if (hour < 12 && day == date.Day && date.Hour < 12)
                     {
                         continue;
                     }
 
-                    if (hour >= 12 && hour < 24 && day == date.Day && (date.Hour >= 12 &&  date.Hour < 24))
+                    if (hour >= 12 && hour < 24 && day == date.Day && date.Hour >= 12 && date.Hour < 24)
                     {
                         continue;
                     }
-
-                    hour = date.Hour;
-                    day = date.Day;
                 }
                 else
                 {
@@ -71,9 +67,10 @@ namespace BorderCrossing.Extensions
                     {
                         continue;
                     }
-                    hour = date.Hour;
                 }
 
+                hour = date.Hour;
+                day = date.Day;
                 locations.Add(location);
             }
             return locations;
