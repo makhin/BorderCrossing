@@ -11,6 +11,7 @@ using BorderCrossing.DbContext;
 using BorderCrossing.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace BorderCrossing
 {
@@ -73,6 +74,7 @@ namespace BorderCrossing
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
