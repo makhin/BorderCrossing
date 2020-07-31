@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Extensions;
-using BorderCrossing.Models.Google;
-using Microsoft.Extensions.Primitives;
 using NetTopologySuite.Geometries;
-using Location = BorderCrossing.Models.Google.Location;
 
 namespace BorderCrossing.Services
 {
@@ -37,7 +33,6 @@ namespace BorderCrossing.Services
 
         public async Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, Request request, ProgressChangedEventHandler callback)
         {
-            _ = _repository.SaveLocationHistoryFileAsync(memoryStream, fileName, request);
             var locationHistory = await BorderCrossingHelper.ExtractJsonAsync(memoryStream, callback);
             _repository.AddLocationHistory(locationHistory, request.RequestId.ToString());
             return request.RequestId.ToString();
@@ -114,9 +109,12 @@ namespace BorderCrossing.Services
 
         private string GetCountryName(Geometry point)
         {
-            var country = _countries.FirstOrDefault(c => point.Within(c.Geom)) ?? _countries
-                .Select(c => new {Country = c, Distance = c.Geom.Distance(point),})
-                .OrderBy(d => d.Distance).FirstOrDefault()?.Country;
+            var country = _countries.FirstOrDefault(c => point.Within(c.Geom));
+
+            country ??= _countries
+                .Select(c => new {Country = c, Distance = c.Geom.Distance(point)})
+                .OrderBy(d => d.Distance)
+                .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;
 
             return country == null ? "Unknown" : country.Name;
         }

@@ -53,7 +53,7 @@ namespace BorderCrossing.Models
                 {
                     Id = 142,
                     Name = "Азия",
-                    Checked = false
+                    Checked = true
                 },
                 new Region
                 {
