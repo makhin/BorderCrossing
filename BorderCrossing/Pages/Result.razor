@@ -5,7 +5,9 @@
 <Container>
 @if (Response != null)
 {
-    <Table>
+    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">Если вы сохраните ссылку на эту страницу, то будете иметь доступ к результатам без повторной загрузки файла.</Heading>
+
+    <Table Margin="Margin.Is3.FromTop">
         <TableHeader>
             <TableRow>
                 <TableHeaderCell>Въезд</TableHeaderCell>
@@ -35,11 +37,11 @@
             </TableRow>
         </TableHeader>
         <TableBody>
-            @foreach (KeyValuePair<string, int> countryDay in Response.CountryDays)
+            @foreach (var (country, days) in Response.CountryDays)
             {
                 <TableRow>
-                    <TableRowHeader>@countryDay.Key</TableRowHeader>
-                    <TableRowCell>@countryDay.Value</TableRowCell>
+                    <TableRowHeader>@country</TableRowHeader>
+                    <TableRowCell>@days</TableRowCell>
                 </TableRow>
             }
         </TableBody>
@@ -47,6 +49,6 @@
 }
 else
 {
-    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Danger">Результаты не найдены</Heading>
+    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Danger">@Message</Heading>
 }
 </Container>

@@ -30,33 +30,35 @@ namespace BorderCrossing.Pages
 
             if (!checkPoints.Any())
             {
-                Message = "Результатов не найдено";
-                this.StateHasChanged();
-                return;
+                Message = "Результаты не найдены";
             }
-
-            Response = new BorderCrossingResponse();
-
-            var arrivalPoint = checkPoints.First();
-            Response.Periods.Add(new Period
+            else
             {
-                ArrivalPoint = arrivalPoint,
-                Country = arrivalPoint.CountryName
-            });
-            var last = Response.Periods.Last();
+                Response = new BorderCrossingResponse();
 
-            foreach (var checkPoint in checkPoints.Skip(1).Take(checkPoints.Count - 2))
-            {
-                last.DeparturePoint = checkPoint;
+                var arrivalPoint = checkPoints.First();
                 Response.Periods.Add(new Period
                 {
-                    ArrivalPoint = checkPoint,
-                    Country = checkPoint.CountryName,
+                    ArrivalPoint = arrivalPoint,
+                    Country = arrivalPoint.CountryName
                 });
-                last = Response.Periods.Last();
+                var last = Response.Periods.Last();
+
+                foreach (var checkPoint in checkPoints.Skip(1).Take(checkPoints.Count - 2))
+                {
+                    last.DeparturePoint = checkPoint;
+                    Response.Periods.Add(new Period
+                    {
+                        ArrivalPoint = checkPoint,
+                        Country = checkPoint.CountryName,
+                    });
+                    last = Response.Periods.Last();
+                }
+
+                last.DeparturePoint = checkPoints.Last();
             }
 
-            last.DeparturePoint = checkPoints.Last();
+            this.StateHasChanged();
         }
     }
 }
