@@ -13,7 +13,7 @@ using Jil;
 using NetTopologySuite.Geometries;
 using Location = BorderCrossing.Models.Google.Location;
 
-namespace BorderCrossing.Extensions
+namespace BorderCrossing.Services
 {
     public static class BorderCrossingHelper
     {
@@ -87,7 +87,7 @@ namespace BorderCrossing.Extensions
                         continue;
                     }
 
-                    await using (Stream stream = entry.Open())
+                    using (Stream stream = entry.Open())
                     {
                         using (ContainerStream containerStream = new ContainerStream(stream))
                         {

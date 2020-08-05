@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using BorderCrossing.Res;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,6 +23,8 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class HomePage : Page
     {
+        public readonly string Title = Strings.HomeTitle;
+
         public HomePage()
         {
             this.InitializeComponent();

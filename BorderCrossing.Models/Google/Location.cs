@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using BorderCrossing.Extensions;
-using BorderCrossing.Models.Core;
 using Jil;
 using NetTopologySuite.Geometries;
 
@@ -31,5 +29,6 @@ namespace BorderCrossing.Models.Google
         public DateTime Date => TimestampMsUnix.ToDateTime();
 
         public long TimestampMsUnix => long.Parse(this.TimestampMs);
+
     }
 }

@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BorderCrossing.DbContext;
-using BorderCrossing.Models;
 using BorderCrossing.Extensions;
+using BorderCrossing.Models;
+using BorderCrossing.Models.Google;
+using Microsoft.Extensions.Caching.Memory;
 using NetTopologySuite.Geometries;
 
 namespace BorderCrossing.Services
@@ -23,24 +25,26 @@ namespace BorderCrossing.Services
     public class BorderCrossingService : IBorderCrossingService
     {
         private readonly IBorderCrossingRepository _repository;
+        private readonly IMemoryCache _cache;
         private readonly List<Country> _countries;
 
-        public BorderCrossingService(IBorderCrossingRepository repository)
+        public BorderCrossingService(IBorderCrossingRepository repository, IMemoryCache cache)
         {
             _repository = repository;
+            _cache = cache;
             _countries = _repository.GetAllCountries();
         }
 
         public async Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, Request request, ProgressChangedEventHandler callback)
         {
             var locationHistory = await BorderCrossingHelper.ExtractJsonAsync(memoryStream, callback);
-            _repository.AddLocationHistory(locationHistory, request.RequestId.ToString());
+            AddLocationHistory(locationHistory, request.RequestId.ToString());
             return request.RequestId.ToString();
         }
 
         public async Task<QueryRequest> GetQueryRequestAsync(string requestId)
         {
-            var locationHistory = _repository.GetLocationHistory(requestId);
+            var locationHistory = GetLocationHistory(requestId);
 
             return await Task.FromResult(new QueryRequest
             {
@@ -52,7 +56,7 @@ namespace BorderCrossing.Services
 
         public async Task ParseLocationHistoryAsync(string requestId, QueryRequest model, ProgressChangedEventHandler callback)
         {
-            var locationHistory = _repository.GetLocationHistory(requestId);
+            var locationHistory = GetLocationHistory(requestId);
             var locations = BorderCrossingHelper.PrepareLocations(locationHistory, model.IntervalType);
             var filteredLocations = locations.Where(l => l.Date >= model.StartDate && l.Date <= model.EndDate).OrderBy(l => l.TimestampMsUnix).ToList();
             
@@ -117,6 +121,16 @@ namespace BorderCrossing.Services
                 .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;
 
             return country == null ? "Unknown" : country.Name;
+        }
+
+        private void AddLocationHistory(LocationHistory locationHistory, string requestId)
+        {
+            _cache.Set(requestId, locationHistory, TimeSpan.FromMinutes(15));
+        }
+
+        private LocationHistory GetLocationHistory(string requestId)
+        {
+            return _cache.Get<LocationHistory>(requestId);
         }
     }
 }

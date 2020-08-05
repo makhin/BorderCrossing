@@ -9,6 +9,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock Style="{StaticResource PageTitleTextBlockStyle}">Как?</TextBlock>
+        <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}"></TextBlock>
     </Grid>
 </Page>

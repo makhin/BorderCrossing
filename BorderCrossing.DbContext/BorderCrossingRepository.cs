@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BorderCrossing.Models.Google;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -14,8 +13,6 @@ namespace BorderCrossing.DbContext
     {
         List<Country> GetAllCountries();
         Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Request request);
-        void AddLocationHistory(LocationHistory locationHistory, string requestId);
-        LocationHistory GetLocationHistory(string requestId);
         Task<List<CheckPoint>> GetResultAsync(string requestId);
         Task UpdateResultAsync(string requestId, List<CheckPoint> checkPoints);
         Task<Request> AddNewRequest(Guid newGuid, string ipAddress, string userAgent);
@@ -46,16 +43,6 @@ namespace BorderCrossing.DbContext
             _cache.Set(CountriesKey, countries, cacheEntryOptions);
 
             return countries;
-        }
-
-        public void AddLocationHistory(LocationHistory locationHistory, string requestId)
-        {
-            _cache.Set(requestId, locationHistory, TimeSpan.FromMinutes(15));
-        }
-        
-        public LocationHistory GetLocationHistory(string requestId)
-        {
-            return _cache.Get<LocationHistory>(requestId);
         }
 
         public async Task<List<CheckPoint>> GetResultAsync(string requestId)

@@ -117,13 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="HomeNav" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="HowNav" xml:space="preserve">
+    <value>How?</value>
+  </data>
+  <data name="UploadNav" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Border Crossing</value>
+  </data>
   <data name="HomeTitle" xml:space="preserve">
-    <value>Главная</value>
+    <value>What is it?</value>
   </data>
   <data name="HowTitle" xml:space="preserve">
-    <value>Как?</value>
+    <value>How to use?</value>
   </data>
-  <data name="UploadTitle" xml:space="preserve">
-    <value>Загрузить</value>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
   </data>
 </root>

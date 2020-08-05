@@ -76,6 +76,13 @@ namespace BorderCrossing
             }
             app.UseSerilogRequestLogging();
 
+            var supportedCultures = new[] { "en-US", "ru" };
+            var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

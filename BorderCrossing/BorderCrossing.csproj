@@ -37,7 +37,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Components\" />
+      <ProjectReference Include="..\BorderCrossing.DbContext\BorderCrossing.DbContext.csproj" />
+      <ProjectReference Include="..\BorderCrossing.Extensions\BorderCrossing.Extensions.csproj" />
+      <ProjectReference Include="..\BorderCrossing.Models\BorderCrossing.Models.csproj" />
+      <ProjectReference Include="..\BorderCrossing.Res\BorderCrossing.Res.csproj" />
+      <ProjectReference Include="..\BorderCrossing.Services\BorderCrossing.Services.csproj" />
     </ItemGroup>
 
 </Project>

@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using BorderCrossing.Res;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -22,9 +23,9 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public readonly string HomeLabel = "Главная";
-        public readonly string HowLabel = "Как?";
-        public readonly string UploadLabel = "Загрузить";
+        public readonly string HomeLabel = Strings.HomeNav;
+        public readonly string HowLabel = Strings.HowNav;
+        public readonly string UploadLabel = Strings.UploadNav;
 
         /// <summary>
         /// Gets the navigation frame instance.
