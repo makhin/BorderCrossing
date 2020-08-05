@@ -1,0 +1,59 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BorderCrossing.UWP2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:MUXC="using:Microsoft.UI.Xaml.Controls"
+    x:Class="BorderCrossing.UWP2.MainPage"
+    mc:Ignorable="d">
+
+    <Grid
+        x:Name="LayoutRoot">
+
+        <MUXC:NavigationView
+            x:Name="NavView"
+            OpenPaneLength="160"
+            AlwaysShowHeader="False"
+            IsSettingsVisible="False"
+            ItemInvoked="NavigationView_ItemInvoked"
+            BackRequested="NavigationView_BackRequested"
+            IsBackEnabled="{x:Bind AppFrame.CanGoBack, Mode=OneWay}">
+
+            <MUXC:NavigationView.MenuItems>
+                <MUXC:NavigationViewItem
+                    x:Name="HomeMenuItem"
+                    Content="{x:Bind HomeLabel}" 
+                    ToolTipService.ToolTip="{x:Bind HomeLabel}"
+                    Icon="ContactInfo"/>
+                <MUXC:NavigationViewItem
+                    x:Name="HowMenuItem"
+                    Content="{x:Bind HowLabel}" 
+                    ToolTipService.ToolTip="{x:Bind HowLabel}"
+                    Icon="Shop"/>
+                <MUXC:NavigationViewItem
+                    x:Name="UploadMenuItem"
+                    Content="{x:Bind UploadLabel}" 
+                    ToolTipService.ToolTip="{x:Bind UploadLabel}"
+                    Icon="Upload"/>
+            </MUXC:NavigationView.MenuItems>
+
+            <!-- In OnNavigatingToPage, we synchronize the selected item in the NavigationView with the current page. -->
+            <Frame
+                x:Name="frame"
+                Margin="20,0,0,0"
+                Navigating="OnNavigatingToPage">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition>
+                            <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                                <EntranceNavigationTransitionInfo />
+                            </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                        </NavigationThemeTransition>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
+
+        </MUXC:NavigationView>
+    </Grid>
+</Page>
