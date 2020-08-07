@@ -135,4 +135,13 @@
   <data name="HowTitle" xml:space="preserve">
     <value>Как использовать?</value>
   </data>
+  <data name="ZipWarning" xml:space="preserve">
+    <value>Файл должен быть .zip архивом</value>
+  </data>
+  <data name="QueryStartDateLabel" xml:space="preserve">
+    <value>От</value>
+  </data>
+  <data name="QueryEndDateLabel" xml:space="preserve">
+    <value>До</value>
+  </data>
 </root>

@@ -106,11 +106,20 @@ namespace BorderCrossing.Res {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test.
+        ///   Looks up a localized string similar to To.
         /// </summary>
-        public static string Test {
+        public static string QueryEndDateLabel {
             get {
-                return ResourceManager.GetString("Test", resourceCulture);
+                return ResourceManager.GetString("QueryEndDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From.
+        /// </summary>
+        public static string QueryStartDateLabel {
+            get {
+                return ResourceManager.GetString("QueryStartDateLabel", resourceCulture);
             }
         }
         
@@ -120,6 +129,15 @@ namespace BorderCrossing.Res {
         public static string UploadNav {
             get {
                 return ResourceManager.GetString("UploadNav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File should be .zip archive.
+        /// </summary>
+        public static string ZipWarning {
+            get {
+                return ResourceManager.GetString("ZipWarning", resourceCulture);
             }
         }
     }

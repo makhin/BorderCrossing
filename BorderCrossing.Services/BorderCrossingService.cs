@@ -15,11 +15,11 @@ namespace BorderCrossing.Services
 {
     public interface IBorderCrossingService
     {
-        Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, Request request, ProgressChangedEventHandler callback);
+        Task PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, string requestId, ProgressChangedEventHandler callback);
         Task<QueryRequest> GetQueryRequestAsync(string requestId);
         Task ParseLocationHistoryAsync(string requestId, QueryRequest model, ProgressChangedEventHandler callback);
         Task<List<CheckPoint>> GetResultAsync(string requestId);
-        Task<Request> AddNewRequestAsync(string ipAddress, string userAgent);
+        Task<string> AddNewRequestAsync(string ipAddress, string userAgent);
     }
 
     public class BorderCrossingService : IBorderCrossingService
@@ -35,11 +35,10 @@ namespace BorderCrossing.Services
             _countries = _repository.GetAllCountries();
         }
 
-        public async Task<string> PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, Request request, ProgressChangedEventHandler callback)
+        public async Task PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, string requestId, ProgressChangedEventHandler callback)
         {
             var locationHistory = await BorderCrossingHelper.ExtractJsonAsync(memoryStream, callback);
-            AddLocationHistory(locationHistory, request.RequestId.ToString());
-            return request.RequestId.ToString();
+            AddLocationHistory(locationHistory, requestId);
         }
 
         public async Task<QueryRequest> GetQueryRequestAsync(string requestId)
@@ -106,9 +105,10 @@ namespace BorderCrossing.Services
             return await _repository.GetResultAsync(requestId);
         }
 
-        public Task<Request> AddNewRequestAsync(string ipAddress, string userAgent)
+        public async Task<string> AddNewRequestAsync(string ipAddress, string userAgent)
         {
-            return _repository.AddNewRequest(Guid.NewGuid(), ipAddress, userAgent);
+            var request = await _repository.AddNewRequest(Guid.NewGuid(), ipAddress, userAgent);
+            return request.RequestId.ToString();
         }
 
         private string GetCountryName(Geometry point)

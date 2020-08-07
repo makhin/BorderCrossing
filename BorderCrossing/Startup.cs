@@ -44,7 +44,6 @@ namespace BorderCrossing
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-
             services.AddDbContext<CountryDbContext>(options =>
             {
                 options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));

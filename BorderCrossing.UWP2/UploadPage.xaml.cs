@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using BorderCrossing.Res;
+using BorderCrossing.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -22,24 +15,48 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class UploadPage : Page
     {
-        public UploadPage()
+        private readonly IBorderCrossingService _borderCrossingService;
+
+        public int PercentagePrep { get; set; }
+
+        public UploadPage() : this(App.Services.GetRequiredService<IBorderCrossingService>()) { }
+
+
+        public UploadPage(IBorderCrossingService borderCrossingService)
         {
+            _borderCrossingService = borderCrossingService;
             this.InitializeComponent();
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            var picker = new Windows.Storage.Pickers.FileOpenPicker();
-            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;
-            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Downloads;
+            var picker = new Windows.Storage.Pickers.FileOpenPicker
+            {
+                ViewMode = Windows.Storage.Pickers.PickerViewMode.List,
+                SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Downloads
+            };
             picker.FileTypeFilter.Add(".zip");
 
-            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
-            if (file != null)
+            var file = await picker.PickSingleFileAsync();
+
+            if (file == null) return;
+
+            if (Path.GetExtension(file.Name) != ".zip")
             {
+                throw new Exception(Strings.ZipWarning);
             }
-            else
+
+            using (var fileStream = await file.OpenStreamForReadAsync())
             {
+                var memoryStream = new MemoryStream();
+                await fileStream.CopyToAsync(memoryStream);
+
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var requestId = Guid.NewGuid().ToString();
+                await _borderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name,
+                    requestId, (s, progressChangedEventArgs) => { });
+
+                this.Frame.Navigate(typeof(QueryPage));
             }
         }
     }

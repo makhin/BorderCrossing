@@ -5,12 +5,17 @@
     xmlns:local="using:BorderCrossing.UWP2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <StackPanel>
             <Button Content="Выбрать файл" Click="Button_Click" />
+            <muxc:ProgressBar Width="130" Value="{x:Bind PercentagePrep}"/>
+                <TextBlock Width="60" TextAlignment="Center" />
+                <TextBlock Text="Progress" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ProgressBar  />
         </StackPanel>
     </Grid>
 </Page>

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Blazorise;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
 using BorderCrossing.Models.Core;
+using BorderCrossing.Res;
 
 namespace BorderCrossing.Pages
 {
@@ -53,11 +53,11 @@ namespace BorderCrossing.Pages
 
                 foreach (var file in e.Files)
                 {
-                    var request = await BorderCrossingService.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
+                    string requestId = await BorderCrossingService.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {
-                        throw new Exception("Файл должен быть .zip архивом");
+                        throw new Exception(Strings.ZipWarning);
                     }
 
                     await using (var memoryStream = new MemoryStream())
@@ -66,7 +66,7 @@ namespace BorderCrossing.Pages
                         PercentageLoad = 100;
                         StateHasChanged();
                         Status = PageStatus.Deserializing;
-                        string requestId = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, request, (sender, progressChangedEventArgs) =>
+                        await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, requestId, (sender, progressChangedEventArgs) =>
                         {
                             PercentagePrep = progressChangedEventArgs.ProgressPercentage;
                             InvokeAsync(StateHasChanged);

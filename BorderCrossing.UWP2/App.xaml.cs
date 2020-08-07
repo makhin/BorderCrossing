@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -14,6 +15,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using BorderCrossing.DbContext;
+using BorderCrossing.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BorderCrossing.UWP2
 {
@@ -22,6 +26,7 @@ namespace BorderCrossing.UWP2
     /// </summary>
     sealed partial class App : Application
     {
+        public static IServiceProvider Services { get; set; }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,6 +35,17 @@ namespace BorderCrossing.UWP2
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            IServiceCollection serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            Services = serviceCollection.BuildServiceProvider();
+
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
+            services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }
 
         /// <summary>
