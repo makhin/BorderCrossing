@@ -36,6 +36,10 @@
                     Content="{x:Bind UploadLabel}" 
                     ToolTipService.ToolTip="{x:Bind UploadLabel}"
                     Icon="Upload"/>
+                <MUXC:NavigationViewItem
+                    x:Name="QueryMenuItem"
+                    Content="Query" 
+                    Icon="Upload"/>
             </MUXC:NavigationView.MenuItems>
 
             <!-- In OnNavigatingToPage, we synchronize the selected item in the NavigationView with the current page. -->

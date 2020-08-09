@@ -54,7 +54,9 @@ namespace BorderCrossing.UWP2
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 var requestId = Guid.NewGuid().ToString();
                 await _borderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name,
-                    requestId, (s, progressChangedEventArgs) => { });
+                    requestId, (s, progressChangedEventArgs) => 
+                    {
+                    });
 
                 this.Frame.Navigate(typeof(QueryPage));
             }

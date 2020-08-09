@@ -20,19 +20,6 @@ using BorderCrossing.Res;
 
 namespace BorderCrossing.UWP2
 {
-
-    public class NamedIntervalType
-    {
-        public string Name { get; private set; }
-        public IntervalType IntervalType { get; private set; }
-        public NamedIntervalType(string name, IntervalType intervalType)
-        {
-            this.Name = name;
-            this.IntervalType = intervalType;
-        }
-    }
-
-
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
@@ -41,28 +28,34 @@ namespace BorderCrossing.UWP2
         public readonly string FromLabel = Strings.QueryStartDateLabel;
         public readonly string ToLabel = Strings.QueryEndDateLabel;
 
-        private List<NamedIntervalType> IntervalTypes { get; } = new List<NamedIntervalType>()
+        private List<string> IntervalLabels
         {
-            new NamedIntervalType(IntervalType.Day.GetDisplayName(), IntervalType.Day),
-            new NamedIntervalType(IntervalType.Every12Hours.GetDisplayName(), IntervalType.Every12Hours),
-            new NamedIntervalType(IntervalType.Hour.GetDisplayName(), IntervalType.Hour),
-        };
+            get
+            {
+                var result = new List<string>();
+                foreach (IntervalType val in Enum.GetValues(typeof(IntervalType)))
+                {
+                    result.Add(val.GetDisplayName());
+                }
+                return result;
+            }
+        }
 
         public QueryRequest ViewModelQueryRequest;
         public QueryPage()
         {
             this.InitializeComponent();
-            this.ViewModelQueryRequest = new QueryRequest();
-        }
-
-        private void IntervalComboBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            IntervalComboBox.SelectedIndex = 1;
+            this.ViewModelQueryRequest = new QueryRequest()
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                IntervalType = IntervalType.Every12Hours,
+            };
         }
 
         private void RunButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

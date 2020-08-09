@@ -8,22 +8,21 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
+    <Page.Resources>
+        <local:DateConverter x:Key="DateConverter" />
+        <local:IntervalTypeConverter x:Key="IntervalTypeConverter" />
+    </Page.Resources>
 
     <Grid>
-        <Grid.Resources>
-            <local:ComparisonConverter x:Key="ComparisonConverter" />
-        </Grid.Resources>
         <StackPanel>
-            <DatePicker x:Name="StartDate" Header="{x:Bind FromLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate}"></DatePicker>
-            <DatePicker x:Name="EndDate" Header="{x:Bind ToLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate}"></DatePicker>
+            <DatePicker x:Name="StartDate" Header="{x:Bind FromLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
+            <DatePicker x:Name="EndDate" Header="{x:Bind ToLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
 
-            <muxc:RadioButtons x:Name="Interval" Header="" HorizontalAlignment="Left" Margin="0,24,0,0" SelectedIndex="1" ItemsSource="{x:Bind IntervalTypes}" SelectedItem="{x:Bind ViewModelQueryRequest.IntervalType}">
+            <muxc:RadioButtons x:Name="Interval" Header="" MaxColumns="3" HorizontalAlignment="Left" Margin="0,24,0,0" ItemsSource="{x:Bind IntervalLabels}" SelectedItem="{x:Bind ViewModelQueryRequest.IntervalType, Mode=TwoWay, Converter={StaticResource IntervalTypeConverter}}">
             </muxc:RadioButtons>
 
-            <ComboBox x:Name="IntervalComboBox" HorizontalAlignment="Left" Margin="0,24,0,0" ItemsSource="{x:Bind IntervalTypes}" DisplayMemberPath="Name" SelectedValuePath="IntervalType" Loaded="IntervalComboBox_Loaded" SelectedItem="{x:Bind ViewModelQueryRequest.IntervalType}"/>
-
-
-            <ListView x:Name="ListView" HorizontalAlignment="Left" Margin="0,24,0,0" Grid.Row="1" VerticalAlignment="Top" ItemsSource="{x:Bind ViewModelQueryRequest.Regions}" >
+            <ListView x:Name="ListView" HorizontalAlignment="Left" Margin="0,24,0,0" Grid.Row="1" VerticalAlignment="Top" ItemsSource="{x:Bind ViewModelQueryRequest.Regions, Mode=TwoWay}" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

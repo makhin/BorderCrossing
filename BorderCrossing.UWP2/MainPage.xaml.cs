@@ -25,7 +25,7 @@ namespace BorderCrossing.UWP2
     {
         public readonly string HomeLabel = Strings.HomeNav;
         public readonly string HowLabel = Strings.HowNav;
-        public readonly string UploadLabel = Strings.UploadNav;
+        public readonly string UploadLabel = Strings.UploadNav;        
 
         /// <summary>
         /// Gets the navigation frame instance.
@@ -39,6 +39,7 @@ namespace BorderCrossing.UWP2
             Loaded += (sender, args) =>
             {
                 NavView.SelectedItem = HomeMenuItem;
+                AppFrame.Navigate(typeof(HomePage));
             };
         }
 
@@ -51,6 +52,7 @@ namespace BorderCrossing.UWP2
             var pageType =
                 label == HomeLabel ? typeof(HomePage) :
                 label == UploadLabel ? typeof(UploadPage) :
+                label == "Query" ? typeof(QueryPage) :
                 label == HowLabel ? typeof(HowPage) : null;
             if (pageType != null && pageType != AppFrame.CurrentSourcePageType)
             {
@@ -73,6 +75,10 @@ namespace BorderCrossing.UWP2
                 else if (e.SourcePageType == typeof(HowPage))
                 {
                     NavView.SelectedItem = HowMenuItem;
+                }
+                else if (e.SourcePageType == typeof(QueryPage))
+                {
+                    NavView.SelectedItem = QueryMenuItem;
                 }
                 else if (e.SourcePageType == typeof(UploadPage))
                 {

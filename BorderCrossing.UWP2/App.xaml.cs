@@ -18,6 +18,8 @@ using Windows.UI.Xaml.Navigation;
 using BorderCrossing.DbContext;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BorderCrossing.UWP2
 {
@@ -39,11 +41,20 @@ namespace BorderCrossing.UWP2
             IServiceCollection serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
-
         }
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+            services.AddDbContext<CountryDbContext>(options =>
+            {
+                options.UseSqlite("Data Source=country.db", b => {
+                    b.UseNetTopologySuite();
+                });
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }, ServiceLifetime.Transient);
+            
             services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }
