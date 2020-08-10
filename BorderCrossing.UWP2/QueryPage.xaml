@@ -17,7 +17,7 @@
     <Grid>
         <StackPanel>
             <DatePicker x:Name="StartDate" Header="{x:Bind FromLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
-            <DatePicker x:Name="EndDate" Header="{x:Bind ToLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
+            <DatePicker x:Name="EndDate" Header="{x:Bind ToLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.EndDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
 
             <muxc:RadioButtons x:Name="Interval" Header="" MaxColumns="3" HorizontalAlignment="Left" Margin="0,24,0,0" ItemsSource="{x:Bind IntervalLabels}" SelectedItem="{x:Bind ViewModelQueryRequest.IntervalType, Mode=TwoWay, Converter={StaticResource IntervalTypeConverter}}">
             </muxc:RadioButtons>
