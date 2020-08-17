@@ -243,7 +243,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="country.db" />
+    <Content Include="Assets\BorderCrossing.db" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

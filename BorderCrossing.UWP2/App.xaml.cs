@@ -20,6 +20,7 @@ using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Windows.Storage;
 
 namespace BorderCrossing.UWP2
 {
@@ -39,22 +40,32 @@ namespace BorderCrossing.UWP2
             this.Suspending += OnSuspending;
 
             IServiceCollection serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
+            Task.Run(() => this.ConfigureServices(serviceCollection)).Wait();
+
             Services = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private async Task ConfigureServices(IServiceCollection services)
         {
-            services.AddMemoryCache();
+            StorageFolder appInstalledFolder = Package.Current.InstalledLocation;
+            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            StorageFolder assetsFolder = await appInstalledFolder.GetFolderAsync("Assets");
+
+            StorageFile dbFile = await assetsFolder.GetFileAsync("BorderCrossing.db");
+
+            await dbFile.MoveAsync(localFolder, "BorderCrossing.db", NameCollisionOption.ReplaceExisting);
+            string dbpath = Path.Combine(localFolder.Path, "BorderCrossing.db");
+
             services.AddDbContext<CountryDbContext>(options =>
             {
-                options.UseSqlite("Data Source=country.db", b => {
+                options.UseSqlite($"Data Source={dbpath}", b => {
                     b.UseNetTopologySuite();
                 });
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
             }, ServiceLifetime.Transient);
-            
+
+            services.AddMemoryCache();
             services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }

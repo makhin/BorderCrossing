@@ -12,7 +12,7 @@
     <Grid>
         <StackPanel>
             <Button Content="Выбрать файл" Click="Button_Click" />
-            <muxc:ProgressBar Width="130" Value="{x:Bind PercentagePrep}"/>
+            <muxc:ProgressBar Width="130" x:Name="ProgressBarPrep" />
                 <TextBlock Width="60" TextAlignment="Center" />
                 <TextBlock Text="Progress" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ProgressBar  />

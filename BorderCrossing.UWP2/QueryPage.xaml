@@ -33,6 +33,11 @@
                 </ListView.ItemTemplate>
             </ListView>
 
+            <muxc:ProgressBar Width="130" x:Name="ProgressBarProc" />
+                <TextBlock Width="60" TextAlignment="Center" />
+                <TextBlock Text="Progress" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ProgressBar  />
+            
             <StackPanel Orientation="Horizontal">
                 <Button Content="Пуск" Margin="0,24" Click="RunButton_Click"/>
             </StackPanel>

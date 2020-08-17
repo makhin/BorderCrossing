@@ -9,7 +9,7 @@
         public CountryDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CountryDbContext>();
-            optionsBuilder.UseSqlite("Data Source=country.db", b => {
+            optionsBuilder.UseSqlite("Data Source=BorderCrossing.db", b => {
                     b.MigrationsAssembly("BorderCrossing.Console");
                     b.UseNetTopologySuite();
                 });
@@ -22,6 +22,21 @@
     {
         static void Main(string[] args)
         {
+            var optionsBuilder = new DbContextOptionsBuilder<CountryDbContext>();
+            optionsBuilder.UseSqlite("Data Source=BorderCrossing.db", b => {
+                b.UseNetTopologySuite();
+            });
+
+            string connectionString = "Server=localhost;Database=World;Trusted_Connection=True;";
+
+            var optionsBuilder2 = new DbContextOptionsBuilder<CountryDbContext>();
+            optionsBuilder2.UseSqlServer(connectionString, b => {
+                b.UseNetTopologySuite();
+            });
+
+            var dbl = new CountryDbContext(optionsBuilder.Options);
+            var dbs = new CountryDbContext(optionsBuilder2.Options);
+
         }
     }
 }

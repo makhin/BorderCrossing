@@ -9,6 +9,25 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <ListView x:Name="itemListView"
+          Margin="120,0,0,60"
+          ItemsSource="{x:Bind Response.Periods}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="110" Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
+                            <TextBlock Text="{Binding ArrivalPoint.Date}" TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding Country}" TextWrapping="NoWrap"/>
+                            <TextBlock Text="{Binding DeparturePoint.Date}" MaxHeight="60"/>
+                            <TextBlock Text="{Binding Days}" TextWrapping="NoWrap"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

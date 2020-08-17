@@ -17,6 +17,7 @@ using BorderCrossing.Models;
 using BorderCrossing.Res;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -69,7 +70,10 @@ namespace BorderCrossing.UWP2
         {
             await _borderCrossingService.ParseLocationHistoryAsync(this.RequestId, this.ViewModelQueryRequest, (sender, e) =>
             {
-                PercentageProc = e.ProgressPercentage;
+                _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    ProgressBarProc.Value = e.ProgressPercentage;
+                });
             });
 
             this.Frame.Navigate(typeof(ResultPage), this.RequestId);

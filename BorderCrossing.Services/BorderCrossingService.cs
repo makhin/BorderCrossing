@@ -32,7 +32,7 @@ namespace BorderCrossing.Services
         {
             _repository = repository;
             _cache = cache;
-            //_countries = _repository.GetAllCountries();
+            _countries = _repository.GetAllCountries();
         }
 
         public async Task PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, string requestId, ProgressChangedEventHandler callback)
