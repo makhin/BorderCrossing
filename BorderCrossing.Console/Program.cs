@@ -1,4 +1,6 @@
-﻿namespace BorderCrossing.Console
+﻿using System;
+
+namespace BorderCrossing.Console
 {
     using BorderCrossing.DbContext;
     using Microsoft.EntityFrameworkCore;
@@ -23,7 +25,7 @@
         static void Main(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CountryDbContext>();
-            optionsBuilder.UseSqlite("Data Source=BorderCrossing.db", b => {
+            optionsBuilder.UseSqlite(@"Data Source=C:\Users\omakhin\RiderProjects\BorderCrossing\BorderCrossing.Console\BorderCrossing.db", b => {
                 b.UseNetTopologySuite();
             });
 
@@ -36,6 +38,19 @@
 
             var dbl = new CountryDbContext(optionsBuilder.Options);
             var dbs = new CountryDbContext(optionsBuilder2.Options);
+
+            foreach (var country in dbs.Countries)
+            {
+                var c = new Country()
+                {
+                    Name = country.Name,
+                    Region = country.Region,
+                    Geom = country.Geom
+                };
+
+                dbl.Countries.Add(c);
+                dbl.SaveChanges();
+            }
 
         }
     }

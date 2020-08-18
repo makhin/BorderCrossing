@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderCrossing.Models", "Bo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderCrossing.Extensions", "BorderCrossing.Extensions\BorderCrossing.Extensions.csproj", "{4F43A116-4C1A-42BA-A94C-FC1B5C98D76C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BorderCrossing.Console", "BorderCrossing.Console\BorderCrossing.Console.csproj", "{83AA0592-CDF6-4095-A664-9AE7603591B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BorderCrossing.Console", "BorderCrossing.Console\BorderCrossing.Console.csproj", "{83AA0592-CDF6-4095-A664-9AE7603591B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -294,7 +294,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B4482B58-1667-4216-8335-CE502F72A5F5}
 		RESX_PrefixTranslations = False
+		SolutionGuid = {B4482B58-1667-4216-8335-CE502F72A5F5}
 	EndGlobalSection
 EndGlobal

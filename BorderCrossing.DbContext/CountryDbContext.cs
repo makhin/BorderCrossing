@@ -20,6 +20,8 @@ namespace BorderCrossing.DbContext
                 .HasOne(b => b.File)
                 .WithOne(i => i.Request)
                 .HasForeignKey<LocationHistoryFile>(b => b.RequestId);
+
+            modelBuilder.Entity<Country>().Property(c => c.Geom).HasSrid(4326);
         }
 
         public CountryDbContext(DbContextOptions<CountryDbContext> options) : base(options)
