@@ -76,10 +76,6 @@ namespace BorderCrossing.UWP2
                 {
                     NavView.SelectedItem = HowMenuItem;
                 }
-                else if (e.SourcePageType == typeof(QueryPage))
-                {
-                    NavView.SelectedItem = QueryMenuItem;
-                }
                 else if (e.SourcePageType == typeof(UploadPage))
                 {
                     NavView.SelectedItem = UploadMenuItem;

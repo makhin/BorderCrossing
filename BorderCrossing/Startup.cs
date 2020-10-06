@@ -58,6 +58,7 @@ namespace BorderCrossing
 
             services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
+            services.AddTransient<IBorderCrossingServiceWebWrapper, BorderCrossingServiceWebWrapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -53,18 +53,16 @@ namespace BorderCrossing.UWP2
                 await fileStream.CopyToAsync(memoryStream);
 
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                var requestId = Guid.NewGuid().ToString();
 
-                await _borderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name,
-                    requestId, (s, progressChangedEventArgs) => 
+                var locationHistory = await BorderCrossingHelper.ExtractJsonAsync(memoryStream, (s, progressChangedEventArgs) =>
+                {
+                    _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                     {
-                        _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                          {
-                              ProgressBarPrep.Value = progressChangedEventArgs.ProgressPercentage;
-                          });
+                        ProgressBarPrep.Value = progressChangedEventArgs.ProgressPercentage;
                     });
+                });
 
-                this.Frame.Navigate(typeof(QueryPage), requestId);
+                this.Frame.Navigate(typeof(QueryPage), locationHistory);
             }
         }
     }

@@ -18,6 +18,8 @@ using BorderCrossing.Res;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Windows.UI.Core;
+using BorderCrossing.DbContext;
+using BorderCrossing.Models.Google;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,9 +37,7 @@ namespace BorderCrossing.UWP2
         public readonly string FromLabel = Strings.QueryStartDateLabel;
         public readonly string ToLabel = Strings.QueryEndDateLabel;
 
-        public string RequestId { get; set; }
-
-        public int PercentageProc { get; set; }
+        public LocationHistory LocationHistory { get; set; }
 
         private List<string> IntervalLabels
         {
@@ -59,16 +59,16 @@ namespace BorderCrossing.UWP2
             this.InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.RequestId = (string)e.Parameter;
-            this.ViewModelQueryRequest = await _borderCrossingService.GetQueryRequestAsync(this.RequestId);
+            this.LocationHistory = (LocationHistory)e.Parameter;
+            this.ViewModelQueryRequest = await _borderCrossingService.GetQueryRequestAsync(this.LocationHistory);
         }
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
-            await _borderCrossingService.ParseLocationHistoryAsync(this.RequestId, this.ViewModelQueryRequest, (sender, e) =>
+            List<CheckPoint> checkpoints = await _borderCrossingService.ParseLocationHistoryAsync(this.LocationHistory, this.ViewModelQueryRequest, (sender, e) =>
             {
                 _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
@@ -76,7 +76,7 @@ namespace BorderCrossing.UWP2
                 });
             });
 
-            this.Frame.Navigate(typeof(ResultPage), this.RequestId);
+            this.Frame.Navigate(typeof(ResultPage), checkpoints);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace BorderCrossing.Pages
         }
 
         [Inject] 
-        public IBorderCrossingService BorderCrossingService { get; set; }
+        public IBorderCrossingServiceWebWrapper BorderCrossingServiceWebWrapper { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -53,7 +53,7 @@ namespace BorderCrossing.Pages
 
                 foreach (var file in e.Files)
                 {
-                    string requestId = await BorderCrossingService.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
+                    string requestId = await BorderCrossingServiceWebWrapper.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {
@@ -66,7 +66,7 @@ namespace BorderCrossing.Pages
                         PercentageLoad = 100;
                         StateHasChanged();
                         Status = PageStatus.Deserializing;
-                        await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, requestId, (sender, progressChangedEventArgs) =>
+                        await BorderCrossingServiceWebWrapper.PrepareLocationHistoryAsync(memoryStream, file.Name, requestId, (sender, progressChangedEventArgs) =>
                         {
                             PercentagePrep = progressChangedEventArgs.ProgressPercentage;
                             InvokeAsync(StateHasChanged);

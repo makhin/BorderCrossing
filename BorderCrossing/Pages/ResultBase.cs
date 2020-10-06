@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
+using BorderCrossing.Res;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
 
@@ -12,7 +13,7 @@ namespace BorderCrossing.Pages
     public class ResultBase : ComponentBase
     {
         [Inject]
-        public IBorderCrossingService BorderCrossingService { get; set; }
+        public IBorderCrossingServiceWebWrapper BorderCrossingServiceWebWrapper { get; set; }
 
         [Parameter]
         public string RequestId { get; set; }
@@ -23,10 +24,10 @@ namespace BorderCrossing.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Message = "Загрузка...";
+            Message = Strings.Loading;
             this.StateHasChanged();
 
-            var checkPoints = await BorderCrossingService.GetResultAsync(RequestId);
+            var checkPoints = await BorderCrossingServiceWebWrapper.GetResultAsync(RequestId);
 
             if (!checkPoints.Any())
             {

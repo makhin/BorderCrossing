@@ -14,7 +14,7 @@ namespace BorderCrossing.Pages
         }
 
         [Inject]
-        public IBorderCrossingService BorderCrossingService { get; set; }
+        public IBorderCrossingServiceWebWrapper BorderCrossingServiceWebWrapper { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
@@ -33,19 +33,20 @@ namespace BorderCrossing.Pages
         protected override async Task OnInitializedAsync()
         {
             Status = PageStatus.AskParameter;
-            QueryRequest = await BorderCrossingService.GetQueryRequestAsync(RequestId);
+            QueryRequest = await BorderCrossingServiceWebWrapper.GetQueryRequestAsync(RequestId);
         }
 
         public async Task Start()
         {
             Status = PageStatus.Processing;
             this.StateHasChanged();
-            await BorderCrossingService.ParseLocationHistoryAsync(RequestId, QueryRequest, (sender, e) =>
+            var checkpoints = await BorderCrossingServiceWebWrapper.ParseLocationHistoryAsync(RequestId, QueryRequest, (sender, e) =>
             {
                 PercentageProc = e.ProgressPercentage;
                 InvokeAsync(StateHasChanged);
             });
 
+            await BorderCrossingServiceWebWrapper.UpdateResultAsync(RequestId, checkpoints);
             NavigationManager.NavigateTo($"result/{RequestId}");
         }
     }

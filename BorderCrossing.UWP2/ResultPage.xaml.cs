@@ -1,9 +1,12 @@
-﻿using BorderCrossing.Models;
+﻿using System;
+using System.Collections.Generic;
+using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using BorderCrossing.DbContext;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -14,28 +17,24 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class ResultPage : Page
     {
-        private readonly IBorderCrossingService _borderCrossingService;
         public BorderCrossingResponse Response { get; set; }
 
-        public string RequestId { get; set; }
-
-        public ResultPage() : this(App.Services.GetRequiredService<IBorderCrossingService>()) { }
-
-        public ResultPage(IBorderCrossingService borderCrossingService)
+        public ResultPage()
         {
-            _borderCrossingService = borderCrossingService;
             this.InitializeComponent();
         }
 
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        /// <inheritdoc />
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.RequestId = (string)e.Parameter;
-
-            var checkPoints = await _borderCrossingService.GetResultAsync(RequestId);
+            var checkPoints = (List<CheckPoint>)e.Parameter;
+            if (checkPoints == null || !checkPoints.Any())
+            {
+                return;
+            }
 
             Response = new BorderCrossingResponse();
-
             var arrivalPoint = checkPoints.First();
             Response.Periods.Add(new Period
             {

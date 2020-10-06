@@ -51,9 +51,16 @@ namespace BorderCrossing.UWP2
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFolder assetsFolder = await appInstalledFolder.GetFolderAsync("Assets");
 
-            StorageFile dbFile = await assetsFolder.GetFileAsync("BorderCrossing.db");
+            try
+            {
+                StorageFile dbFile = await assetsFolder.GetFileAsync("BorderCrossing.db");
+                await dbFile.MoveAsync(localFolder, "BorderCrossing.db", NameCollisionOption.ReplaceExisting);
+            }
+            catch
+            {
+                // ignored
+            }
 
-            await dbFile.MoveAsync(localFolder, "BorderCrossing.db", NameCollisionOption.ReplaceExisting);
             string dbpath = Path.Combine(localFolder.Path, "BorderCrossing.db");
 
             services.AddDbContext<CountryDbContext>(options =>
