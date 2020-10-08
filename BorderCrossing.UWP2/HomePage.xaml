@@ -9,6 +9,21 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}" ></TextBlock>
+        <StackPanel>
+            <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}" ></TextBlock>
+            <RichTextBlock Style="{StaticResource PageNormalTextBlockStyle}" >
+                <Paragraph>"{x:Static properties:Strings.HomeP1}"</Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HomeP21}"
+                    <Span>
+                        <InlineUIContainer>
+                            <HyperlinkButton Tapped="UIElement_OnTapped" FontSize="16" Padding="0,0,0,0">"{x:Static properties:Strings.HomeP22}"</HyperlinkButton>
+                        </InlineUIContainer>
+                    </Span>
+                </Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HomeP3}"</Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HomeP4}"</Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HomeP5}" <Hyperlink NavigateUri="mailto:amakhin@hotmail.com">amakhin@hotmail.com</Hyperlink></Paragraph>
+            </RichTextBlock>
+        </StackPanel>
     </Grid>
 </Page>

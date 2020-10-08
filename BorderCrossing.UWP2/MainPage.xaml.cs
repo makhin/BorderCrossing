@@ -43,6 +43,18 @@ namespace BorderCrossing.UWP2
             };
         }
 
+        public void SetSelectedItem(string text)
+        {
+            if (text == "How")
+            {
+                NavView.SelectedItem = HowMenuItem;
+            } 
+            else if (text == "upload")
+            {
+                NavView.SelectedItem = UploadMenuItem;
+            }
+        }
+
         /// <summary>
         /// Navigates to the page corresponding to the tapped item.
         /// </summary>
@@ -82,6 +94,7 @@ namespace BorderCrossing.UWP2
                 }
             }
         }
+
 
 
         /// <summary>

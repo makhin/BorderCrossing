@@ -29,5 +29,11 @@ namespace BorderCrossing.UWP2
         {
             this.InitializeComponent();
         }
+
+        private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(HowPage));
+            ((Window.Current.Content as Frame).Content as MainPage).SetSelectedItem("how");
+        }
     }
 }

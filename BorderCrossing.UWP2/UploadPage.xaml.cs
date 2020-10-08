@@ -4,7 +4,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using BorderCrossing.Res;
 using BorderCrossing.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Windows.UI.Core;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -16,16 +15,8 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class UploadPage : Page
     {
-        private readonly IBorderCrossingService _borderCrossingService;
-
-        public int PercentagePrep { get; set; }
-
-        public UploadPage() : this(App.Services.GetRequiredService<IBorderCrossingService>()) { }
-
-
-        public UploadPage(IBorderCrossingService borderCrossingService)
+        public UploadPage()
         {
-            _borderCrossingService = borderCrossingService;
             this.InitializeComponent();
         }
 

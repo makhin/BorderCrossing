@@ -9,6 +9,36 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}"></TextBlock>
+        <ScrollViewer>
+        <StackPanel>
+            <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}"></TextBlock>
+            <RichTextBlock Style="{StaticResource PageNormalTextBlockStyle}" >
+                <Paragraph>"{x:Static properties:Strings.HowP11}"
+                    <Hyperlink NavigateUri="https://takeout.google.com/settings/takeout">https://takeout.google.com/settings/takeout</Hyperlink> "{x:Static properties:Strings.HowP12}"
+                </Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HowP2}"</Paragraph>
+                <Paragraph>
+                    <InlineUIContainer>
+                        <Image Source="Assets/takeout.png" Width="500"/>
+                    </InlineUIContainer>
+                </Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HowP4}"</Paragraph>
+                <Paragraph>
+                    <InlineUIContainer>
+                        <Image Source="Assets/takeout2.png" Width="500"/>
+                    </InlineUIContainer>
+                </Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HowP5}"</Paragraph>
+                <Paragraph>"{x:Static properties:Strings.HowP61}" 
+                    <Span>
+                        <InlineUIContainer>
+                                <HyperlinkButton Tapped="UIElement_OnTapped" FontSize="16" Padding="0,0,0,0">"{x:Static properties:Strings.HowP62}"</HyperlinkButton>
+                        </InlineUIContainer>
+                    </Span>.
+                    "{x:Static properties:Strings.HowP63}"
+                </Paragraph>
+            </RichTextBlock>
+        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

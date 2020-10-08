@@ -28,5 +28,11 @@ namespace BorderCrossing.UWP2
         {
             this.InitializeComponent();
         }
+
+        private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(UploadPage));
+            ((Window.Current.Content as Frame).Content as MainPage).SetSelectedItem("upload");
+        }
     }
 }

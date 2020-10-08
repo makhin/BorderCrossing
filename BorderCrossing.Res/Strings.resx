@@ -147,4 +147,54 @@
   <data name="Loading" xml:space="preserve">
     <value>Loading...</value>
   </data>
+  <data name="HomeP1" xml:space="preserve">
+    <value></value>
+    
+  </data>
+  <data name="HomeP21" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HomeP22" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HomeP3" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HomeP4" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HomeP5" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>amakhin@hotmail.com</value>
+    <comment>@Invariant</comment>
+  </data>
+  <data name="HowP11" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP12" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP2" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP4" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP5" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP61" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP62" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="HowP63" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="UploadBrowse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
 </root>
