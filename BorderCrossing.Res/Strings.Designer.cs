@@ -20,7 +20,7 @@ namespace BorderCrossing.Res {
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
         
@@ -70,11 +70,110 @@ namespace BorderCrossing.Res {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Arrival.
+        /// </summary>
+        public static string Arrival {
+            get {
+                return ResourceManager.GetString("Arrival", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string Country {
+            get {
+                return ResourceManager.GetString("Country", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Days.
+        /// </summary>
+        public static string Days {
+            get {
+                return ResourceManager.GetString("Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Departure.
+        /// </summary>
+        public static string Departure {
+            get {
+                return ResourceManager.GetString("Departure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to amakhin@hotmail.com.
+        /// </summary>
+        public static string email {
+            get {
+                return ResourceManager.GetString("email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string HomeNav {
             get {
                 return ResourceManager.GetString("HomeNav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This program parses the history of locations from Google, finds the dates of crossing state borders and calculates the number of days spent in each state..
+        /// </summary>
+        public static string HomeP1 {
+            get {
+                return ResourceManager.GetString("HomeP1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The required initial data is a file with the history of locations, how to get it, see.
+        /// </summary>
+        public static string HomeP21 {
+            get {
+                return ResourceManager.GetString("HomeP21", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        public static string HomeP22 {
+            get {
+                return ResourceManager.GetString("HomeP22", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limitations: Google records location information almost every minute, and if you check each point, the verification process can take a long time, so the program checks two points per day, which can significantly speed up the process, but, on the other hand, with this algorithm, short trips can be lost..
+        /// </summary>
+        public static string HomeP3 {
+            get {
+                return ResourceManager.GetString("HomeP3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Known Issues: Sometimes inaccurate country identification in coastal areas. In this version, countries are limited to Europe, and the frequency of checks is twice a day..
+        /// </summary>
+        public static string HomeP4 {
+            get {
+                return ResourceManager.GetString("HomeP4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please write about the problems found at.
+        /// </summary>
+        public static string HomeP5 {
+            get {
+                return ResourceManager.GetString("HomeP5", resourceCulture);
             }
         }
         
@@ -93,6 +192,87 @@ namespace BorderCrossing.Res {
         public static string HowNav {
             get {
                 return ResourceManager.GetString("HowNav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open page.
+        /// </summary>
+        public static string HowP11 {
+            get {
+                return ResourceManager.GetString("HowP11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (authorization may be required)..
+        /// </summary>
+        public static string HowP12 {
+            get {
+                return ResourceManager.GetString("HowP12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leave only location history selected,.
+        /// </summary>
+        public static string HowP2 {
+            get {
+                return ResourceManager.GetString("HowP2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the next step, do not change anything..
+        /// </summary>
+        public static string HowP4 {
+            get {
+                return ResourceManager.GetString("HowP4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wait for the mail with a link to the file, download it to your computer or mobile device..
+        /// </summary>
+        public static string HowP5 {
+            get {
+                return ResourceManager.GetString("HowP5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to.
+        /// </summary>
+        public static string HowP61 {
+            get {
+                return ResourceManager.GetString("HowP61", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to page.
+        /// </summary>
+        public static string HowP62 {
+            get {
+                return ResourceManager.GetString("HowP62", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the downloaded file (usually it has a name like &lt;Bold&gt; takeout-20200707T092637Z-001.zip &lt;/Bold&gt;) and wait for the result..
+        /// </summary>
+        public static string HowP63 {
+            get {
+                return ResourceManager.GetString("HowP63", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The longest part is uploading the file to the service, with a low Internet speed and a large history file size, this step can take 10-15 minutes, so it is recommended to be patient and upload the file to a device with a high speed Internet connection..
+        /// </summary>
+        public static string HowP7 {
+            get {
+                return ResourceManager.GetString("HowP7", resourceCulture);
             }
         }
         
@@ -133,11 +313,47 @@ namespace BorderCrossing.Res {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string UploadBrowse {
+            get {
+                return ResourceManager.GetString("UploadBrowse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload.
         /// </summary>
         public static string UploadNav {
             get {
                 return ResourceManager.GetString("UploadNav", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attention! The upload may take a long time..
+        /// </summary>
+        public static string UploadP1 {
+            get {
+                return ResourceManager.GetString("UploadP1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing.
+        /// </summary>
+        public static string UploadP2 {
+            get {
+                return ResourceManager.GetString("UploadP2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload.
+        /// </summary>
+        public static string UploadP3 {
+            get {
+                return ResourceManager.GetString("UploadP3", resourceCulture);
             }
         }
         

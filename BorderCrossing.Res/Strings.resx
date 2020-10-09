@@ -148,53 +148,77 @@
     <value>Loading...</value>
   </data>
   <data name="HomeP1" xml:space="preserve">
-    <value></value>
+    <value>This program parses the history of locations from Google, finds the dates of crossing state borders and calculates the number of days spent in each state.</value>
     
   </data>
   <data name="HomeP21" xml:space="preserve">
-    <value></value>
+    <value>The required initial data is a file with the history of locations, how to get it, see</value>
   </data>
   <data name="HomeP22" xml:space="preserve">
-    <value></value>
+    <value>here</value>
   </data>
   <data name="HomeP3" xml:space="preserve">
-    <value></value>
+    <value>Limitations: Google records location information almost every minute, and if you check each point, the verification process can take a long time, so the program checks two points per day, which can significantly speed up the process, but, on the other hand, with this algorithm, short trips can be lost.</value>
   </data>
   <data name="HomeP4" xml:space="preserve">
-    <value></value>
+    <value>Known Issues: Sometimes inaccurate country identification in coastal areas. In this version, countries are limited to Europe, and the frequency of checks is twice a day.</value>
   </data>
   <data name="HomeP5" xml:space="preserve">
-    <value></value>
+    <value>Please write about the problems found at</value>
   </data>
   <data name="email" xml:space="preserve">
     <value>amakhin@hotmail.com</value>
     <comment>@Invariant</comment>
   </data>
   <data name="HowP11" xml:space="preserve">
-    <value></value>
+    <value>Open page</value>
   </data>
   <data name="HowP12" xml:space="preserve">
-    <value></value>
+    <value>(authorization may be required).</value>
   </data>
   <data name="HowP2" xml:space="preserve">
-    <value></value>
+    <value>Leave only location history selected,</value>
   </data>
   <data name="HowP4" xml:space="preserve">
-    <value></value>
+    <value>In the next step, do not change anything.</value>
   </data>
   <data name="HowP5" xml:space="preserve">
-    <value></value>
+    <value>Wait for the mail with a link to the file, download it to your computer or mobile device.</value>
   </data>
   <data name="HowP61" xml:space="preserve">
-    <value></value>
+    <value>Go to</value>
   </data>
   <data name="HowP62" xml:space="preserve">
-    <value></value>
+    <value>page</value>
   </data>
   <data name="HowP63" xml:space="preserve">
-    <value></value>
+    <value>Select the downloaded file (usually it has a name like &lt;Bold&gt; takeout-20200707T092637Z-001.zip &lt;/Bold&gt;) and wait for the result.</value>
   </data>
   <data name="UploadBrowse" xml:space="preserve">
     <value>Browse</value>
+  </data>
+  <data name="HowP7" xml:space="preserve">
+    <value>The longest part is uploading the file to the service, with a low Internet speed and a large history file size, this step can take 10-15 minutes, so it is recommended to be patient and upload the file to a device with a high speed Internet connection.</value>
+  </data>
+  <data name="UploadP1" xml:space="preserve">
+    <value>Attention! The upload may take a long time.</value>
+  </data>
+  <data name="UploadP2" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
+  <data name="UploadP3" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Days</value>
+  </data>
+  <data name="Arrival" xml:space="preserve">
+    <value>Arrival</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>Departure</value>
   </data>
 </root>

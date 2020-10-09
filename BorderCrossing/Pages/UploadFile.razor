@@ -1,5 +1,6 @@
 ﻿@page "/uploadfile"
 
+@using BorderCrossing.Res
 @inherits UploadFileBase
 
 @functions {
@@ -33,9 +34,9 @@
 
         @if (Status == PageStatus.Uploading)
         {
-            <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">Загрузка</Heading>
+            <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">@Strings.UploadP3</Heading>
 
-            <Paragraph Color="TextColor.Info">Внимание! Загрузка может занять продолжительное время.</Paragraph>
+            <Paragraph Color="TextColor.Info">@Strings.UploadP1</Paragraph>
 
             <Progress Margin="Margin.Is3.FromTop" Size="Size.Large">
                 <ProgressBar Value="@PercentageLoad">@PercentageLoad%</ProgressBar>
@@ -44,7 +45,7 @@
     }
     @if (Status == PageStatus.Deserializing)
     {
-        <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">Подготовка</Heading>
+<Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">@Strings.UploadP2</Heading>
 
         <Progress Margin="Margin.Is3.FromTop" Size="Size.Large">
             <ProgressBar Value="@PercentagePrep">@PercentagePrep%</ProgressBar>

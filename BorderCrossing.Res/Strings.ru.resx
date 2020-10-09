@@ -192,4 +192,28 @@
   <data name="UploadBrowse" xml:space="preserve">
     <value>Выбрать файл</value>
   </data>
+  <data name="HowP7" xml:space="preserve">
+    <value>Самая долгая часть - это выгрузка файла на сервис, при невысокой скорости интернета и большом размере файла истории, этот шаг может растянуться на 10-15 минут, поэтому рекомендуется запастись терпением и выгружать файл на устройстве с высокой скоростью интренет-соединения.</value>
+  </data>
+  <data name="UploadP1" xml:space="preserve">
+    <value>Внимание! Загрузка может занять продолжительное время.</value>
+  </data>
+  <data name="UploadP2" xml:space="preserve">
+    <value>Подготовка</value>
+  </data>
+  <data name="UploadP3" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Страна</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Дни</value>
+  </data>
+  <data name="Arrival" xml:space="preserve">
+    <value>Въезд</value>
+  </data>
+  <data name="Departure" xml:space="preserve">
+    <value>Выезд</value>
+  </data>
 </root>

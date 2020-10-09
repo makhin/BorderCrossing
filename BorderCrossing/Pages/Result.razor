@@ -1,5 +1,6 @@
 ﻿@page "/result/{RequestId}"
 @using BorderCrossing.Models
+@using BorderCrossing.Res
 @inherits ResultBase
 
 <Container>
@@ -10,10 +11,10 @@
     <Table Margin="Margin.Is3.FromTop">
         <TableHeader>
             <TableRow>
-                <TableHeaderCell>Въезд</TableHeaderCell>
-                <TableHeaderCell>Страна</TableHeaderCell>
-                <TableHeaderCell>Выезд</TableHeaderCell>
-                <TableHeaderCell>Дни</TableHeaderCell>
+                <TableHeaderCell>@Strings.Arrival</TableHeaderCell>
+                <TableHeaderCell>@Strings.Country</TableHeaderCell>
+                <TableHeaderCell>@Strings.Departure</TableHeaderCell>
+                <TableHeaderCell>@Strings.Days</TableHeaderCell>
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -32,8 +33,8 @@
     <Table>
         <TableHeader>
             <TableRow>
-                <TableHeaderCell>Страна</TableHeaderCell>
-                <TableHeaderCell>Дни</TableHeaderCell>
+                <TableHeaderCell>@Strings.Country</TableHeaderCell>
+                <TableHeaderCell>@Strings.Days</TableHeaderCell>
             </TableRow>
         </TableHeader>
         <TableBody>
