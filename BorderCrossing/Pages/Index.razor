@@ -1,7 +1,10 @@
 ﻿@page "/"
 @using BorderCrossing.Res
+@inject IStringLocalizer<SharedResource> SharedLocalizer
 
 <h1>@Strings.HomeTitle</h1>
+
+@SharedLocalizer["HelloKey"]
 
 <p>@Strings.HomeP1</p>
 <p>@Strings.HomeP21 <NavLink href="how">@Strings.HomeP22</NavLink>.</p>
