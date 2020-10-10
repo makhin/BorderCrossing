@@ -17,7 +17,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Strings.ru.resx">
+    <EmbeddedResource Update="Strings.ru-RU.resx">
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
