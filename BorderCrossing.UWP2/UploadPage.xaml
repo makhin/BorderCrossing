@@ -10,12 +10,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel>
-            <Button Content="Выбрать файл" Click="Button_Click" />
-            <muxc:ProgressBar Width="130" x:Name="ProgressBarPrep" />
-                <TextBlock Width="60" TextAlignment="Center" />
-                <TextBlock Text="Progress" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ProgressBar  />
+        <StackPanel Margin="10">
+            <muxc:ProgressBar Height="20" x:Name="ProgressBarPrep" />
+            <Button Margin="0,10,0,0" Content="Выбрать файл" Click="Button_Click" />
         </StackPanel>
     </Grid>
 </Page>

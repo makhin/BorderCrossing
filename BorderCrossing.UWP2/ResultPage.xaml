@@ -10,52 +10,53 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <controls:DataGrid x:Name="dataGrid" 
-                           Margin="120,0,0,60"
-                           AutoGenerateColumns="False" 
-                           IsReadOnly="True"
-                           GridLinesVisibility="Horizontal"
-                           HeadersVisibility="Column"
-                           ItemsSource="{x:Bind Response.Periods}">
-            <controls:DataGrid.Columns>
-                <controls:DataGridTextColumn 
-                    Header="Въезд" 
-                    Width="SizeToCells"
-                    Binding="{Binding ArrivalPoint.Date}"  />
-                <controls:DataGridTextColumn 
-                    Header="Страна" 
-                    Width="SizeToCells"
-                    Binding="{Binding Country}"  />
-                <controls:DataGridTextColumn 
-                    Header="Выезд" 
-                    Width="SizeToCells"
-                    Binding="{Binding DeparturePoint.Date}"  />
-                <controls:DataGridTextColumn 
-                    Header="Дни" 
-                    Width="SizeToHeader"
-                    Binding="{Binding Days}"  />
-            </controls:DataGrid.Columns>
-        </controls:DataGrid>
+        <ScrollViewer Margin="10">
+            <StackPanel>
+                <controls:DataGrid x:Name="dataGridCountries" 
+                                   Margin="0,0,0,20"
+                                   AutoGenerateColumns="False" 
+                                   IsReadOnly="True"
+                                   GridLinesVisibility="Horizontal"
+                                   HeadersVisibility="Column"
+                                   ItemsSource="{x:Bind Response.Periods}">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn 
+                            Header="Въезд" 
+                            Width="SizeToCells"
+                            Binding="{Binding ArrivalPoint.Date}"  />
+                        <controls:DataGridTextColumn 
+                            Header="Страна" 
+                            Width="SizeToCells"
+                            Binding="{Binding Country}"  />
+                        <controls:DataGridTextColumn 
+                            Header="Выезд" 
+                            Width="SizeToCells"
+                            Binding="{Binding DeparturePoint.Date}"  />
+                        <controls:DataGridTextColumn 
+                            Header="Дни" 
+                            Width="SizeToHeader"
+                            Binding="{Binding Days}"  />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
 
-        <!--<ListView x:Name="itemListView"
-                  Margin="120,0,0,60"
-                  ItemsSource="{x:Bind Response.Periods}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Height="110" Margin="6">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                            <TextBlock Text="{Binding ArrivalPoint.Date}" TextWrapping="NoWrap"/>
-                            <TextBlock Text="{Binding Country}" TextWrapping="NoWrap"/>
-                            <TextBlock Text="{Binding DeparturePoint.Date}" MaxHeight="60"/>
-                            <TextBlock Text="{Binding Days}" TextWrapping="NoWrap"/>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
+                <controls:DataGrid x:Name="dataGridCountryDays" 
+                                   AutoGenerateColumns="False" 
+                                   IsReadOnly="True"
+                                   GridLinesVisibility="Horizontal"
+                                   HeadersVisibility="Column"
+                                   ItemsSource="{x:Bind Response.CountryDays}">
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn 
+                            Header="Страна" 
+                            Width="SizeToCells"
+                            Binding="{Binding Key}"  />
+                        <controls:DataGridTextColumn 
+                            Header="Дни" 
+                            Width="SizeToHeader"
+                            Binding="{Binding Value}"  />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+             </StackPanel>
+         </ScrollViewer>
     </Grid>
 </Page>

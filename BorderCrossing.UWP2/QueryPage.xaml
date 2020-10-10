@@ -15,7 +15,7 @@
     </Page.Resources>
 
     <Grid>
-        <StackPanel>
+        <StackPanel Margin="10">
             <DatePicker x:Name="StartDate" Header="{x:Bind FromLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.StartDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
             <DatePicker x:Name="EndDate" Header="{x:Bind ToLabel}" HorizontalAlignment="Left" Margin="0,24,0,0" Date="{x:Bind ViewModelQueryRequest.EndDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"></DatePicker>
 
@@ -32,14 +32,12 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <muxc:ProgressBar Width="130" x:Name="ProgressBarProc" />
-                <TextBlock Width="60" TextAlignment="Center" />
-                <TextBlock Text="Progress" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ProgressBar  />
+            <StackPanel>
+                <muxc:ProgressBar Height="20"  x:Name="ProgressBarProc" />
+            </StackPanel>
             
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Пуск" Margin="0,24" Click="RunButton_Click"/>
+            <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                <Button Content="Пуск" Click="RunButton_Click"/>
             </StackPanel>
         </StackPanel>
     </Grid>
