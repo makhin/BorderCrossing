@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Res;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 
 namespace BorderCrossing.Pages
 {
@@ -18,20 +16,23 @@ namespace BorderCrossing.Pages
         [Parameter]
         public string RequestId { get; set; }
 
+        [Inject]
+        private IStringLocalizer<SharedResource> L { get; set; }
+
         public BorderCrossingResponse Response { get; set; }
 
         public string Message { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            Message = Strings.Loading;
+            Message = L["UploadP2"];
             this.StateHasChanged();
 
             var checkPoints = await BorderCrossingServiceWebWrapper.GetResultAsync(RequestId);
 
             if (!checkPoints.Any())
             {
-                Message = "Результаты не найдены";
+                Message = L["ResultNodFound"];
             }
             else
             {

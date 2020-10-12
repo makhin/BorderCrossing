@@ -1,23 +1,22 @@
 ﻿@page "/how"
 @using BorderCrossing.Res
+@inject IStringLocalizer<SharedResource> L
 
-<h1>@Strings.HowTitle</h1>
+<h1>@L["HowTitle"]</h1>
 
-<p>@Strings.HowP11 <a href="https://takeout.google.com/settings/takeout" target="_blank">https://takeout.google.com/settings/takeout</a> @Strings.HowP12</p>
-<p>@Strings.HowP2</p>
+<p>@L["HowP11"] <a href="https://takeout.google.com/settings/takeout" target="_blank">https://takeout.google.com/settings/takeout</a> @L["HowP12"]</p>
+<p>@L["HowP2"]</p>
 <picture>
-    <source 
-        media="(min-width: 650px)"
-        srcset="images/takeout.png">
+    <source media="(min-width: 650px)"
+            srcset="images/takeout.png">
     <img src="images/takeoutM.png" />
 </picture>
-<p>@Strings.HowP4</p>
+<p>@L["HowP4"]</p>
 <picture>
-    <source 
-        media="(min-width: 650px)"
-        srcset="images/takeout2.png">
+    <source media="(min-width: 650px)"
+            srcset="images/takeout2.png">
     <img src="images/takeoutM2.png" />
 </picture>
-<p>@Strings.HowP5</p>
-<p>@Strings.HowP61 <NavLink href="uploadfile">@Strings.HowP62</NavLink>@Strings.HowP63</p>
-<p>@Strings.HowP7</p>
+<p>@L["HowP5"]</p>
+<p>@L["HowP61"] <NavLink href="uploadfile">@L["HowP62"]</NavLink>. @L["HowP63"]</p>
+<p>@L["HowP7"]</p>

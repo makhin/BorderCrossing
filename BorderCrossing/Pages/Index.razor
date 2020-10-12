@@ -1,13 +1,10 @@
 ﻿@page "/"
 @using BorderCrossing.Res
-@inject IStringLocalizer<SharedResource> SharedLocalizer
+@inject IStringLocalizer<SharedResource> L
 
-<h1>@Strings.HomeTitle</h1>
-
-@SharedLocalizer["HelloKey"]
-
-<p>@Strings.HomeP1</p>
-<p>@Strings.HomeP21 <NavLink href="how">@Strings.HomeP22</NavLink>.</p>
-<p>@Strings.HomeP3</p>
-<p>@Strings.HomeP4</p>
-<p>@Strings.HomeP5 <a href="mailto:amakhin@hotmail.com">amakhin@hotmail.com</a>.</p>
+<h1>@L["HomeTitle"]</h1>
+<p>@L["HomeP1"]</p>
+<p>@L["HomeP21"] <NavLink href="how">@L["HomeP22"]</NavLink>.</p>
+<p>@L["HomeP3"]</p>
+<p>@L["HomeP4"]</p>
+<p>@L["HomeP5"] <a href="mailto: amakhin@hotmail.com">amakhin@hotmail.com</a>.</p>

@@ -6,6 +6,7 @@ using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
 using BorderCrossing.Models.Core;
 using BorderCrossing.Res;
+using Microsoft.Extensions.Localization;
 
 namespace BorderCrossing.Pages
 {
@@ -23,6 +24,9 @@ namespace BorderCrossing.Pages
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        private IStringLocalizer<SharedResource> L { get; set; }
 
         protected PageStatus Status { get; set; }
 
@@ -57,7 +61,7 @@ namespace BorderCrossing.Pages
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {
-                        throw new Exception(Strings.ZipWarning);
+                        throw new Exception(L["ZipWarning"]);
                     }
 
                     await using (var memoryStream = new MemoryStream())
