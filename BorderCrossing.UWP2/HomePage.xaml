@@ -5,19 +5,24 @@
     xmlns:local="using:BorderCrossing.UWP2"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prop ="clr-namespace:BorderCrossing.Res;assembly=BorderCrossing.Res"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
         <StackPanel>
-            <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}" ></TextBlock>
-            <TextBlock TextWrapping="Wrap" Text="{x:Bind HomeP1}" />
-            <TextBlock TextWrapping="Wrap" Text="{x:Bind HomeP21}" />
-            <TextBlock TextWrapping="Wrap" Text="{x:Bind HomeP22}" />
-            <TextBlock TextWrapping="Wrap" Text="{x:Bind HomeP3}" />
-            <TextBlock TextWrapping="Wrap" Text="{x:Bind HomeP4}" />
-            <TextBlock TextWrapping="Wrap" Text="{x:Bind HomeP5}" />
+            <TextBlock x:Uid="HomeTitle" Style="{StaticResource PageTitleTextBlockStyle}" ></TextBlock>
+            <TextBlock x:Uid="HomeP1" TextWrapping="Wrap" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Uid="HomeP21" TextWrapping="Wrap"/>
+                <TextBlock Grid.Column="1" x:Uid="HomeP22" TextWrapping="Wrap" TextDecorations="Underline" Tapped="UIElement_OnTapped"/>
+            </Grid>
+            <TextBlock x:Uid="HomeP3" TextWrapping="Wrap"/>
+            <TextBlock x:Uid="HomeP4" TextWrapping="Wrap"/>
+            <TextBlock x:Uid="HomeP5" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>
 </Page>

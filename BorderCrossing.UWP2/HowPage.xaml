@@ -11,7 +11,7 @@
     <Grid>
         <ScrollViewer>
         <StackPanel>
-            <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" Text="{x:Bind Title}"></TextBlock>
+            <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" x:Uid="HowTitle"></TextBlock>
             <RichTextBlock Style="{StaticResource PageNormalTextBlockStyle}" >
                 <Paragraph>"{x:Static properties:Strings.HowP11}"
                     <Hyperlink NavigateUri="https://takeout.google.com/settings/takeout">https://takeout.google.com/settings/takeout</Hyperlink> "{x:Static properties:Strings.HowP12}"

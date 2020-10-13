@@ -24,14 +24,6 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class HomePage : Page
     {
-        public readonly string Title = Strings.HomeTitle;
-        public readonly string HomeP1 = Strings.HomeP1;
-        public readonly string HomeP21 = Strings.HomeP21;
-        public readonly string HomeP22 = Strings.HomeP22;
-        public readonly string HomeP3 = Strings.HomeP3;
-        public readonly string HomeP4 = Strings.HomeP4;
-        public readonly string HomeP5 = Strings.HomeP5;
-
         public HomePage()
         {
             this.InitializeComponent();

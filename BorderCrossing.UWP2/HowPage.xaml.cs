@@ -23,7 +23,6 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class HowPage : Page
     {
-        public readonly string Title = Strings.HowTitle;
         public HowPage()
         {
             this.InitializeComponent();

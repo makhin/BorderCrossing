@@ -33,10 +33,6 @@ namespace BorderCrossing.UWP2
         private readonly IBorderCrossingService _borderCrossingService;
 
         public QueryPage() : this(App.Services.GetRequiredService<IBorderCrossingService>()) { }
-
-        public readonly string FromLabel = Strings.QueryStartDateLabel;
-        public readonly string ToLabel = Strings.QueryEndDateLabel;
-
         public LocationHistory LocationHistory { get; set; }
 
         private List<string> IntervalLabels

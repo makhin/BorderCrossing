@@ -23,9 +23,9 @@ namespace BorderCrossing.UWP2
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public readonly string HomeLabel = Strings.HomeNav;
-        public readonly string HowLabel = Strings.HowNav;
-        public readonly string UploadLabel = Strings.UploadNav;        
+        public readonly string HomeLabel;
+        public readonly string HowLabel;
+        public readonly string UploadLabel;        
 
         /// <summary>
         /// Gets the navigation frame instance.
@@ -36,6 +36,11 @@ namespace BorderCrossing.UWP2
         {
             this.InitializeComponent();
 
+            var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            HomeLabel = resourceLoader.GetString("HomeNav");
+            HowLabel = resourceLoader.GetString("HowNav");
+            UploadLabel = resourceLoader.GetString("UploadNav");
+
             Loaded += (sender, args) =>
             {
                 NavView.SelectedItem = HomeMenuItem;
@@ -45,7 +50,7 @@ namespace BorderCrossing.UWP2
 
         public void SetSelectedItem(string text)
         {
-            if (text == "How")
+            if (text == "how")
             {
                 NavView.SelectedItem = HowMenuItem;
             } 
@@ -64,7 +69,6 @@ namespace BorderCrossing.UWP2
             var pageType =
                 label == HomeLabel ? typeof(HomePage) :
                 label == UploadLabel ? typeof(UploadPage) :
-                label == "Query" ? typeof(QueryPage) :
                 label == HowLabel ? typeof(HowPage) : null;
             if (pageType != null && pageType != AppFrame.CurrentSourcePageType)
             {

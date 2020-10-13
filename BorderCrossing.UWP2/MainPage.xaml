@@ -26,12 +26,12 @@
                     x:Name="HomeMenuItem"
                     Content="{x:Bind HomeLabel}" 
                     ToolTipService.ToolTip="{x:Bind HomeLabel}"
-                    Icon="ContactInfo"/>
+                    Icon="Home"/>
                 <MUXC:NavigationViewItem
                     x:Name="HowMenuItem"
                     Content="{x:Bind HowLabel}" 
                     ToolTipService.ToolTip="{x:Bind HowLabel}"
-                    Icon="Shop"/>
+                    Icon="Help"/>
                 <MUXC:NavigationViewItem
                     x:Name="UploadMenuItem"
                     Content="{x:Bind UploadLabel}" 
