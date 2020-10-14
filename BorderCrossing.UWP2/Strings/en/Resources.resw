@@ -166,32 +166,29 @@
   <data name="HowNav" xml:space="preserve">
     <value>How</value>
   </data>
-  <data name="HowP11" xml:space="preserve">
+  <data name="HowP11.Text" xml:space="preserve">
     <value>Open page</value>
   </data>
-  <data name="HowP12" xml:space="preserve">
+  <data name="HowP12.Text" xml:space="preserve">
     <value>(authorization may be required).</value>
   </data>
-  <data name="HowP2" xml:space="preserve">
+  <data name="HowP2.Text" xml:space="preserve">
     <value>Leave only location history selected,</value>
   </data>
-  <data name="HowP4" xml:space="preserve">
+  <data name="HowP4.Text" xml:space="preserve">
     <value>In the next step, do not change anything.</value>
   </data>
-  <data name="HowP5" xml:space="preserve">
+  <data name="HowP5.Text" xml:space="preserve">
     <value>Wait for the mail with a link to the file, download it to your computer or mobile device.</value>
   </data>
-  <data name="HowP61" xml:space="preserve">
+  <data name="HowP61.Text" xml:space="preserve">
     <value>Go to</value>
   </data>
-  <data name="HowP62" xml:space="preserve">
-    <value>page</value>
+  <data name="HowP62.Text" xml:space="preserve">
+    <value>page.</value>
   </data>
-  <data name="HowP63" xml:space="preserve">
+  <data name="HowP63.Text" xml:space="preserve">
     <value>Select the downloaded file (usually it has a name like takeout-20200707T092637Z-001.zip) and wait for the result.</value>
-  </data>
-  <data name="HowP7" xml:space="preserve">
-    <value>The longest part is uploading the file to the service, with a low Internet speed and a large history file size, this step can take 10-15 minutes, so it is recommended to be patient and upload the file to a device with a high speed Internet connection.</value>
   </data>
   <data name="HowTitle.Text" xml:space="preserve">
     <value>How to use?</value>
@@ -207,9 +204,6 @@
   </data>
   <data name="QueryStartDateLabel.Header" xml:space="preserve">
     <value>From</value>
-  </data>
-  <data name="ResultKeepUrl" xml:space="preserve">
-    <value>If you keep the link to this page, you will be able to access the results without re-downloading the file.</value>
   </data>
   <data name="ResultNodFound" xml:space="preserve">
     <value>No results found</value>

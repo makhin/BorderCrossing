@@ -162,32 +162,29 @@
   <data name="HowNav" xml:space="preserve">
     <value>Как</value>
   </data>
-  <data name="HowP11" xml:space="preserve">
+  <data name="HowP11.Text" xml:space="preserve">
     <value>Открыть страницу</value>
   </data>
-  <data name="HowP12" xml:space="preserve">
+  <data name="HowP12.Text" xml:space="preserve">
     <value>(может потребоваться авторизация).</value>
   </data>
-  <data name="HowP2" xml:space="preserve">
+  <data name="HowP2.Text" xml:space="preserve">
     <value>Оставить выбранным только историю местоположений,</value>
   </data>
-  <data name="HowP4" xml:space="preserve">
+  <data name="HowP4.Text" xml:space="preserve">
     <value>На следующем шаге ничего не менять.</value>
   </data>
-  <data name="HowP5" xml:space="preserve">
+  <data name="HowP5.Text" xml:space="preserve">
     <value>Дождаться письма со ссылкой на файл, скачать его на компьютер или мобильное устройство.</value>
   </data>
-  <data name="HowP61" xml:space="preserve">
+  <data name="HowP61.Text" xml:space="preserve">
     <value>Перейти на</value>
   </data>
-  <data name="HowP62" xml:space="preserve">
-    <value>страницу</value>
+  <data name="HowP62.Text" xml:space="preserve">
+    <value>страницу.</value>
   </data>
-  <data name="HowP63" xml:space="preserve">
+  <data name="HowP63.Text" xml:space="preserve">
     <value>Выбрать загруженный файл (обычно он имеет имя типа takeout-20200707T092637Z-001.zip) и дождаться результата.</value>
-  </data>
-  <data name="HowP7" xml:space="preserve">
-    <value>Самая долгая часть - это выгрузка файла на сервис, при невысокой скорости интернета и большом размере файла истории, этот шаг может растянуться на 10-15 минут, поэтому рекомендуется запастись терпением и выгружать файл на устройстве с высокой скоростью интренет-соединения.</value>
   </data>
   <data name="HowTitle.Text" xml:space="preserve">
     <value>Как использовать?</value>
@@ -203,9 +200,6 @@
   </data>
   <data name="QueryStartDateLabel.Header" xml:space="preserve">
     <value>От</value>
-  </data>
-  <data name="ResultKeepUrl" xml:space="preserve">
-    <value>Если вы сохраните ссылку на эту страницу, то будете иметь доступ к результатам без повторной загрузки файла.</value>
   </data>
   <data name="ResultNodFound" xml:space="preserve">
     <value>Результаты не найдены</value>

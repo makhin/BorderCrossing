@@ -9,20 +9,23 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <StackPanel>
+        <StackPanel Margin="10">
             <TextBlock x:Uid="HomeTitle" Style="{StaticResource PageTitleTextBlockStyle}" ></TextBlock>
             <TextBlock x:Uid="HomeP1" TextWrapping="Wrap" />
+            <RelativePanel>
+                <TextBlock x:Name="P21" x:Uid="HomeP21" TextWrapping="Wrap"/>
+                <TextBlock x:Name="P22" x:Uid="HomeP22" TextWrapping="Wrap" TextDecorations="Underline" Tapped="UIElement_OnTapped"  Margin="3,0,0,0" RelativePanel.RightOf="P21"/>
+            </RelativePanel>
+            <TextBlock x:Uid="HomeP3" TextWrapping="Wrap"/>
+            <TextBlock x:Uid="HomeP4" TextWrapping="Wrap"/>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Uid="HomeP21" TextWrapping="Wrap"/>
-                <TextBlock Grid.Column="1" x:Uid="HomeP22" TextWrapping="Wrap" TextDecorations="Underline" Tapped="UIElement_OnTapped"/>
+                <TextBlock x:Uid="HomeP5" TextWrapping="Wrap"/>
+                <HyperlinkButton Grid.Column="1" Margin="3,0,0,0" Content="amakhin@hotmail.com" NavigateUri="mailto:amakhin@hotmail.com" Padding="0"/>
             </Grid>
-            <TextBlock x:Uid="HomeP3" TextWrapping="Wrap"/>
-            <TextBlock x:Uid="HomeP4" TextWrapping="Wrap"/>
-            <TextBlock x:Uid="HomeP5" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>
 </Page>
