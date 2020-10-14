@@ -126,6 +126,9 @@
   <data name="Country" xml:space="preserve">
     <value>Country</value>
   </data>
+  <data name="Day" xml:space="preserve">
+    <value>Every Day</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>Days</value>
   </data>
@@ -135,6 +138,9 @@
   <data name="email" xml:space="preserve">
     <value>amakhin@hotmail.com</value>
     <comment>@Invariant</comment>
+  </data>
+  <data name="Every12Hours" xml:space="preserve">
+    <value>Every 12 Hours</value>
   </data>
   <data name="HomeNav" xml:space="preserve">
     <value>Home</value>
@@ -159,6 +165,9 @@
   </data>
   <data name="HomeTitle" xml:space="preserve">
     <value>What is it?</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Every Hour</value>
   </data>
   <data name="HowNav" xml:space="preserve">
     <value>How</value>

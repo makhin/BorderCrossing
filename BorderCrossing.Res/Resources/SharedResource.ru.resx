@@ -126,11 +126,17 @@
   <data name="Country" xml:space="preserve">
     <value>Страна</value>
   </data>
+  <data name="Day" xml:space="preserve">
+    <value>Раз в день</value>
+  </data>
   <data name="Days" xml:space="preserve">
     <value>Дни</value>
   </data>
   <data name="Departure" xml:space="preserve">
     <value>Выезд</value>
+  </data>
+  <data name="Every12Hours" xml:space="preserve">
+    <value>Каждые 12 часов</value>
   </data>
   <data name="HomeNav" xml:space="preserve">
     <value>Главная</value>
@@ -155,6 +161,9 @@
   </data>
   <data name="HomeTitle" xml:space="preserve">
     <value>Что это?</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Каждый час</value>
   </data>
   <data name="HowNav" xml:space="preserve">
     <value>Как</value>
