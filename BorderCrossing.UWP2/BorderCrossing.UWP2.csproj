@@ -248,10 +248,6 @@
       <Project>{0f7cf544-54a5-4e20-9ed6-534e5b2ef96b}</Project>
       <Name>BorderCrossing.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BorderCrossing.Res\BorderCrossing.Res.csproj">
-      <Project>{d1c5d07d-2de8-46b0-bca4-05826783998b}</Project>
-      <Name>BorderCrossing.Res</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BorderCrossing.Services\BorderCrossing.Services.csproj">
       <Project>{490b77c2-7b2c-4f1f-9f31-e254584323f5}</Project>
       <Name>BorderCrossing.Services</Name>

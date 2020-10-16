@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using BorderCrossing.DbContext;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Windows.Storage;
-using BorderCrossing.Res;
+using Windows.Storage.Search;
 
 namespace BorderCrossing.UWP2
 {
@@ -32,6 +23,7 @@ namespace BorderCrossing.UWP2
     /// </summary>
     sealed partial class App : Application
     {
+        private const string BorderCrossingDb = "BorderCrossing.db";
         public static IServiceProvider Services { get; set; }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -54,21 +46,26 @@ namespace BorderCrossing.UWP2
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFolder assetsFolder = await appInstalledFolder.GetFolderAsync("Assets");
 
-            try
+            var isFilePresent = await IsDbFilePresent(BorderCrossingDb, true);
+
+            if (!isFilePresent)
             {
-                StorageFile dbFile = await assetsFolder.GetFileAsync("BorderCrossing.db");
-                await dbFile.MoveAsync(localFolder, "BorderCrossing.db", NameCollisionOption.ReplaceExisting);
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+                try
+                {
+                    StorageFile dbFile = await assetsFolder.GetFileAsync(BorderCrossingDb);
+                    await dbFile.CopyAsync(localFolder, BorderCrossingDb, NameCollisionOption.ReplaceExisting);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
 
-            string dbpath = Path.Combine(localFolder.Path, "BorderCrossing.db");
+            string dbPath = Path.Combine(localFolder.Path, BorderCrossingDb);
 
             services.AddDbContext<CountryDbContext>(options =>
             {
-                options.UseSqlite($"Data Source={dbpath}", b => {
+                options.UseSqlite($"Data Source={dbPath}", b => {
                     b.UseNetTopologySuite();
                 });
                 options.EnableSensitiveDataLogging();
@@ -143,6 +140,26 @@ namespace BorderCrossing.UWP2
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private static async Task<bool> IsDbFilePresent(string fileName, bool notEmpty = false)
+        {
+            var folder = ApplicationData.Current.LocalFolder;
+            IReadOnlyList<StorageFile> files = await folder.CreateFileQuery().GetFilesAsync();
+            var file = files.FirstOrDefault(f => f.Name == fileName);
+
+            if (file == null)
+            {
+                return false;
+            }
+
+            if (!notEmpty)
+            {
+                return true;
+            }
+
+            Windows.Storage.FileProperties.BasicProperties basicProperties = await file.GetBasicPropertiesAsync();
+            return basicProperties.Size > 0;
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.IO;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using BorderCrossing.Res;
 using BorderCrossing.Services;
 using Windows.UI.Core;
 
