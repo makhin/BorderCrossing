@@ -1,16 +1,18 @@
 ﻿using System;
+using Windows.ApplicationModel.Resources;
 using Windows.UI.Xaml.Data;
-using BorderCrossing.Extensions;
 using BorderCrossing.Models;
 
 namespace BorderCrossing.UWP2
 {
     public class IntervalTypeConverter : IValueConverter
     {
+        private readonly ResourceLoader _resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var it = (IntervalType)value;
-            return it.GetDisplayName();
+            return _resourceLoader.GetString(it.ToString());
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -22,7 +24,7 @@ namespace BorderCrossing.UWP2
 
             foreach (IntervalType val in Enum.GetValues(typeof(IntervalType)))
             {
-                if (val.GetDisplayName() == (string)value)
+                if (_resourceLoader.GetString(val.ToString()) == (string)value)
                 {
                     return val;
                 }

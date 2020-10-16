@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -58,9 +59,9 @@ namespace BorderCrossing.UWP2
                 StorageFile dbFile = await assetsFolder.GetFileAsync("BorderCrossing.db");
                 await dbFile.MoveAsync(localFolder, "BorderCrossing.db", NameCollisionOption.ReplaceExisting);
             }
-            catch
+            catch(Exception ex)
             {
-                // ignored
+                Debug.WriteLine(ex.Message);
             }
 
             string dbpath = Path.Combine(localFolder.Path, "BorderCrossing.db");

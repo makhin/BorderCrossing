@@ -8,8 +8,8 @@
 
   <Identity
     Name="5558e7a3-909b-4a35-be09-2811eb53f5e4"
-    Publisher="CN=User"
-    Version="1.0.0.0" />
+    Publisher="CN=Alexandr Makhin"
+    Version="1.0.3.0" />
 
   <mp:PhoneIdentity PhoneProductId="5558e7a3-909b-4a35-be09-2811eb53f5e4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

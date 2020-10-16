@@ -39,10 +39,11 @@ namespace BorderCrossing.UWP2
         {
             get
             {
+                var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
                 var result = new List<string>();
                 foreach (IntervalType val in Enum.GetValues(typeof(IntervalType)))
                 {
-                    result.Add(val.GetDisplayName());
+                    result.Add(resourceLoader.GetString(val.ToString()));
                 }
                 return result;
             }

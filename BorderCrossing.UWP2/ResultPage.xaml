@@ -6,8 +6,13 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controlsprimitives="using:Microsoft.Toolkit.Uwp.UI.Controls.Primitives"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <local:DateConverter2 x:Key="DateConverter2" />
+    </Page.Resources>
 
     <Grid>
         <ScrollViewer Margin="10">
@@ -19,21 +24,26 @@
                                    GridLinesVisibility="Horizontal"
                                    HeadersVisibility="Column"
                                    ItemsSource="{x:Bind Response.Periods}">
+                    <controls:DataGrid.Resources>
+                        <Style x:Key="HeaderStyle" TargetType="controlsprimitives:DataGridColumnHeader" >
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
+                    </controls:DataGrid.Resources>
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTextColumn 
-                            Header="Въезд" 
+                        <controls:DataGridTextColumn x:Uid="Arrival"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
                             Width="SizeToCells"
-                            Binding="{Binding ArrivalPoint.Date}"  />
-                        <controls:DataGridTextColumn 
-                            Header="Страна" 
+                            Binding="{Binding ArrivalPoint.Date, Converter={StaticResource DateConverter2}}"  />
+                        <controls:DataGridTextColumn x:Uid="Country"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
                             Width="SizeToCells"
                             Binding="{Binding Country}"  />
-                        <controls:DataGridTextColumn 
-                            Header="Выезд" 
-                            Width="SizeToCells"
-                            Binding="{Binding DeparturePoint.Date}"  />
-                        <controls:DataGridTextColumn 
-                            Header="Дни" 
+                        <controls:DataGridTextColumn x:Uid="Departure"
+                             HeaderStyle="{ StaticResource HeaderStyle }"
+                             Width="SizeToCells"
+                            Binding="{Binding DeparturePoint.Date, Converter={StaticResource DateConverter2}}"/>
+                        <controls:DataGridTextColumn x:Uid="Days"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
                             Width="SizeToHeader"
                             Binding="{Binding Days}"  />
                     </controls:DataGrid.Columns>
@@ -45,13 +55,19 @@
                                    GridLinesVisibility="Horizontal"
                                    HeadersVisibility="Column"
                                    ItemsSource="{x:Bind Response.CountryDays}">
+                    <controls:DataGrid.Resources>
+                        <Style x:Key="HeaderStyle" TargetType="controlsprimitives:DataGridColumnHeader" >
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
+                    </controls:DataGrid.Resources>
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTextColumn 
-                            Header="Страна" 
-                            Width="SizeToCells"
+                        <controls:DataGridTextColumn x:Uid="Country"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
+                            Width="SizeToHeader"
                             Binding="{Binding Key}"  />
                         <controls:DataGridTextColumn 
-                            Header="Дни" 
+                            x:Uid="Days"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
                             Width="SizeToHeader"
                             Binding="{Binding Value}"  />
                     </controls:DataGrid.Columns>

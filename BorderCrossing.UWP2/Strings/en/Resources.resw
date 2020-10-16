@@ -120,24 +120,30 @@
   <data name="AppName" xml:space="preserve">
     <value>Border Crossing</value>
   </data>
-  <data name="Arrival" xml:space="preserve">
+  <data name="Arrival.Header" xml:space="preserve">
     <value>Arrival</value>
   </data>
   <data name="Browse.Content" xml:space="preserve">
     <value>Browse</value>
   </data>
-  <data name="Country" xml:space="preserve">
+  <data name="Country.Header" xml:space="preserve">
     <value>Country</value>
   </data>
-  <data name="Days" xml:space="preserve">
+  <data name="Day" xml:space="preserve">
+    <value>Every Day</value>
+  </data>
+  <data name="Days.Header" xml:space="preserve">
     <value>Days</value>
   </data>
-  <data name="Departure" xml:space="preserve">
+  <data name="Departure.Header" xml:space="preserve">
     <value>Departure</value>
   </data>
   <data name="email" xml:space="preserve">
     <value>amakhin@hotmail.com</value>
     <comment>@Invariant</comment>
+  </data>
+  <data name="Every12Hours" xml:space="preserve">
+    <value>Every 12 Hours</value>
   </data>
   <data name="HomeNav" xml:space="preserve">
     <value>Home</value>
@@ -162,6 +168,9 @@
   </data>
   <data name="HomeTitle.Text" xml:space="preserve">
     <value>What is it?</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Every Hour</value>
   </data>
   <data name="HowNav" xml:space="preserve">
     <value>How</value>

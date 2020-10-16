@@ -4,6 +4,7 @@ using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using Windows.Globalization.DateTimeFormatting;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using BorderCrossing.DbContext;
@@ -18,6 +19,8 @@ namespace BorderCrossing.UWP2
     public sealed partial class ResultPage : Page
     {
         public BorderCrossingResponse Response { get; set; }
+
+        public DateTimeFormatter ShortDateFormatter = new DateTimeFormatter("shortdate");
 
         public ResultPage()
         {
