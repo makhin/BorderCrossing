@@ -1,54 +1,55 @@
 ﻿@page "/result/{RequestId}"
-@using BorderCrossing.Models
+@using BorderCrossing.Res
+@inject IStringLocalizer<SharedResource> L
 @inherits ResultBase
 
 <Container>
-@if (Response != null)
-{
-    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">Если вы сохраните ссылку на эту страницу, то будете иметь доступ к результатам без повторной загрузки файла.</Heading>
+    @if (Response != null)
+    {
+    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6">@L["ResultKeepUrl"]</Heading>
 
-    <Table Margin="Margin.Is3.FromTop">
-        <TableHeader>
-            <TableRow>
-                <TableHeaderCell>Въезд</TableHeaderCell>
-                <TableHeaderCell>Страна</TableHeaderCell>
-                <TableHeaderCell>Выезд</TableHeaderCell>
-                <TableHeaderCell>Дни</TableHeaderCell>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            @foreach (var period in Response.Periods)
-            {
+        <Table Margin="Margin.Is3.FromTop">
+            <TableHeader>
                 <TableRow>
-                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.Y,@period.ArrivalPoint.Point.Coordinate.X">@period.ArrivalPoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
-                    <TableRowCell>@period.Country</TableRowCell>
-                    <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.Y,@period.DeparturePoint.Point.Coordinate.X">@period.DeparturePoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
-                    <TableRowCell>@period.Days</TableRowCell>
+                    <TableHeaderCell>@L["Arrival"]</TableHeaderCell>
+                    <TableHeaderCell>@L["Country"]</TableHeaderCell>
+                    <TableHeaderCell>@L["Departure"]</TableHeaderCell>
+                    <TableHeaderCell>@L["Days"]</TableHeaderCell>
                 </TableRow>
-            }
-        </TableBody>
-    </Table>
+            </TableHeader>
+            <TableBody>
+                @foreach (var period in Response.Periods)
+                {
+                    <TableRow>
+                        <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.ArrivalPoint.Point.Coordinate.Y,@period.ArrivalPoint.Point.Coordinate.X">@period.ArrivalPoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
+                        <TableRowCell>@period.Country</TableRowCell>
+                        <TableRowCell><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=@period.DeparturePoint.Point.Coordinate.Y,@period.DeparturePoint.Point.Coordinate.X">@period.DeparturePoint.Date.ToString("dd.MM.yyyy HH:mm")</a></TableRowCell>
+                        <TableRowCell>@period.Days</TableRowCell>
+                    </TableRow>
+                }
+            </TableBody>
+        </Table>
 
-    <Table>
-        <TableHeader>
-            <TableRow>
-                <TableHeaderCell>Страна</TableHeaderCell>
-                <TableHeaderCell>Дни</TableHeaderCell>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            @foreach (var (country, days) in Response.CountryDays)
-            {
+        <Table>
+            <TableHeader>
                 <TableRow>
-                    <TableRowHeader>@country</TableRowHeader>
-                    <TableRowCell>@days</TableRowCell>
+                    <TableHeaderCell>@L["Country"]</TableHeaderCell>
+                    <TableHeaderCell>@L["Days"]</TableHeaderCell>
                 </TableRow>
-            }
-        </TableBody>
-    </Table>
-}
-else
-{
-    <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Danger">@Message</Heading>
-}
+            </TableHeader>
+            <TableBody>
+                @foreach (var (country, days) in Response.CountryDays)
+                {
+                    <TableRow>
+                        <TableRowHeader>@country</TableRowHeader>
+                        <TableRowCell>@days</TableRowCell>
+                    </TableRow>
+                }
+            </TableBody>
+        </Table>
+    }
+    else
+    {
+        <Heading Margin="Margin.Is3.FromTop" Size="HeadingSize.Is6" TextColor="TextColor.Danger">@Message</Heading>
+    }
 </Container>

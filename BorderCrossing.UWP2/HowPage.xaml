@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="BorderCrossing.UWP2.HowPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BorderCrossing.UWP2"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <ScrollViewer>
+        <StackPanel Margin="10">
+            <TextBlock Style="{StaticResource PageTitleTextBlockStyle}" x:Uid="HowTitle"></TextBlock>
+            <RelativePanel>
+                <TextBlock x:Name="P11" x:Uid="HowP11"></TextBlock>
+                <HyperlinkButton x:Name="P12" Margin="3,0,0,0" Content="https://takeout.google.com/settings/takeout" NavigateUri="https://takeout.google.com/settings/takeout" Padding="0" RelativePanel.RightOf="P11" />
+                <TextBlock x:Name="P13" x:Uid="HowP12" Margin="3,0,0,0" RelativePanel.RightOf="P12"></TextBlock>
+            </RelativePanel>
+            <TextBlock x:Uid="HowP2"></TextBlock>
+            <Image Source="Assets/takeout.png" Width="500"/>
+            <TextBlock x:Uid="HowP4"></TextBlock>
+            <Image Source="Assets/takeout2.png" Width="500"/>
+            <TextBlock x:Uid="HowP5"></TextBlock>
+            <RelativePanel>
+                <TextBlock x:Name="P61" x:Uid="HowP61"></TextBlock>
+                <TextBlock x:Name="P62" x:Uid="HowP62" TextDecorations="Underline" Tapped="UIElement_OnTapped" Margin="3,0,0,0" RelativePanel.RightOf="P61"></TextBlock>
+                <TextBlock x:Name="P63" x:Uid="HowP63" Margin="3,0,0,0" RelativePanel.RightOf="P62"></TextBlock>
+            </RelativePanel>
+        </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -1,4 +1,5 @@
-using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BorderCrossing.DbContext;
 using BorderCrossing.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -44,7 +46,6 @@ namespace BorderCrossing
 
             string connectionString = Configuration.GetConnectionString("DefaultConnection");
 
-
             services.AddDbContext<CountryDbContext>(options =>
             {
                 options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
@@ -59,6 +60,15 @@ namespace BorderCrossing
 
             services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
+            services.AddTransient<IBorderCrossingServiceWebWrapper, BorderCrossingServiceWebWrapper>();
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            var supportedCultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("ru") };
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +87,7 @@ namespace BorderCrossing
             app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
+            app.UseRequestLocalization();
             app.UseStaticFiles();
 
             app.UseRouting();

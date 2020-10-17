@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Blazorise;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
 using BorderCrossing.Models.Core;
+using BorderCrossing.Res;
+using Microsoft.Extensions.Localization;
 
 namespace BorderCrossing.Pages
 {
@@ -19,10 +20,13 @@ namespace BorderCrossing.Pages
         }
 
         [Inject] 
-        public IBorderCrossingService BorderCrossingService { get; set; }
+        public IBorderCrossingServiceWebWrapper BorderCrossingServiceWebWrapper { get; set; }
 
         [Inject]
         public NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        private IStringLocalizer<SharedResource> L { get; set; }
 
         protected PageStatus Status { get; set; }
 
@@ -53,11 +57,11 @@ namespace BorderCrossing.Pages
 
                 foreach (var file in e.Files)
                 {
-                    var request = await BorderCrossingService.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
+                    string requestId = await BorderCrossingServiceWebWrapper.AddNewRequestAsync(ConnectionInfo?.RemoteIpAddress, ConnectionInfo?.UserAgent);
 
                     if (Path.GetExtension(file.Name) != ".zip")
                     {
-                        throw new Exception("Файл должен быть .zip архивом");
+                        throw new Exception(L["ZipWarning"]);
                     }
 
                     await using (var memoryStream = new MemoryStream())
@@ -66,7 +70,7 @@ namespace BorderCrossing.Pages
                         PercentageLoad = 100;
                         StateHasChanged();
                         Status = PageStatus.Deserializing;
-                        string requestId = await BorderCrossingService.PrepareLocationHistoryAsync(memoryStream, file.Name, request, (sender, progressChangedEventArgs) =>
+                        await BorderCrossingServiceWebWrapper.PrepareLocationHistoryAsync(memoryStream, file.Name, requestId, (sender, progressChangedEventArgs) =>
                         {
                             PercentagePrep = progressChangedEventArgs.ProgressPercentage;
                             InvokeAsync(StateHasChanged);

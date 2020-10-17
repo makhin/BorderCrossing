@@ -1,0 +1,78 @@
+﻿<Page
+    x:Class="BorderCrossing.UWP2.ResultPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BorderCrossing.UWP2"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controlsprimitives="using:Microsoft.Toolkit.Uwp.UI.Controls.Primitives"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <local:DateConverter2 x:Key="DateConverter2" />
+    </Page.Resources>
+
+    <Grid>
+        <ScrollViewer Margin="10">
+            <StackPanel>
+                <controls:DataGrid x:Name="dataGridCountries" 
+                                   Margin="0,0,0,20"
+                                   AutoGenerateColumns="False" 
+                                   IsReadOnly="True"
+                                   GridLinesVisibility="Horizontal"
+                                   HeadersVisibility="Column"
+                                   ItemsSource="{x:Bind Response.Periods}">
+                    <controls:DataGrid.Resources>
+                        <Style x:Key="HeaderStyle" TargetType="controlsprimitives:DataGridColumnHeader" >
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
+                    </controls:DataGrid.Resources>
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn x:Uid="Arrival"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
+                            Width="SizeToCells"
+                            Binding="{Binding ArrivalPoint.Date, Converter={StaticResource DateConverter2}}"  />
+                        <controls:DataGridTextColumn x:Uid="Country"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
+                            Width="SizeToCells"
+                            Binding="{Binding Country}"  />
+                        <controls:DataGridTextColumn x:Uid="Departure"
+                             HeaderStyle="{ StaticResource HeaderStyle }"
+                             Width="SizeToCells"
+                            Binding="{Binding DeparturePoint.Date, Converter={StaticResource DateConverter2}}"/>
+                        <controls:DataGridTextColumn x:Uid="Days"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
+                            Width="SizeToHeader"
+                            Binding="{Binding Days}"  />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+
+                <controls:DataGrid x:Name="dataGridCountryDays" 
+                                   AutoGenerateColumns="False" 
+                                   IsReadOnly="True"
+                                   GridLinesVisibility="Horizontal"
+                                   HeadersVisibility="Column"
+                                   ItemsSource="{x:Bind Response.CountryDays}">
+                    <controls:DataGrid.Resources>
+                        <Style x:Key="HeaderStyle" TargetType="controlsprimitives:DataGridColumnHeader" >
+                            <Setter Property="FontSize" Value="18" />
+                        </Style>
+                    </controls:DataGrid.Resources>
+                    <controls:DataGrid.Columns>
+                        <controls:DataGridTextColumn x:Uid="Country"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
+                            Width="SizeToHeader"
+                            Binding="{Binding Key}"  />
+                        <controls:DataGridTextColumn 
+                            x:Uid="Days"
+                            HeaderStyle="{ StaticResource HeaderStyle }"
+                            Width="SizeToHeader"
+                            Binding="{Binding Value}"  />
+                    </controls:DataGrid.Columns>
+                </controls:DataGrid>
+             </StackPanel>
+         </ScrollViewer>
+    </Grid>
+</Page>
