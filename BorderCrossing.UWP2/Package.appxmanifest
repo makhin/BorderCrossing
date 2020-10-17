@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="5558e7a3-909b-4a35-be09-2811eb53f5e4"
-    Publisher="CN=Alexandr Makhin"
-    Version="1.0.7.0" />
+    Name="10904AlexandrMakhin.BorderCrossing"
+    Publisher="CN=8BDCC7C0-2797-4D41-85E1-F6ADEFA4BD45"
+    Version="1.0.12.0" />
 
-  <mp:PhoneIdentity PhoneProductId="5558e7a3-909b-4a35-be09-2811eb53f5e4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="f71ce057-e88a-4e64-a935-2ae1599e0b9f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>BorderCrossing.UWP2</DisplayName>
-    <PublisherDisplayName>User</PublisherDisplayName>
+    <DisplayName>Border Crossing</DisplayName>
+    <PublisherDisplayName>Alexandr Makhin</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -37,8 +37,14 @@
         Square44x44Logo="Assets\Square44x44Logo.png"
         Description="Border Crossing"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png"/>
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" Square71x71Logo="Assets\SmallTile.png" Square310x310Logo="Assets\LargeTile.png">
+        </uap:DefaultTile >
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/>
+          <uap:Rotation Preference="portrait"/>
+          <uap:Rotation Preference="landscapeFlipped"/>
+          <uap:Rotation Preference="portraitFlipped"/></uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
