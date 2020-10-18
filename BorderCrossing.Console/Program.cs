@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using NetTopologySuite.Geometries;
 
 namespace BorderCrossing.Console
 {
@@ -24,20 +29,22 @@ namespace BorderCrossing.Console
     {
         static void Main(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<CountryDbContext>();
-            optionsBuilder.UseSqlite(@"Data Source=C:\Users\omakhin\RiderProjects\BorderCrossing\BorderCrossing.Console\BorderCrossing.db", b => {
-                b.UseNetTopologySuite();
-            });
+            //var optionsBuilder = new DbContextOptionsBuilder<CountryDbContext>();
+            //optionsBuilder.UseSqlite(@"Data Source=C:\Users\omakhin\RiderProjects\BorderCrossing\BorderCrossing.Console\BorderCrossing.db", b => {
+            //    b.UseNetTopologySuite();
+            //});
 
-            string connectionString = "Server=localhost;Database=World;Trusted_Connection=True;";
+            string connectionString = "Server=localhost;Database=BorderCrossing;Trusted_Connection=True;";
 
             var optionsBuilder2 = new DbContextOptionsBuilder<CountryDbContext>();
             optionsBuilder2.UseSqlServer(connectionString, b => {
                 b.UseNetTopologySuite();
             });
 
-            var dbl = new CountryDbContext(optionsBuilder.Options);
+            //var dbl = new CountryDbContext(optionsBuilder.Options);
             var dbs = new CountryDbContext(optionsBuilder2.Options);
+
+            List<Country> countries = new List<Country>();
 
             foreach (var country in dbs.Countries)
             {
@@ -48,10 +55,32 @@ namespace BorderCrossing.Console
                     Geom = country.Geom
                 };
 
-                dbl.Countries.Add(c);
-                dbl.SaveChanges();
+                countries.Add(c);
+
+                //dbl.Countries.Add(c);
+                //dbl.SaveChanges();
             }
 
+
+            Stream file = File.Open(@"c:\Temp\c.bin", FileMode.Create);
+            IFormatter formatter = new BinaryFormatter();
+
+            formatter.Serialize(file, countries);
+
+            file.Close();
         }
+    }
+
+    [Serializable]
+    public class Country
+    {
+        [DataMember]
+        public string Name { get; set; }
+
+        [DataMember]
+        public short Region { get; set; }
+
+        [DataMember]
+        public Geometry Geom { get; set; }
     }
 }
