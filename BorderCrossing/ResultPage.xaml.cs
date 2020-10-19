@@ -3,7 +3,6 @@ using System.Linq;
 using Windows.Globalization.DateTimeFormatting;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238

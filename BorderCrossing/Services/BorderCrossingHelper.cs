@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using BorderCrossing.DbContext;
 using BorderCrossing.Models;
 using BorderCrossing.Models.Core;
 using BorderCrossing.Models.Google;

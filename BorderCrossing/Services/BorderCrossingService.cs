@@ -2,11 +2,9 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using BorderCrossing.DbContext;
 using BorderCrossing.Extensions;
 using BorderCrossing.Models;
 using BorderCrossing.Models.Google;
-using Microsoft.Extensions.Caching.Memory;
 using NetTopologySuite.Geometries;
 
 namespace BorderCrossing.Services
@@ -19,15 +17,6 @@ namespace BorderCrossing.Services
 
     public class BorderCrossingService : IBorderCrossingService
     {
-        private readonly IBorderCrossingRepository _repository;
-        private readonly List<Country> _countries;
-
-        public BorderCrossingService(IBorderCrossingRepository repository, IMemoryCache cache)
-        {
-            _repository = repository;
-            _countries = _repository.GetAllCountries();
-        }
-
         public async Task<QueryRequest> GetQueryRequestAsync(LocationHistory locationHistory)
         {
             return await Task.FromResult(new QueryRequest
@@ -85,10 +74,10 @@ namespace BorderCrossing.Services
 
         private string GetCountryName(Geometry point)
         {
-            var country = _countries.FirstOrDefault(c => point.Within(c.Polygon));
+            var country = CountryStorage.Countries.FirstOrDefault(c => point.Within(c.Geom));
 
-            country ??= _countries
-                .Select(c => new { Country = c, Distance = c.Polygon.Distance(point) })
+            country ??= CountryStorage.Countries
+                .Select(c => new { Country = c, Distance = c.Geom.Distance(point) })
                 .OrderBy(d => d.Distance)
                 .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;
 

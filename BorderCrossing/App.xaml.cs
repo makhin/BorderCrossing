@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -10,9 +8,9 @@ using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using BorderCrossing.DbContext;
+using BorderCrossing.Models;
 using BorderCrossing.Services;
-using Microsoft.EntityFrameworkCore;
+using Jil;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BorderCrossing
@@ -22,7 +20,6 @@ namespace BorderCrossing
     /// </summary>
     sealed partial class App : Application
     {
-        private const string BorderCrossingDb = "BorderCrossing.db";
         public static IServiceProvider Services { get; set; }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -42,35 +39,14 @@ namespace BorderCrossing
         private async Task ConfigureServices(IServiceCollection services)
         {
             StorageFolder appInstalledFolder = Package.Current.InstalledLocation;
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFolder assetsFolder = await appInstalledFolder.GetFolderAsync("Assets");
+            StorageFile storageFile = await assetsFolder.GetFileAsync("countries.json");
+            string json = await Windows.Storage.FileIO.ReadTextAsync(storageFile);
 
-            var isFilePresent = await IsDbFilePresent(BorderCrossingDb, true);
+            var countries = JSON.Deserialize<List<CountryJson>>(json);
 
-            if (!isFilePresent)
-            {
-                try
-                {
-                    StorageFile dbFile = await assetsFolder.GetFileAsync(BorderCrossingDb);
-                    await dbFile.CopyAsync(localFolder, BorderCrossingDb, NameCollisionOption.ReplaceExisting);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
-            }
+            CountryStorage.Load(countries);
 
-            string dbPath = Path.Combine(localFolder.Path, BorderCrossingDb);
-
-            services.AddDbContext<CountryDbContext>(options =>
-            {
-                options.UseSqlite($"Data Source={dbPath}");
-                options.EnableSensitiveDataLogging();
-                options.EnableDetailedErrors();
-            }, ServiceLifetime.Transient);
-
-            services.AddMemoryCache();
-            services.AddTransient<IBorderCrossingRepository, BorderCrossingRepository>();
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }
 
