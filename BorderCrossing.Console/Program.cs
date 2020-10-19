@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using BorderCrossing.Models.Google;
+using Jil;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
 
 namespace BorderCrossing.Console
 {
@@ -46,32 +49,29 @@ namespace BorderCrossing.Console
 
             List<Country> countries = new List<Country>();
 
+            GeoJsonWriter writer = new GeoJsonWriter();
+
             foreach (var country in dbs.Countries)
             {
                 var c = new Country()
                 {
                     Name = country.Name,
                     Region = country.Region,
-                    Geom = country.Geom
-                };
+                    Geom = writer.Write(country.Geom)
+            };
 
                 countries.Add(c);
-
                 //dbl.Countries.Add(c);
                 //dbl.SaveChanges();
             }
 
+            var json = JSON.Serialize(countries);
 
-            Stream file = File.Open(@"c:\Temp\c.bin", FileMode.Create);
-            IFormatter formatter = new BinaryFormatter();
-
-            formatter.Serialize(file, countries);
-
-            file.Close();
+            File.WriteAllText(@"c:\temp\c3.json", json);
         }
     }
 
-    [Serializable]
+    [DataContract]
     public class Country
     {
         [DataMember]
@@ -81,6 +81,6 @@ namespace BorderCrossing.Console
         public short Region { get; set; }
 
         [DataMember]
-        public Geometry Geom { get; set; }
+        public string Geom { get; set; }
     }
 }
