@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Input;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -22,6 +23,8 @@ namespace BorderCrossing
 
         public QueryPage() : this(App.Services.GetRequiredService<IBorderCrossingService>()) { }
         public LocationHistory LocationHistory { get; set; }
+
+        public bool IsRunEnabled { get; set; }
 
         private List<string> IntervalLabels
         {
@@ -47,12 +50,19 @@ namespace BorderCrossing
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            this.IsRunEnabled = true;
             this.LocationHistory = (LocationHistory)e.Parameter;
             this.ViewModelQueryRequest = await _borderCrossingService.GetQueryRequestAsync(this.LocationHistory);
         }
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
+            if (IsRunEnabled == false)
+            {
+                return;
+            }
+
+            IsRunEnabled = false;
             List<CheckPoint> checkpoints = await _borderCrossingService.ParseLocationHistoryAsync(this.LocationHistory, this.ViewModelQueryRequest, (sender, e) =>
             {
                 _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>

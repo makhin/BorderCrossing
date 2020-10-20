@@ -72,11 +72,11 @@ namespace BorderCrossing.Services
             return checkPoints;
         }
 
-        private string GetCountryName(Geometry point)
+        private static string GetCountryName(Geometry point)
         {
-            var country = CountryStorage.Countries.FirstOrDefault(c => point.Within(c.Geom));
+            var country = CountryStorage.GetCountryStorage().Countries.FirstOrDefault(c => point.Within(c.Geom));
 
-            country ??= CountryStorage.Countries
+            country ??= CountryStorage.GetCountryStorage().Countries
                 .Select(c => new { Country = c, Distance = c.Geom.Distance(point) })
                 .OrderBy(d => d.Distance)
                 .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;

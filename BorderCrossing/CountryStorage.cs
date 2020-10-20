@@ -1,24 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Windows.ApplicationModel;
+using Windows.Storage;
 using BorderCrossing.Models;
+using Jil;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 
 namespace BorderCrossing
 {
-    public static class CountryStorage
+    public class CountryStorage
     {
-        public static List<Country> Countries { get; }
+        private static CountryStorage _instance;
 
-        static CountryStorage()
+        protected CountryStorage()
         {
-            Countries = new List<Country>();
-        }
+            var appInstalledFolder = Package.Current.InstalledLocation;
+            var assetsFolder = appInstalledFolder.GetFolderAsync("Assets").GetAwaiter().GetResult();
+            var storageFile = assetsFolder.GetFileAsync("countries.json").GetAwaiter().GetResult();
+            var json = Windows.Storage.FileIO.ReadTextAsync(storageFile).GetAwaiter().GetResult();
+            var countries = JSON.Deserialize<List<CountryJson>>(json);
 
-        public static void Load(List<CountryJson> countries)
-        {
-            GeoJsonReader reader = new GeoJsonReader();
+            var reader = new GeoJsonReader();
 
-            foreach (var country in countries)
+            foreach (var country in countries.Where(c => c.Region == 150)) //TODO Demo restriction
             {
                 Countries.Add(new Country()
                 {
@@ -28,5 +34,12 @@ namespace BorderCrossing
                 });
             }
         }
+
+        public static CountryStorage GetCountryStorage()
+        {
+            return _instance ??= new CountryStorage();
+        }
+
+        public List<Country> Countries { get; } = new List<Country>();
     }
 }

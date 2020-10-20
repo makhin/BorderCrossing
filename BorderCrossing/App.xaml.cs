@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using BorderCrossing.Models;
 using BorderCrossing.Services;
-using Jil;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BorderCrossing
@@ -36,17 +31,8 @@ namespace BorderCrossing
             Services = serviceCollection.BuildServiceProvider();
         }
 
-        private async Task ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection services)
         {
-            StorageFolder appInstalledFolder = Package.Current.InstalledLocation;
-            StorageFolder assetsFolder = await appInstalledFolder.GetFolderAsync("Assets");
-            StorageFile storageFile = await assetsFolder.GetFileAsync("countries.json");
-            string json = await Windows.Storage.FileIO.ReadTextAsync(storageFile);
-
-            var countries = JSON.Deserialize<List<CountryJson>>(json);
-
-            CountryStorage.Load(countries);
-
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }
 
@@ -113,26 +99,6 @@ namespace BorderCrossing
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
-        }
-
-        private static async Task<bool> IsDbFilePresent(string fileName, bool notEmpty = false)
-        {
-            var folder = ApplicationData.Current.LocalFolder;
-            IReadOnlyList<StorageFile> files = await folder.CreateFileQuery().GetFilesAsync();
-            var file = files.FirstOrDefault(f => f.Name == fileName);
-
-            if (file == null)
-            {
-                return false;
-            }
-
-            if (!notEmpty)
-            {
-                return true;
-            }
-
-            Windows.Storage.FileProperties.BasicProperties basicProperties = await file.GetBasicPropertiesAsync();
-            return basicProperties.Size > 0;
         }
     }
 }
