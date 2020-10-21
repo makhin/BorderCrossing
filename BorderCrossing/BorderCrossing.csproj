@@ -27,6 +27,7 @@
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <AppInstallerUri>c:\temp</AppInstallerUri>
     <HoursBetweenUpdateChecks>24</HoursBetweenUpdateChecks>
+    <AppxPackageDir>C:\Temp</AppxPackageDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>

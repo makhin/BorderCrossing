@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -7,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
+using UnhandledExceptionEventArgs = Windows.UI.Xaml.UnhandledExceptionEventArgs;
 
 namespace BorderCrossing
 {
@@ -24,14 +24,14 @@ namespace BorderCrossing
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += OnUnhandledException;
 
             IServiceCollection serviceCollection = new ServiceCollection();
-            Task.Run(() => this.ConfigureServices(serviceCollection)).Wait();
-
+            ConfigureServices(serviceCollection);
             Services = serviceCollection.BuildServiceProvider();
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IBorderCrossingService, BorderCrossingService>();
         }
@@ -72,6 +72,7 @@ namespace BorderCrossing
                     // parameter
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
@@ -99,6 +100,19 @@ namespace BorderCrossing
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private async void OnUnhandledException(object sender , UnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+
+            await new ContentDialog
+            {
+                Title = "An error occurred",
+                Content = e.Message,
+                CloseButtonText = "shut down",
+                DefaultButton = ContentDialogButton.Close
+            }.ShowAsync();
         }
     }
 }
