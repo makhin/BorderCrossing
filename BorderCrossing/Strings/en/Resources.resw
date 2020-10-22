@@ -201,6 +201,9 @@
   <data name="Loading" xml:space="preserve">
     <value>Loading...</value>
   </data>
+  <data name="LocationHistoryWarning" xml:space="preserve">
+    <value>Archive does not contain Location History file</value>
+  </data>
   <data name="Processing" xml:space="preserve">
     <value>Processing</value>
   </data>

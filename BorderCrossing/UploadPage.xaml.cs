@@ -14,13 +14,9 @@ namespace BorderCrossing
     /// </summary>
     public sealed partial class UploadPage : Page
     {
-        private string ZipWarning { get; }
-
         public UploadPage()
         {
             this.InitializeComponent();
-            var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
-            ZipWarning = resourceLoader.GetString("ZipWarning");
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -38,7 +34,8 @@ namespace BorderCrossing
 
             if (Path.GetExtension(file.Name) != ".zip")
             {
-                throw new Exception(ZipWarning);
+                var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+                throw new Exception(resourceLoader.GetString("ZipWarning"));
             }
 
             using (var fileStream = await file.OpenStreamForReadAsync())

@@ -7,6 +7,9 @@ using Windows.UI.Xaml.Navigation;
 using BorderCrossing.Services;
 using Microsoft.Extensions.DependencyInjection;
 using UnhandledExceptionEventArgs = Windows.UI.Xaml.UnhandledExceptionEventArgs;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace BorderCrossing
 {
@@ -25,6 +28,7 @@ namespace BorderCrossing
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             this.UnhandledException += OnUnhandledException;
+            AppCenter.Start("2b36da1b-c39e-4f3d-8dcd-816ba2a7d4b1", typeof(Analytics), typeof(Crashes));
 
             IServiceCollection serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);

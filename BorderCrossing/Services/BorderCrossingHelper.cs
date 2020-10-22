@@ -102,7 +102,8 @@ namespace BorderCrossing.Services
                 }
             }
 
-            throw new Exception("Архив не содержит файла с историей местоположений");
+            var resourceLoader = Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView();
+            throw new Exception(resourceLoader.GetString("LocationHistoryWarning"));
         }
 
         public static CheckPoint FindCheckPoint(List<Location> locations, Location location1, string country1, Location location2, string country2, Func<Geometry, string> getCountry, int callCount = 0)
