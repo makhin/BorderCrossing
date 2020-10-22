@@ -5,8 +5,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using BorderCrossing.Services;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace BorderCrossing
 {
     /// <summary>
@@ -41,6 +39,7 @@ namespace BorderCrossing
             using (var fileStream = await file.OpenStreamForReadAsync())
             {
                 var memoryStream = new MemoryStream();
+
                 await fileStream.CopyToAsync(memoryStream);
 
                 memoryStream.Seek(0, SeekOrigin.Begin);

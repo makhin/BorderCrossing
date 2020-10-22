@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using BorderCrossing.Models;
 using BorderCrossing.Models.Core;
 using BorderCrossing.Models.Google;
-using Jil;
 using NetTopologySuite.Geometries;
+using Newtonsoft.Json;
 using Location = BorderCrossing.Models.Google.Location;
 
 namespace BorderCrossing.Services
@@ -94,8 +94,11 @@ namespace BorderCrossing.Services
 
                             using (StreamReader streamReader = new StreamReader(containerStream))
                             {
-                                var jilOptions = new Options(excludeNulls: true);
-                                return await Task.Run(() => JSON.Deserialize<LocationHistory>(streamReader, jilOptions));
+                                using (JsonTextReader jsonTextReader = new JsonTextReader(streamReader))
+                                {
+                                    var serializer = new JsonSerializer();
+                                    return await Task.Run(() => serializer.Deserialize<LocationHistory>(jsonTextReader));
+                                }
                             }
                         }
                     }

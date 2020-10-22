@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Windows.ApplicationModel;
-using Windows.Storage;
 using BorderCrossing.Models;
-using Jil;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
+using Newtonsoft.Json;
 
 namespace BorderCrossing
 {
@@ -20,7 +19,7 @@ namespace BorderCrossing
             var assetsFolder = appInstalledFolder.GetFolderAsync("Assets").GetAwaiter().GetResult();
             var storageFile = assetsFolder.GetFileAsync("countries.json").GetAwaiter().GetResult();
             var json = Windows.Storage.FileIO.ReadTextAsync(storageFile).GetAwaiter().GetResult();
-            var countries = JSON.Deserialize<List<CountryJson>>(json);
+            List<CountryJson> countries = JsonConvert.DeserializeObject<List<CountryJson>>(json);
 
             var reader = new GeoJsonReader();
 

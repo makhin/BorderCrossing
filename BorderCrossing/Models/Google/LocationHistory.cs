@@ -1,10 +1,10 @@
-﻿using Jil;
+﻿using Newtonsoft.Json;
 
 namespace BorderCrossing.Models.Google
 {
     public partial class LocationHistory
     {
-        [JilDirective(Name = "locations")]
+        [JsonProperty("locations")]
         public Location[] Locations { get; set; }
     }
 }

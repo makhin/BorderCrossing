@@ -1,19 +1,19 @@
 ﻿using System;
 using BorderCrossing.Extensions;
-using Jil;
 using NetTopologySuite.Geometries;
+using Newtonsoft.Json;
 
 namespace BorderCrossing.Models.Google
 {
     public class Location
     {
-        [JilDirective(Name = "timestampMs")]
+        [JsonProperty("timestampMs")]
         public string TimestampMs { get; set; }
 
-        [JilDirective(Name = "latitudeE7")]
+        [JsonProperty("latitudeE7")]
         public long LatitudeE7 { get; set; }
 
-        [JilDirective(Name = "longitudeE7")]
+        [JsonProperty("longitudeE7")]
         public long LongitudeE7 { get; set; }
 
         public Geometry Point
