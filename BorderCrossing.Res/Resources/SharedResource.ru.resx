@@ -159,6 +159,9 @@
   <data name="HomeP5" xml:space="preserve">
     <value>О найденных проблемах прошу писать по адресу</value>
   </data>
+  <data name="HomeP6" xml:space="preserve">
+    <value>Вы также можете загрузить приложение из Microsoft Store. Оно имеет такую же функциональность.</value>
+  </data>
   <data name="HomeTitle" xml:space="preserve">
     <value>Что это?</value>
   </data>

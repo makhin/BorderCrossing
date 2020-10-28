@@ -163,6 +163,9 @@
   <data name="HomeP5" xml:space="preserve">
     <value>Please write about the problems found at</value>
   </data>
+  <data name="HomeP6" xml:space="preserve">
+    <value>You also can use app from Microsoft store. It has the same functionality.</value>
+  </data>
   <data name="HomeTitle" xml:space="preserve">
     <value>What is it?</value>
   </data>
