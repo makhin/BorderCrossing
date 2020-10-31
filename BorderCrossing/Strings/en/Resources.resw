@@ -157,7 +157,7 @@
     <value>Limitations: Google records location information almost every minute, and if you check each point, the verification process can take a long time, so the program checks two points per day, which can significantly speed up the process, but, on the other hand, with this algorithm, short trips can be lost.</value>
   </data>
   <data name="HomeP4.Text" xml:space="preserve">
-    <value>Known Issues: Sometimes inaccurate country identification in coastal areas. In this version, countries are limited to Europe, and the frequency of checks is twice a day.</value>
+    <value>Known Issues: Sometimes inaccurate country identification in coastal areas.</value>
   </data>
   <data name="HomeP5.Text" xml:space="preserve">
     <value>Please write about the problems found at</value>
