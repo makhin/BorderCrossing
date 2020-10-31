@@ -19,11 +19,11 @@ namespace BorderCrossing
             var assetsFolder = appInstalledFolder.GetFolderAsync("Assets").GetAwaiter().GetResult();
             var storageFile = assetsFolder.GetFileAsync("countries.json").GetAwaiter().GetResult();
             var json = Windows.Storage.FileIO.ReadTextAsync(storageFile).GetAwaiter().GetResult();
-            List<CountryJson> countries = JsonConvert.DeserializeObject<List<CountryJson>>(json);
+            var countries = JsonConvert.DeserializeObject<List<CountryJson>>(json);
 
             var reader = new GeoJsonReader();
 
-            foreach (var country in countries.Where(c => c.Region == 150)) //TODO Demo restriction
+            foreach (var country in countries) 
             {
                 Countries.Add(new Country()
                 {

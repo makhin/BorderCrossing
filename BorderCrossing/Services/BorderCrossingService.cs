@@ -11,12 +11,14 @@ namespace BorderCrossing.Services
 {
     public interface IBorderCrossingService
     {
-        Task<QueryRequest> GetQueryRequestAsync(LocationHistory locationHistory);
+        Task<QueryRequest> GetQueryRequestAsync(LocationHistory locationHistory); 
         Task<List<CheckPoint>> ParseLocationHistoryAsync(LocationHistory locationHistory, QueryRequest model, ProgressChangedEventHandler callback);
     }
 
     public class BorderCrossingService : IBorderCrossingService
     {
+        private IEnumerable<Country> _countries;
+
         public async Task<QueryRequest> GetQueryRequestAsync(LocationHistory locationHistory)
         {
             return await Task.FromResult(new QueryRequest
@@ -29,6 +31,8 @@ namespace BorderCrossing.Services
 
         public async Task<List<CheckPoint>> ParseLocationHistoryAsync(LocationHistory locationHistory, QueryRequest model, ProgressChangedEventHandler callback)
         {
+            _countries = CountryStorage.GetCountryStorage().Countries.Where(c => model.Regions.Where(r => r.Checked).Select(r => r.Id).Contains(c.Region));
+
             var locations = BorderCrossingHelper.PrepareLocations(locationHistory, model.IntervalType);
             var filteredLocations = locations.Where(l => l.Date >= model.StartDate && l.Date <= model.EndDate).OrderBy(l => l.TimestampMsUnix).ToList();
             
@@ -36,7 +40,7 @@ namespace BorderCrossing.Services
             var currentCountry = GetCountryName(currentLocation.Point);
             
             var i = 0;
-            var count = filteredLocations.Count();
+            var count = filteredLocations.Count;
 
             var checkPoints = new List<CheckPoint>
             {
@@ -72,11 +76,11 @@ namespace BorderCrossing.Services
             return checkPoints;
         }
 
-        private static string GetCountryName(Geometry point)
+        private string GetCountryName(Geometry point)
         {
-            var country = CountryStorage.GetCountryStorage().Countries.FirstOrDefault(c => point.Within(c.Geom));
+            var country = _countries.FirstOrDefault(c => point.Within(c.Geom));
 
-            country ??= CountryStorage.GetCountryStorage().Countries
+            country ??= _countries
                 .Select(c => new { Country = c, Distance = c.Geom.Distance(point) })
                 .OrderBy(d => d.Distance)
                 .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;

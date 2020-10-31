@@ -30,22 +30,32 @@
                         </Style>
                     </controls:DataGrid.Resources>
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTextColumn x:Uid="Arrival"
-                            HeaderStyle="{ StaticResource HeaderStyle }"
-                            Width="SizeToCells"
-                            Binding="{Binding ArrivalPoint.Date, Converter={StaticResource DateConverter2}}"  />
+                        <controls:DataGridTemplateColumn x:Uid="Arrival"
+                                                         HeaderStyle="{ StaticResource HeaderStyle }"
+                                                         Width="SizeToCells">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <HyperlinkButton Content="{Binding ArrivalPoint.Date, Converter={StaticResource DateConverter2}}" NavigateUri="{Binding ArrivalPoint.GoogleMapUrl}" Padding="0"/>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
                         <controls:DataGridTextColumn x:Uid="Country"
                             HeaderStyle="{ StaticResource HeaderStyle }"
                             Width="SizeToCells"
                             Binding="{Binding Country}"  />
-                        <controls:DataGridTextColumn x:Uid="Departure"
-                             HeaderStyle="{ StaticResource HeaderStyle }"
-                             Width="SizeToCells"
-                            Binding="{Binding DeparturePoint.Date, Converter={StaticResource DateConverter2}}"/>
+                        <controls:DataGridTemplateColumn x:Uid="Departure"
+                                                         HeaderStyle="{ StaticResource HeaderStyle }"
+                                                         Width="SizeToCells">
+                            <controls:DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <HyperlinkButton Content="{Binding DeparturePoint.Date, Converter={StaticResource DateConverter2}}" NavigateUri="{Binding DeparturePoint.GoogleMapUrl}" Padding="0"/>
+                                </DataTemplate>
+                            </controls:DataGridTemplateColumn.CellTemplate>
+                        </controls:DataGridTemplateColumn>
                         <controls:DataGridTextColumn x:Uid="Days"
-                            HeaderStyle="{ StaticResource HeaderStyle }"
-                            Width="SizeToHeader"
-                            Binding="{Binding Days}"  />
+                                                     HeaderStyle="{ StaticResource HeaderStyle }"
+                                                     Width="SizeToHeader"
+                                                     Binding="{Binding Days}"  />
                     </controls:DataGrid.Columns>
                 </controls:DataGrid>
 

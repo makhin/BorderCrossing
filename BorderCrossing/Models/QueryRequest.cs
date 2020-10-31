@@ -28,25 +28,25 @@ namespace BorderCrossing.Models
                 {
                     Id = 0,
                     Name = "Antarctic",
-                    Checked = false
+                    Checked = true
                 },
                 new Region
                 {
                     Id = 2,
                     Name = "Africa",
-                    Checked = false
+                    Checked = true
                 },
                 new Region
                 {
                     Id = 9,
                     Name = "Australia",
-                    Checked = false
+                    Checked = true
                 },
                 new Region
                 { 
                     Id = 19,
                     Name = "America",
-                    Checked = false
+                    Checked = true
                 },
                 new Region
                 {
