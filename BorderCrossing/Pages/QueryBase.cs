@@ -26,7 +26,7 @@ namespace BorderCrossing.Pages
 
         public int PercentageProc { get; set; }
 
-        public bool IsDemo = true;
+        public bool IsDemo = false;
 
         protected PageStatus Status { get; set; }
 

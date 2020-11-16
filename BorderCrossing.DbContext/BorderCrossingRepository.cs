@@ -5,14 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace BorderCrossing.DbContext
 {
     public interface IBorderCrossingRepository
     {
         List<Country> GetAllCountries();
-        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Request request);
+        Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, string requestId);
         Task<List<CheckPoint>> GetResultAsync(string requestId);
         Task UpdateResultAsync(string requestId, List<CheckPoint> checkPoints);
         Task<Request> AddNewRequest(Guid newGuid, string ipAddress, string userAgent);
@@ -20,29 +19,16 @@ namespace BorderCrossing.DbContext
 
     public class BorderCrossingRepository : IBorderCrossingRepository
     {
-        private const string CountriesKey = "Countries";
         private readonly CountryDbContext _appDbContext;
-        private readonly IMemoryCache _cache;
 
-        public BorderCrossingRepository(CountryDbContext appDbContext, IMemoryCache cache)
+        public BorderCrossingRepository(CountryDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            _cache = cache;
-
         }
 
         public List<Country> GetAllCountries()
         {
-            if (_cache.TryGetValue(CountriesKey, out List<Country> countries))
-            {
-                return countries;
-            }
-
-            countries = _appDbContext.Countries.Where(c=> c.Region == 150).ToList();
-            var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.NeverRemove);
-            _cache.Set(CountriesKey, countries, cacheEntryOptions);
-
-            return countries;
+            return _appDbContext.Countries.ToList();
         }
 
         public async Task<List<CheckPoint>> GetResultAsync(string requestId)
@@ -97,9 +83,11 @@ namespace BorderCrossing.DbContext
             }
         }
 
-        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, Request request)
+        public async Task SaveLocationHistoryFileAsync(MemoryStream memoryStream, string fileName, string requestId)
         {
             _appDbContext.Database.SetCommandTimeout(180);
+            var request = await _appDbContext.Requests.FindAsync(requestId);
+
             var locationHistoryFile = new LocationHistoryFile
             {
                 File = memoryStream.ToArray(),

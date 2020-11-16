@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using BorderCrossing.DbContext;
 using BorderCrossing.Models;
@@ -58,6 +57,7 @@ namespace BorderCrossing.Services
         }
         public async Task PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, string requestId, ProgressChangedEventHandler callback)
         {
+            _ = _repository.SaveLocationHistoryFileAsync(memoryStream, fileName, requestId);
             var locationHistory = await BorderCrossingHelper.ExtractJsonAsync(memoryStream, callback);
             AddLocationHistory(locationHistory, requestId);
         }

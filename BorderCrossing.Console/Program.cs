@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using BorderCrossing.Models.Google;
 using Jil;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 
 namespace BorderCrossing.Console
