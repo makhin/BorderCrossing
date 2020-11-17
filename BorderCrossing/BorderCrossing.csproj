@@ -24,7 +24,7 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64|arm64</AppxBundlePlatforms>
     <AppInstallerUri>c:\temp</AppInstallerUri>
     <HoursBetweenUpdateChecks>24</HoursBetweenUpdateChecks>
     <AppxPackageDir>C:\Temp</AppxPackageDir>
@@ -137,7 +137,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CountryStorage.cs" />
     <Compile Include="DateConverter.cs" />
     <Compile Include="DateConverter2.cs" />
     <Compile Include="Models\CheckPoint.cs" />
@@ -231,6 +230,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ClosedXML">
+      <Version>0.95.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
       <Version>3.4.3</Version>
     </PackageReference>

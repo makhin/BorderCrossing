@@ -9,7 +9,7 @@
   <Identity
     Name="10904AlexandrMakhin.BorderCrossing"
     Publisher="CN=8BDCC7C0-2797-4D41-85E1-F6ADEFA4BD45"
-    Version="1.0.25.0" />
+    Version="1.0.26.0" />
 
   <mp:PhoneIdentity PhoneProductId="f71ce057-e88a-4e64-a935-2ae1599e0b9f" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

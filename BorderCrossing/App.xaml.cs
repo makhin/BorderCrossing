@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.System.Profile;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -26,6 +27,12 @@ namespace BorderCrossing
         public App()
         {
             this.InitializeComponent();
+            this.RequiresPointerMode = Windows.UI.Xaml.ApplicationRequiresPointerMode.WhenRequested;
+            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Xbox")
+            {
+                this.FocusVisualKind = FocusVisualKind.Reveal;
+            }
+
             this.Suspending += OnSuspending;
             this.UnhandledException += OnUnhandledException;
             AppCenter.Start("2b36da1b-c39e-4f3d-8dcd-816ba2a7d4b1", typeof(Analytics), typeof(Crashes));

@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
 using BorderCrossing.Extensions;
 using BorderCrossing.Models;
 using BorderCrossing.Models.Google;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using Newtonsoft.Json;
 
 namespace BorderCrossing.Services
 {
@@ -16,8 +20,8 @@ namespace BorderCrossing.Services
     }
 
     public class BorderCrossingService : IBorderCrossingService
-    {
-        private IEnumerable<Country> _countries;
+    { 
+        private static readonly Lazy<List<Country>> Countries = new Lazy<List<Country>>(LoadCountries);
 
         public async Task<QueryRequest> GetQueryRequestAsync(LocationHistory locationHistory)
         {
@@ -31,7 +35,7 @@ namespace BorderCrossing.Services
 
         public async Task<List<CheckPoint>> ParseLocationHistoryAsync(LocationHistory locationHistory, QueryRequest model, ProgressChangedEventHandler callback)
         {
-            _countries = CountryStorage.GetCountryStorage().Countries.Where(c => model.Regions.Where(r => r.Checked).Select(r => r.Id).Contains(c.Region));
+            //_countries.Value.Where(c => model.Regions.Where(r => r.Checked).Select(r => r.Id).Contains(c.Region));
 
             var locations = BorderCrossingHelper.PrepareLocations(locationHistory, model.IntervalType);
             var filteredLocations = locations.Where(l => l.Date >= model.StartDate && l.Date <= model.EndDate).OrderBy(l => l.TimestampMsUnix).ToList();
@@ -75,12 +79,35 @@ namespace BorderCrossing.Services
 
             return checkPoints;
         }
+        private static List<Country> LoadCountries()
+        {
+            var result = new List<Country>();
+            var appInstalledFolder = Package.Current.InstalledLocation;
+            var assetsFolder = appInstalledFolder.GetFolderAsync("Assets").GetAwaiter().GetResult();
+            var storageFile = assetsFolder.GetFileAsync("countries.json").GetAwaiter().GetResult();
+            var json = Windows.Storage.FileIO.ReadTextAsync(storageFile).GetAwaiter().GetResult();
+            var countries = JsonConvert.DeserializeObject<List<CountryJson>>(json);
+
+            var reader = new GeoJsonReader();
+
+            foreach (var country in countries)
+            {
+                result.Add(new Country()
+                {
+                    Name = country.Name,
+                    Region = country.Region,
+                    Geom = reader.Read<Geometry>(country.Geom)
+                });
+            }
+
+            return result;
+        }
 
         private string GetCountryName(Geometry point)
         {
-            var country = _countries.FirstOrDefault(c => point.Within(c.Geom));
+            var country = Countries.Value.FirstOrDefault(c => point.Within(c.Geom));
 
-            country ??= _countries
+            country ??= Countries.Value
                 .Select(c => new { Country = c, Distance = c.Geom.Distance(point) })
                 .OrderBy(d => d.Distance)
                 .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;

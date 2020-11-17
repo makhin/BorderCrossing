@@ -22,20 +22,24 @@
             IsBackEnabled="{x:Bind AppFrame.CanGoBack, Mode=OneWay}">
 
             <MUXC:NavigationView.MenuItems>
-                <MUXC:NavigationViewItem
+                <MUXC:NavigationViewItem 
                     x:Name="HomeMenuItem"
                     Content="{x:Bind HomeLabel}" 
                     ToolTipService.ToolTip="{x:Bind HomeLabel}"
+                    XYFocusDown="{x:Bind HomeMenuItem}"
                     Icon="Home"/>
-                <MUXC:NavigationViewItem
+                <MUXC:NavigationViewItem 
                     x:Name="HowMenuItem"
                     Content="{x:Bind HowLabel}" 
                     ToolTipService.ToolTip="{x:Bind HowLabel}"
+                    XYFocusDown="{x:Bind UploadMenuItem}"
+                    XYFocusUp="{x:Bind HomeMenuItem}"
                     Icon="Help"/>
                 <MUXC:NavigationViewItem
                     x:Name="UploadMenuItem"
                     Content="{x:Bind UploadLabel}" 
                     ToolTipService.ToolTip="{x:Bind UploadLabel}"
+                    XYFocusUp="{x:Bind HowMenuItem}"
                     Icon="Upload"/>
             </MUXC:NavigationView.MenuItems>
 
