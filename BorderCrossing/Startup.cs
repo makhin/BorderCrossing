@@ -1,19 +1,19 @@
-using System.Collections.Generic;
-using System.Globalization;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using BorderCrossing.DbContext;
+using BorderCrossing.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BorderCrossing.DbContext;
-using BorderCrossing.Services;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace BorderCrossing
 {
@@ -100,7 +100,7 @@ namespace BorderCrossing
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
-            });            
+            });
         }
     }
 }

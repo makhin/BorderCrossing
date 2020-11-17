@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using BorderCrossing.Models;
+﻿using BorderCrossing.Models;
 using BorderCrossing.Res;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BorderCrossing.Pages
 {

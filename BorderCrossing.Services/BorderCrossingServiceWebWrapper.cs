@@ -1,19 +1,19 @@
-﻿using System;
+﻿using BorderCrossing.DbContext;
+using BorderCrossing.Models;
+using BorderCrossing.Models.Google;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
-using BorderCrossing.DbContext;
-using BorderCrossing.Models;
-using BorderCrossing.Models.Google;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace BorderCrossing.Services
 {
     public interface IBorderCrossingServiceWebWrapper
     {
         Task<QueryRequest> GetQueryRequestAsync(string requestId);
-        Task<List<CheckPoint>> ParseLocationHistoryAsync(string requestId, QueryRequest model,  ProgressChangedEventHandler callback);
+        Task<List<CheckPoint>> ParseLocationHistoryAsync(string requestId, QueryRequest model, ProgressChangedEventHandler callback);
         Task UpdateResultAsync(string requestId, List<CheckPoint> checkPoints);
         Task<string> AddNewRequestAsync(string ipAddress, string userAgent);
         Task PrepareLocationHistoryAsync(MemoryStream memoryStream, string fileName, string requestId, ProgressChangedEventHandler callback);

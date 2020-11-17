@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Jil;
+using NetTopologySuite.IO;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using Jil;
-using NetTopologySuite.IO;
 
 namespace BorderCrossing.Console
 {
@@ -15,10 +15,11 @@ namespace BorderCrossing.Console
         public CountryDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CountryDbContext>();
-            optionsBuilder.UseSqlite("Data Source=BorderCrossing.db", b => {
-                    b.MigrationsAssembly("BorderCrossing.Console");
-                    b.UseNetTopologySuite();
-                });
+            optionsBuilder.UseSqlite("Data Source=BorderCrossing.db", b =>
+            {
+                b.MigrationsAssembly("BorderCrossing.Console");
+                b.UseNetTopologySuite();
+            });
 
             return new CountryDbContext(optionsBuilder.Options);
         }
@@ -36,7 +37,8 @@ namespace BorderCrossing.Console
             string connectionString = "Server=localhost;Database=BorderCrossing;Trusted_Connection=True;";
 
             var optionsBuilder2 = new DbContextOptionsBuilder<CountryDbContext>();
-            optionsBuilder2.UseSqlServer(connectionString, b => {
+            optionsBuilder2.UseSqlServer(connectionString, b =>
+            {
                 b.UseNetTopologySuite();
             });
 
@@ -54,7 +56,7 @@ namespace BorderCrossing.Console
                     Name = country.Name,
                     Region = country.Region,
                     Geom = writer.Write(country.Geom)
-            };
+                };
 
                 countries.Add(c);
                 //dbl.Countries.Add(c);

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BorderCrossing.DbContext
 {
@@ -19,16 +20,28 @@ namespace BorderCrossing.DbContext
 
     public class BorderCrossingRepository : IBorderCrossingRepository
     {
+        private const string CountriesKey = "Countries";
         private readonly CountryDbContext _appDbContext;
+        private readonly IMemoryCache _cache;
 
-        public BorderCrossingRepository(CountryDbContext appDbContext)
+        public BorderCrossingRepository(CountryDbContext appDbContext, IMemoryCache cache)
         {
             _appDbContext = appDbContext;
+            _cache = cache;
         }
 
         public List<Country> GetAllCountries()
         {
-            return _appDbContext.Countries.ToList();
+            if (_cache.TryGetValue(CountriesKey, out List<Country> countries))
+            {
+                return countries;
+            }
+
+            countries = _appDbContext.Countries.ToList();
+            var cacheEntryOptions = new MemoryCacheEntryOptions().SetPriority(CacheItemPriority.NeverRemove);
+            _cache.Set(CountriesKey, countries, cacheEntryOptions);
+
+            return countries;
         }
 
         public async Task<List<CheckPoint>> GetResultAsync(string requestId)

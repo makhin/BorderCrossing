@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
-using BorderCrossing.DbContext;
+﻿using BorderCrossing.DbContext;
 using BorderCrossing.Extensions;
 using BorderCrossing.Models;
 using BorderCrossing.Models.Google;
 using NetTopologySuite.Geometries;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BorderCrossing.Services
 {
@@ -40,10 +40,10 @@ namespace BorderCrossing.Services
         {
             var locations = BorderCrossingHelper.PrepareLocations(locationHistory, model.IntervalType);
             var filteredLocations = locations.Where(l => l.Date >= model.StartDate && l.Date <= model.EndDate).OrderBy(l => l.TimestampMsUnix).ToList();
-            
+
             var currentLocation = filteredLocations.First();
             var currentCountry = GetCountryName(currentLocation.Point);
-            
+
             var i = 0;
             var count = filteredLocations.Count();
 
@@ -86,7 +86,7 @@ namespace BorderCrossing.Services
             var country = _countries.Value.FirstOrDefault(c => point.Within(c.Geom));
 
             country ??= _countries.Value
-                .Select(c => new {Country = c, Distance = c.Geom.Distance(point)})
+                .Select(c => new { Country = c, Distance = c.Geom.Distance(point) })
                 .OrderBy(d => d.Distance)
                 .FirstOrDefault(c => c.Distance * 100 < 10)?.Country;
 

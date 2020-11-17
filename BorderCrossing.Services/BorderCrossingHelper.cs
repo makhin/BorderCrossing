@@ -1,16 +1,16 @@
-﻿using System;
+﻿using BorderCrossing.DbContext;
+using BorderCrossing.Models;
+using BorderCrossing.Models.Core;
+using BorderCrossing.Models.Google;
+using Jil;
+using NetTopologySuite.Geometries;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
-using BorderCrossing.DbContext;
-using BorderCrossing.Models;
-using BorderCrossing.Models.Core;
-using BorderCrossing.Models.Google;
-using Jil;
-using NetTopologySuite.Geometries;
 using Location = BorderCrossing.Models.Google.Location;
 
 namespace BorderCrossing.Services
@@ -48,7 +48,7 @@ namespace BorderCrossing.Services
                     {
                         continue;
                     }
-                } 
+                }
                 else if (intervalType == IntervalType.Every12Hours)
                 {
                     if (hour < 12 && day == date.Day && date.Hour < 12)

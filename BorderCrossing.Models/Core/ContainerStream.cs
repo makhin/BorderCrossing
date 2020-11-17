@@ -51,7 +51,7 @@ namespace BorderCrossing.Models.Core
             {
                 newProgress = (int)(ContainedStream.Position * 100.0 / ContainedStream.Length);
             }
-           
+
             if (newProgress > _lastProgress)
             {
                 _lastProgress = newProgress;

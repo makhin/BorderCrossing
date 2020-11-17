@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BorderCrossing.Models
+﻿namespace BorderCrossing.Models
 {
     public enum IntervalType
     {

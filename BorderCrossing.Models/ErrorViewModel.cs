@@ -1,5 +1,3 @@
-using System;
-
 namespace BorderCrossing.Models
 {
     public class ErrorViewModel

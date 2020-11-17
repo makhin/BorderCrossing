@@ -1,7 +1,7 @@
-﻿using System;
-using BorderCrossing.Extensions;
+﻿using BorderCrossing.Extensions;
 using Jil;
 using NetTopologySuite.Geometries;
+using System;
 
 namespace BorderCrossing.Models.Google
 {
@@ -20,12 +20,12 @@ namespace BorderCrossing.Models.Google
         {
             get
             {
-                var latitude = LatitudeE7/1e7;
-                var longitude = LongitudeE7/1e7;
+                var latitude = LatitudeE7 / 1e7;
+                var longitude = LongitudeE7 / 1e7;
                 return new Point(longitude, latitude);
             }
         }
-        
+
         public DateTime Date => TimestampMsUnix.ToDateTime();
 
         public long TimestampMsUnix => long.Parse(this.TimestampMs);

@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-using Blazorise;
-using BorderCrossing.Services;
-using Microsoft.AspNetCore.Components;
+﻿using Blazorise;
 using BorderCrossing.Models.Core;
 using BorderCrossing.Res;
+using BorderCrossing.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace BorderCrossing.Pages
 {
@@ -19,7 +19,7 @@ namespace BorderCrossing.Pages
             Deserializing,
         }
 
-        [Inject] 
+        [Inject]
         public IBorderCrossingServiceWebWrapper BorderCrossingServiceWebWrapper { get; set; }
 
         [Inject]

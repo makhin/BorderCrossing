@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using BorderCrossing.Models;
+﻿using BorderCrossing.Models;
 using BorderCrossing.Services;
 using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
 
 namespace BorderCrossing.Pages
 {

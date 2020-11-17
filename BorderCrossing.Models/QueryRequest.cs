@@ -9,7 +9,7 @@ namespace BorderCrossing.Models
         [DataType(DataType.Date)]
         [Required]
         public DateTime StartDate { get; set; }
-        
+
         [DataType(DataType.Date)]
         [Required]
         public DateTime EndDate { get; set; }
@@ -43,7 +43,7 @@ namespace BorderCrossing.Models
                     Checked = false
                 },
                 new Region
-                { 
+                {
                     Id = 19,
                     Name = "America",
                     Checked = false

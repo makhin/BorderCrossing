@@ -12,7 +12,7 @@ namespace BorderCrossing.Models
             get
             {
                 return Periods.GroupBy(p => p.Country)
-                    .Select(g => new {Country = g.Key, Days = g.Sum(p => p.Days)})
+                    .Select(g => new { Country = g.Key, Days = g.Sum(p => p.Days) })
                     .ToDictionary(p => p.Country, d => d.Days);
             }
         }

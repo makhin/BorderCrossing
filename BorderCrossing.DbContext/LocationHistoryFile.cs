@@ -12,7 +12,7 @@ namespace BorderCrossing.DbContext
 
         [Required]
         public string FileName { get; set; }
-        
+
         public byte[] File { get; set; }
 
     }
