@@ -1,0 +1,3 @@
+https://bordercrossing.azurewebsites.net
+https://bordercrossing.azurewebsites.net/uploadfile
+https://bordercrossing.azurewebsites.net/how

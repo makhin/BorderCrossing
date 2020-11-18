@@ -18,7 +18,11 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      dir="ltr"
+      itemscope
+      itemtype="https://schema.org/WebPage"
+      prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,6 +31,58 @@
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <meta name="referrer" content="origin" />
+    <link rel="canonical" href="https://bordercrossing.azurewebsites.net/" />
+    @*<link rel="manifest" href="./manifest.json" />*@
+
+    <!-- Security -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+
+    <meta name="author" content="Alexandr Makhin" />
+    <meta name="description" content="Parse Google LocationHistory" />
+    <meta
+        name="keywords"
+        content="map, location, history, locationhistory, google, parse, border, crossing"
+    />
+
+    <meta itemprop="name" content="@L["AppName"]" />
+    <meta itemprop="description" content="Parse Google LocationHistory" />
+    @*<meta itemprop="image" content="./icons/128x128.png" />*@
+    
+    <!-- Microsoft -->
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta http-equiv="cleartype" content="on" />
+    <meta name="application-name" content="@L["AppName"]" />
+    <meta name="msapplication-tooltip" content="Parse Google LocationHistory" />
+    <meta name="msapplication-starturl" content="/" />
+    <meta name="msapplication-config" content="browserconfig.xml" />
+
+    <!-- Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bordercrossing.azurewebsites.net/" />
+    <meta property="og:title" content="@L["AppName"]" />
+    @*<meta property="og:image" content="./icons/256x256.png" />*@
+    <meta property="og:site_name" content="@L["AppName"]" />
+    <meta property="og:description" content="Parse Google LocationHistory" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:title" content="@L["AppName"]" />
+    <meta name="twitter:description" content="Parse Google LocationHistory" />
+    <meta name="twitter:url" content="https://bordercrossing.azurewebsites.net/" />
+    @*<meta name="twitter:image" content="./icons/128x128.png" />*@
+
+    <!-- IOS -->
+    <meta name="apple-mobile-web-app-title" content="@L["AppName"]" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#222" />
+    @*<link rel="apple-touch-icon" href="./icons/256x256.png" />*@
+
+    <!-- Android -->
+    <meta name="theme-color" content="#eee" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- inside of head section -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
